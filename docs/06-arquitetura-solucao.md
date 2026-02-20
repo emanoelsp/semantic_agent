@@ -1,6 +1,6 @@
 # Arquitetura Detalhada da Solucao
 
-## Visao Geral da Arquitetura
+## Visao Geral da Arquitetura - Semantic Agent AAS
 
 A arquitetura do TOON Semantic Agent segue o padrao **Modular Pipeline** com 4 estagios de processamento, inspirado em arquiteturas de controle industrial (Sense -> Think -> Decide -> Act).
 
