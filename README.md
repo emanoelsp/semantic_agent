@@ -37,7 +37,7 @@ A Indústria 4.0 sofre com o **"Gargalo da Instanciação"**: equipamentos legad
 
 ## Estratégia de Construção
 
-Este projeto foi construído seguindo uma **pipeline de 3 etapas cognitivas**, cada uma com uma ferramenta especializada. A justificativa para cada escolha está documentada em `/docs/`.
+Este projeto foi construído seguindo uma **pipeline de 4 etapas cognitivas**, cada uma com uma ferramenta especializada. A justificativa para cada escolha está documentada em `/docs/`.
 
 ### Etapa 1: Gemini - Escopo da Solucao (Contexto)
 
@@ -90,12 +90,30 @@ Este projeto foi construído seguindo uma **pipeline de 3 etapas cognitivas**, c
 - Capacidade de debugging iterativo com feedback loop
 
 **Habilidades Expostas:**
-- Planejamento via TodoManager (decomposicao de milestones)
-- Geracao de design com inspiracao contextual
-- Leitura/escrita de arquivos com validacao
-- Execucao de scripts e migrations
+- Planejamento via TodoManager (decomposição de milestones)
+- Geração de design com inspiração contextual
+- Leitura/escrita de arquivos com validação
+- Execução de scripts e migrations
+
+**Após o Claude Code:** o projeto gerado é baixado em arquivo ZIP. Esse ZIP é enviado ao v0.dev na etapa seguinte.
 
 > Veja detalhes em [`/docs/04-agente-codigo.md`](/docs/04-agente-codigo.md)
+
+### Etapa 4: v0.dev - Páginas e Publicação
+
+**Ferramenta:** v0.dev (agente interligado com Vercel e GitHub)
+**Função:** Criar páginas iniciais e de explicação, fazer commit no GitHub e publicar na Vercel.
+
+**Fluxo:**
+1. Baixar o arquivo ZIP gerado pelo Claude Code
+2. Fazer upload do ZIP no v0.dev
+3. Solicitar ao v0.dev a criação das páginas iniciais e de explicação
+4. O v0.dev (conectado a GitHub e Vercel) faz o commit no repositório e publica o site na Vercel
+
+**Por que v0.dev?**
+- Integração nativa com Vercel e GitHub
+- Geração visual de interfaces com React/Next.js
+- Deploy automático e versionamento em repositório
 
 ---
 

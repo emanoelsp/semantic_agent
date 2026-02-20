@@ -205,6 +205,15 @@ O fluxo e linear (A -> B -> C -> D) mas com **feedback loop** no Modulo C:
 
 ---
 
+## Fluxo de Publicação (Claude Code → v0.dev)
+
+1. **Claude Code** gera o projeto e disponibiliza download em ZIP
+2. **Upload no v0.dev** — agente interligado com Vercel e GitHub
+3. **Solicitar ao v0.dev** criação das páginas iniciais e de explicação
+4. **Commit no GitHub e publicação na Vercel** — realizados automaticamente pelo v0.dev
+
+---
+
 ## Roadmap
 
 | Fase | Descricao | Status |

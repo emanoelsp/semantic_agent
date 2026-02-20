@@ -123,6 +123,19 @@ Antes de implementar a UI, o Claude Code:
 
 ---
 
+## Próximo Passo: v0.dev (Etapa 4)
+
+Após o Claude Code gerar o projeto:
+
+1. **Baixar o arquivo ZIP** — O Claude Code disponibiliza o projeto completo para download em ZIP
+2. **Upload no v0.dev** — Fazer upload do ZIP no v0.dev (agente interligado com Vercel e GitHub)
+3. **Solicitar criação de páginas** — Pedir ao v0.dev para criar as páginas iniciais e de explicação
+4. **Commit e publicação** — O v0.dev, conectado ao GitHub e Vercel, faz o commit no repositório e publica o site na Vercel automaticamente
+
+O v0.dev complementa o Claude Code ao oferecer integração nativa com GitHub e Vercel, permitindo deploy e versionamento sem configuração manual.
+
+---
+
 ## Conclusão
 
-O Claude Code foi a ferramenta ideal para esta etapa porque projetos de software industrial exigem **consistência, planejamento e rastreabilidade**. Diferente de copiar/colar snippets, o Claude Code garante que cada linha de código esteja alinhada com o codebase existente, os padrões do framework e os requisitos do projeto.
+O Claude Code foi a ferramenta ideal para esta etapa porque projetos de software industrial exigem **consistência, planejamento e rastreabilidade**. Diferente de copiar/colar snippets, o Claude Code garante que cada linha de código esteja alinhada com o codebase existente, os padrões do framework e os requisitos do projeto. O fluxo segue com o v0.dev para publicação e refinamento das páginas.

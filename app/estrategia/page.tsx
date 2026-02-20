@@ -40,17 +40,17 @@ export default function EstrategiaPage() {
                   <div className="h-px flex-1 bg-border" />
                 </div>
                 <h2 className="text-lg lg:text-xl font-bold text-foreground font-sans text-center text-balance">
-                  Pipeline de 3 Inteligências Artificiais
+                  Pipeline de 4 Etapas com IA
                 </h2>
                 <p className="text-sm text-muted-foreground text-center max-w-3xl mx-auto font-sans leading-relaxed">
-                  A estratégia deste trabalho utiliza três camadas de IA, cada uma com um
-                  papel específico. Nenhuma delas funciona sozinha — e a combinação que
-                  garante qualidade do escopo até o código final.
+                  A estratégia deste trabalho utiliza quatro etapas com IA: Gemini, NotebookLM,
+                  Claude Code e v0.dev. Após o Claude Code, o ZIP é enviado ao v0.dev para
+                  criação das páginas, commit no GitHub e publicação na Vercel.
                 </p>
               </div>
 
-              {/* 3 Cards do Pipeline */}
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+              {/* 4 Cards do Pipeline */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {/* Gemini */}
                 <Card className="border-border bg-card">
                   <CardContent className="flex flex-col gap-4 p-5">
@@ -175,7 +175,7 @@ export default function EstrategiaPage() {
                       O Claude Code (agente de codificação IA da Anthropic) recebeu o prompt estruturado e{" "}
                       <span className="text-foreground font-medium">executou as tarefas</span>:
                       criou a arquitetura, componentes React, API routes, parser TOON e
-                      mock data — tudo com thinking visível.
+                      mock data. O projeto é baixado em ZIP e enviado ao v0.dev na etapa seguinte.
                     </p>
                     <div className="rounded-md border border-border bg-secondary/30 p-3">
                       <p className="text-[10px] font-bold text-foreground font-sans mb-1">
@@ -201,7 +201,59 @@ export default function EstrategiaPage() {
                       </p>
                       <p className="text-[10px] text-muted-foreground font-sans">
                         Aplicação completa Next.js com 4 módulos, API route, parser BNF,
-                        mock data realista e sistema de exportação AAS/Node-RED.
+                        mock data realista. Download em ZIP para upload no v0.dev.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* v0.dev */}
+                <Card className="border-border bg-card">
+                  <CardContent className="flex flex-col gap-4 p-5">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-950/50 text-emerald-400 border border-emerald-500/20">
+                        <ArrowRight className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <Badge className="mb-0.5 bg-emerald-950/50 text-emerald-400 border border-emerald-500/20 font-mono text-[9px]">
+                          Etapa 4
+                        </Badge>
+                        <h3 className="text-sm font-bold text-foreground font-sans">
+                          v0.dev - Páginas e Deploy
+                        </h3>
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground font-sans leading-relaxed">
+                      Após baixar o ZIP do Claude Code, fazer upload no{" "}
+                      <span className="text-foreground font-medium">v0.dev</span> (agente
+                      interligado com Vercel e GitHub). Solicitar a criação das páginas
+                      iniciais e de explicação. O v0.dev faz commit no GitHub e publica na Vercel.
+                    </p>
+                    <div className="rounded-md border border-border bg-secondary/30 p-3">
+                      <p className="text-[10px] font-bold text-foreground font-sans mb-1">
+                        Fluxo:
+                      </p>
+                      <ul className="flex flex-col gap-1">
+                        {[
+                          "1. Baixar ZIP do Claude Code",
+                          "2. Upload no v0.dev",
+                          "3. Pedir criação das páginas iniciais e de explicação",
+                          "4. Commit no GitHub + publicação na Vercel",
+                        ].map((item) => (
+                          <li key={item} className="flex items-start gap-1.5">
+                            <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0 mt-0.5" />
+                            <span className="text-[10px] text-muted-foreground font-sans">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="rounded-md border border-border bg-background p-3">
+                      <p className="text-[10px] font-bold text-muted-foreground font-mono mb-1">
+                        Output gerado:
+                      </p>
+                      <p className="text-[10px] text-muted-foreground font-sans">
+                        Páginas iniciais e de explicação criadas. Repositório no GitHub
+                        e site publicado na Vercel.
                       </p>
                     </div>
                   </CardContent>

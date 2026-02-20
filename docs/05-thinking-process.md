@@ -143,6 +143,16 @@ Ambos seguem o mesmo principio: **tornar o raciocinio explicito para permitir va
 
 ---
 
+## Fluxo Após Claude Code: v0.dev
+
+Após o Claude Code gerar o projeto e disponibilizar o ZIP:
+1. Baixar o arquivo ZIP
+2. Fazer upload no v0.dev (agente interligado com Vercel e GitHub)
+3. Solicitar a criação das páginas iniciais e de explicação
+4. O v0.dev faz commit no GitHub e publica na Vercel
+
+---
+
 ## Licoes Aprendidas
 
 1. **Documentar ANTES de implementar** acelera o desenvolvimento (a doc serve como "plano de voo")

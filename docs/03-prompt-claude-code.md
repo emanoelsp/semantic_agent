@@ -49,3 +49,10 @@ híbridos via Alinhamento Semântico Restrito (TOON - Token-Oriented Object Nota
 - O agente de código IA utilizado foi o **Claude Code** (Anthropic)
 - Este prompt pode ser ajustado conforme a evolução do projeto
 - Mantenha os objetivos principais: registrar o ATO e documentar as decisões
+
+## Fluxo após o Claude Code (Etapa 4)
+
+1. **Baixar o ZIP** gerado pelo Claude Code
+2. **Fazer upload no v0.dev** — agente interligado com Vercel e GitHub
+3. **Solicitar ao v0.dev** a criação das páginas iniciais e de explicação
+4. **Commit no GitHub e publicação na Vercel** — realizados automaticamente pelo v0.dev
