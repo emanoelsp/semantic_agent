@@ -185,9 +185,10 @@ O fluxo e linear (A -> B -> C -> D) mas com **feedback loop** no Modulo C:
 ├── docs/
 │   ├── 01-gemini-escopo.md
 │   ├── 02-notebooklm-prompts.md
-│   ├── 03-agente-codigo.md
-│   ├── 04-thinking-process.md
-│   └── 05-arquitetura-solucao.md
+│   ├── 03-prompt-claude-code.md
+│   ├── 04-agente-codigo.md
+│   ├── 05-thinking-process.md
+│   └── 06-arquitetura-solucao.md
 └── README.md
 ```
 

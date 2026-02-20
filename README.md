@@ -95,7 +95,7 @@ Este projeto foi construído seguindo uma **pipeline de 3 etapas cognitivas**, c
 - Leitura/escrita de arquivos com validacao
 - Execucao de scripts e migrations
 
-> Veja detalhes em [`/docs/03-agente-codigo.md`](/docs/03-agente-codigo.md)
+> Veja detalhes em [`/docs/04-agente-codigo.md`](/docs/04-agente-codigo.md)
 
 ---
 
@@ -203,10 +203,10 @@ http://localhost:3000
 
 - [`/docs/01-gemini-escopo.md`](./docs/01-gemini-escopo.md) - Estratégia com Gemini para escopo
 - [`/docs/02-notebooklm-prompts.md`](./docs/02-notebooklm-prompts.md) - Engenharia de Prompt com NotebookLM
-- [`/docs/03-agente-codigo.md`](./docs/03-agente-codigo.md) - Claude Code para execução
-- [`/docs/04-thinking-process.md`](./docs/04-thinking-process.md) - Processo de Thinking do Agente
-- [`/docs/05-arquitetura-solucao.md`](./docs/05-arquitetura-solucao.md) - Arquitetura detalhada da solução
-- [`/docs/06-prompt-claude-code.md`](./docs/06-prompt-claude-code.md) - Prompt final para copiar e colar no Claude Code
+- [`/docs/03-prompt-claude-code.md`](./docs/03-prompt-claude-code.md) - Prompt final para copiar e colar no Claude Code
+- [`/docs/04-agente-codigo.md`](./docs/04-agente-codigo.md) - Claude Code para execução
+- [`/docs/05-thinking-process.md`](./docs/05-thinking-process.md) - Processo de Thinking do Agente
+- [`/docs/06-arquitetura-solucao.md`](./docs/06-arquitetura-solucao.md) - Arquitetura detalhada da solução
 
 ---
 

@@ -40,12 +40,12 @@ export default function EstrategiaPage() {
                   <div className="h-px flex-1 bg-border" />
                 </div>
                 <h2 className="text-lg lg:text-xl font-bold text-foreground font-sans text-center text-balance">
-                  Pipeline de 3 Inteligencias Artificiais
+                  Pipeline de 3 Inteligências Artificiais
                 </h2>
                 <p className="text-sm text-muted-foreground text-center max-w-3xl mx-auto font-sans leading-relaxed">
-                  A estrategia deste trabalho utiliza tres camadas de IA, cada uma com um
-                  papel especifico. Nenhuma delas funciona sozinha -- e a combinacao que
-                  garante qualidade do escopo ate o codigo final.
+                  A estratégia deste trabalho utiliza três camadas de IA, cada uma com um
+                  papel específico. Nenhuma delas funciona sozinha — e a combinação que
+                  garante qualidade do escopo até o código final.
                 </p>
               </div>
 
@@ -70,8 +70,8 @@ export default function EstrategiaPage() {
                     <p className="text-xs text-muted-foreground font-sans leading-relaxed">
                       O Gemini (Google DeepMind) foi usado para construir o{" "}
                       <span className="text-foreground font-medium">contexto completo do problema</span>.
-                      Sua janela de contexto de 1M+ tokens permite processar a especificacao
-                      AAS, dicionarios ECLASS e papers de Industria 4.0 simultaneamente.
+                      Sua janela de contexto de 1M+ tokens                       permite processar a especificação
+                      AAS, dicionários ECLASS e papers de Indústria 4.0 simultaneamente.
                     </p>
                     <div className="rounded-md border border-border bg-secondary/30 p-3">
                       <p className="text-[10px] font-bold text-foreground font-sans mb-1">
@@ -81,8 +81,8 @@ export default function EstrategiaPage() {
                         {[
                           "Janela de contexto massiva (1M+ tokens)",
                           "Capacidade multimodal (texto + diagramas)",
-                          "Custo-beneficio para analise de documentos longos",
-                          "Grounding com Google Search para padroes atualizados",
+                          "Custo-benefício para análise de documentos longos",
+                          "Grounding com Google Search para padrões atualizados",
                         ].map((item) => (
                           <li key={item} className="flex items-start gap-1.5">
                             <CheckCircle2 className="h-3 w-3 text-blue-400 shrink-0 mt-0.5" />
@@ -96,8 +96,8 @@ export default function EstrategiaPage() {
                         Output gerado:
                       </p>
                       <p className="text-[10px] text-muted-foreground font-sans">
-                        Especificacao de requisitos (RF-01 a RF-11), definicao dos 4 modulos,
-                        gramatica BNF para TOON, e framework de validacao.
+                        Especificação de requisitos (RF-01 a RF-11), definição dos 4 módulos,
+                        gramática BNF para TOON e framework de validação.
                       </p>
                     </div>
                   </CardContent>
@@ -123,7 +123,7 @@ export default function EstrategiaPage() {
                       O NotebookLM (Google) serviu como{" "}
                       <span className="text-foreground font-medium">engenheiro de prompts</span>.
                       Alimentado com o escopo do Gemini e materiais da disciplina, ele
-                      estruturou os prompts finais usando tecnicas avancadas da Aula 04.
+                      estruturou os prompts finais usando técnicas avançadas da Aula 04.
                     </p>
                     <div className="rounded-md border border-border bg-secondary/30 p-3">
                       <p className="text-[10px] font-bold text-foreground font-sans mb-1">
@@ -131,10 +131,10 @@ export default function EstrategiaPage() {
                       </p>
                       <ul className="flex flex-col gap-1">
                         {[
-                          "Sintese cruzada de multiplos documentos-fonte",
-                          "Criacao de prompts contextualizados com grounding",
-                          "Referencia cruzada com materiais de aula (Aula 04)",
-                          "Iteracao rapida sobre diferentes tecnicas de prompt",
+                          "Síntese cruzada de múltiplos documentos-fonte",
+                          "Criação de prompts contextualizados com grounding",
+                          "Referência cruzada com materiais de aula (Aula 04)",
+                          "Iteração rápida sobre diferentes técnicas de prompt",
                         ].map((item) => (
                           <li key={item} className="flex items-start gap-1.5">
                             <CheckCircle2 className="h-3 w-3 text-amber-400 shrink-0 mt-0.5" />
@@ -149,7 +149,7 @@ export default function EstrategiaPage() {
                       </p>
                       <p className="text-[10px] text-muted-foreground font-sans">
                         Mega-prompt estruturado com XML Tags, Few-Shot, CoT e System Prompt
-                        com gramatica BNF embutida.
+                        com gramática BNF embutida.
                       </p>
                     </div>
                   </CardContent>
@@ -175,7 +175,7 @@ export default function EstrategiaPage() {
                       O Claude Code (agente de codificação IA da Anthropic) recebeu o prompt estruturado e{" "}
                       <span className="text-foreground font-medium">executou as tarefas</span>:
                       criou a arquitetura, componentes React, API routes, parser TOON e
-                      mock data -- tudo com thinking visivel.
+                      mock data — tudo com thinking visível.
                     </p>
                     <div className="rounded-md border border-border bg-secondary/30 p-3">
                       <p className="text-[10px] font-bold text-foreground font-sans mb-1">
@@ -183,8 +183,8 @@ export default function EstrategiaPage() {
                       </p>
                       <ul className="flex flex-col gap-1">
                         {[
-                          "Thinking chain visivel e rastreavel",
-                          "Capacidade de gerar codigo production-ready",
+                          "Thinking chain visível e rastreável",
+                          "Capacidade de gerar código production-ready",
                           "Entendimento profundo de Next.js/React/TailwindCSS",
                           "Planejamento com TodoManager para tarefas complexas",
                         ].map((item) => (
@@ -200,8 +200,8 @@ export default function EstrategiaPage() {
                         Output gerado:
                       </p>
                       <p className="text-[10px] text-muted-foreground font-sans">
-                        Aplicacao completa Next.js com 4 modulos, API route, parser BNF,
-                        mock data realista e sistema de exportacao AAS/Node-RED.
+                        Aplicação completa Next.js com 4 módulos, API route, parser BNF,
+                        mock data realista e sistema de exportação AAS/Node-RED.
                       </p>
                     </div>
                   </CardContent>
@@ -217,12 +217,12 @@ export default function EstrategiaPage() {
                 <div className="flex items-center gap-2">
                   <div className="h-px flex-1 bg-border" />
                   <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground font-mono">
-                    Tecnicas Aplicadas
+                    Técnicas Aplicadas
                   </span>
                   <div className="h-px flex-1 bg-border" />
                 </div>
                 <h2 className="text-lg lg:text-xl font-bold text-foreground font-sans text-center text-balance">
-                  5 Tecnicas de Engenharia de Prompt
+                  5 Técnicas de Engenharia de Prompt
                 </h2>
               </div>
 
@@ -232,10 +232,10 @@ export default function EstrategiaPage() {
                   number={1}
                   title="XML Tags como Delimitadores"
                   icon={<FileCode className="h-4 w-4" />}
-                  description="Separacao clara entre contexto, regras, exemplos e instrucoes usando tags XML. Permite ao modelo distinguir dados de instrucoes sem ambiguidade."
+                  description="Separação clara entre contexto, regras, exemplos e instruções usando tags XML. Permite ao modelo distinguir dados de instruções sem ambiguidade."
                   example={'<contexto>\n  Voce e um Arquiteto de Software Senior...\n</contexto>\n<regras_de_negocio>\n  1. O sistema NAO deve integrar LLMs reais...\n</regras_de_negocio>'}
-                  why="Reduz alucinacoes em 30-40% vs. prompts nao delimitados. O modelo processa cada secao como um bloco semantico distinto."
-                  reference="Aula 04 - Delimitadores e Formatacao"
+                  why="Reduz alucinações em 30-40% vs. prompts não delimitados. O modelo processa cada seção como um bloco semântico distinto."
+                  reference="Aula 04 - Delimitadores e Formatação"
                 />
 
                 {/* Tecnica 2 */}
@@ -243,10 +243,10 @@ export default function EstrategiaPage() {
                   number={2}
                   title="Chain-of-Thought (CoT)"
                   icon={<BrainCircuit className="h-4 w-4" />}
-                  description="Instrucao explicita para raciocinar passo a passo antes de gerar a saida. Presente tanto no prompt do agente de codigo quanto no System Prompt do TOON."
+                  description="Instrução explícita para raciocinar passo a passo antes de gerar a saída. Presente tanto no prompt do Claude Code quanto no System Prompt do TOON."
                   example={'"Pense passo a passo (Chain of Thought).\nPrimeiro, crie a estrutura de pastas.\nDepois, configure o Backend.\nEm seguida, crie os componentes React.\nPor fim, estilize."'}
-                  why="Modelos com CoT demonstram +15% de precisao em tarefas complexas de raciocinio (Wei et al., 2022). Essencial para tarefas de mapeamento semantico."
-                  reference="Aula 03 - Modelos de Raciocinio"
+                  why="Modelos com CoT demonstram +15% de precisão em tarefas complexas de raciocínio (Wei et al., 2022). Essencial para tarefas de mapeamento semântico."
+                  reference="Aula 03 - Modelos de Raciocínio"
                 />
 
                 {/* Tecnica 3 */}
@@ -254,20 +254,20 @@ export default function EstrategiaPage() {
                   number={3}
                   title="Few-Shot Prompting"
                   icon={<MessageSquare className="h-4 w-4" />}
-                  description="Exemplos concretos de entrada/saida para calibrar o formato esperado. Usado no System Prompt do TOON para ensinar a gramatica ao modelo."
+                  description="Exemplos concretos de entrada/saída para calibrar o formato esperado. Usado no System Prompt do TOON para ensinar a gramática ao modelo."
                   example={'Input: "Tag PLC: DB1.DBX0.1"\nReasoning: O dado e um booleano de controle.\nOutput: MAP{SRC=\'DB1.DBX0.1\' | TGT=\'ECLASS:0173-1#02-BAF321#004\' | ACTION=\'DirectMap\'}'}
-                  why="Few-Shot e a tecnica mais eficaz para formatos de saida rigidos. Cada exemplo e um 'molde' que restringe o espaco de geracao do modelo."
+                  why="Few-Shot é a técnica mais eficaz para formatos de saída rígidos. Cada exemplo é um 'molde' que restringe o espaço de geração do modelo."
                   reference="Aula 04 - Exemplos no Prompt"
                 />
 
                 {/* Tecnica 4 */}
                 <PromptTechniqueCard
                   number={4}
-                  title="Gramatica BNF como Restricao"
+                  title="Gramática BNF como Restrição"
                   icon={<Shield className="h-4 w-4" />}
-                  description="Definicao formal da estrutura de saida usando Backus-Naur Form. O modelo e forcado a gerar tokens que obedecem a esta gramatica, eliminando alucinacoes estruturais."
+                  description="Definição formal da estrutura de saída usando Backus-Naur Form. O modelo é forçado a gerar tokens que obedecem a esta gramática, eliminando alucinações estruturais."
                   example={'<TOON> ::= MAP{ <SOURCE> | <TARGET> | <ACTION> }\n<SOURCE> ::= SRC=\'<identificador>\'\n<TARGET> ::= TGT=\'<eclass_irdi>\'\n<ACTION> ::= ACTION=\'<DirectMap | Convert_Unit | Aggregate>\''}
-                  why="Transforma 'geracao de texto livre' em 'raciocinio simbolico estruturado'. Garante 100% de conformidade sintatica -- esta e a inovacao central do TOON."
+                  why="Transforma 'geração de texto livre' em 'raciocínio simbólico estruturado'. Garante 100% de conformidade sintática — esta é a inovação central do TOON."
                   reference="Aula 05 - Structured Outputs"
                 />
 
@@ -276,9 +276,9 @@ export default function EstrategiaPage() {
                   number={5}
                   title="Role Definition (Persona)"
                   icon={<Target className="h-4 w-4" />}
-                  description="Definicao clara do papel do modelo: 'Voce e um Especialista em Interoperabilidade Semantica Industrial'. Direciona o vocabulario e o nivel tecnico da resposta."
+                  description="Definição clara do papel do modelo: 'Você é um Especialista em Interoperabilidade Semântica Industrial'. Direciona o vocabulário e o nível técnico da resposta."
                   example={'### Role\nVoce e um Especialista em Interoperabilidade\nSemantica Industrial. Sua funcao e traduzir\ndados brutos de chao de fabrica (OT) para\no padrao AAS usando estritamente a notacao TOON.'}
-                  why="Roles especializados melhoram a precisao em dominios tecnicos. O modelo ativa conhecimento especifico sobre ECLASS, AAS e protocolos industriais."
+                  why="Roles especializados melhoram a precisão em domínios técnicos. O modelo ativa conhecimento específico sobre ECLASS, AAS e protocolos industriais."
                   reference="Aula 04 - System Prompts"
                 />
               </div>
@@ -297,11 +297,11 @@ export default function EstrategiaPage() {
                   <div className="h-px flex-1 bg-border" />
                 </div>
                 <h2 className="text-lg lg:text-xl font-bold text-foreground font-sans text-center text-balance">
-                  Como o Agente de Codigo "Pensa"
+                  Como o Claude Code &quot;Pensa&quot;
                 </h2>
                 <p className="text-sm text-muted-foreground text-center max-w-3xl mx-auto font-sans leading-relaxed">
                   O Claude Code opera com uma cadeia de pensamento
-                  visivel. Cada decisao arquitetural foi raciocinada internamente antes
+                  visível. Cada decisão arquitetural foi raciocinada internamente antes
                   de ser executada.
                 </p>
               </div>
@@ -326,7 +326,7 @@ export default function EstrategiaPage() {
                       "Recebi um prompt com XML Tags delimitando <contexto>, <stack>, <regras>, <tarefa>",
                       "Identifico que o projeto precisa de: Frontend Next.js + API Route + Mock Data + Parser TOON",
                       "A stack pede React/TailwindCSS com dark mode industrial. Alinho com design tokens tematicos",
-                      "Decisao: Next.js App Router ao inves de Vite (deploy Vercel nativo + SSR + API routes integradas)",
+                      "Decisão: Next.js App Router ao invés de Vite (deploy Vercel nativo + SSR + API routes integradas)",
                     ]}
                   />
 
@@ -334,28 +334,28 @@ export default function EstrategiaPage() {
                     phase="Fase 2: Planejamento de Tarefas"
                     thoughts={[
                       "Crio TodoManager com 5 tarefas milestone: Docs, Theme, API, Dashboard, TOON Parser",
-                      "Priorizo: documentacao primeiro (README + /docs) para rastreabilidade academica",
+                      "Priorizo: documentação primeiro (README + /docs) para rastreabilidade acadêmica",
                       "Depois: tema dark industrial -> API mock -> 4 modulos visuais -> parser BNF",
-                      "Cada modulo e um componente React isolado para separacao de responsabilidades",
+                      "Cada módulo é um componente React isolado para separação de responsabilidades",
                     ]}
                   />
 
                   <ThinkingBlock
-                    phase="Fase 3: Decisoes Arquiteturais"
+                    phase="Fase 3: Decisões Arquiteturais"
                     thoughts={[
                       "API Route /api/process-ingestion ao inves de FastAPI (simplifica deploy, single runtime)",
                       "Mock data em lib/mock-data.ts com tipagem TypeScript forte (interfaces exportadas)",
-                      "Parser TOON em lib/toon-parser.ts com validacao BNF completa + syntax highlighting",
+                      "Parser TOON em lib/toon-parser.ts com validação BNF completa + syntax highlighting",
                       "Delay artificial de 1.5-2.5s na API para simular latencia realista de LLM inference",
                     ]}
                   />
 
                   <ThinkingBlock
-                    phase="Fase 4: Implementacao"
+                    phase="Fase 4: Implementação"
                     thoughts={[
                       "Gero componentes: DashboardHeader, ModuleIngestion, ModuleReasoning, ModuleToon, ModuleActuation",
-                      "Cada modulo recebe props tipadas e opera independentemente via state lifting no page.tsx",
-                      "ModuleReasoning tem animacao progressiva de steps (setInterval) para simular thinking",
+                      "Cada módulo recebe props tipadas e opera independentemente via state lifting no page.tsx",
+                      "ModuleReasoning tem animação progressiva de steps (setInterval) para simular thinking",
                       "ModuleActuation gera AAS JSON e Node-RED flow para download real",
                     ]}
                   />
@@ -371,7 +371,7 @@ export default function EstrategiaPage() {
                 <div className="flex items-center gap-2">
                   <div className="h-px flex-1 bg-border" />
                   <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground font-mono">
-                    Inovacao Central
+                    Inovação Central
                   </span>
                   <div className="h-px flex-1 bg-border" />
                 </div>
@@ -379,8 +379,8 @@ export default function EstrategiaPage() {
                   TOON: Token-Oriented Object Notation
                 </h2>
                 <p className="text-sm text-muted-foreground text-center max-w-3xl mx-auto font-sans leading-relaxed">
-                  A contribuicao cientifica principal deste trabalho. Uma notacao intermediaria
-                  que transforma a "geracao de texto livre" em "raciocinio simbolico estruturado".
+                  A contribuição científica principal deste trabalho. Uma notação intermediária
+                  que transforma a &quot;geração de texto livre&quot; em &quot;raciocínio simbólico estruturado&quot;.
                 </p>
               </div>
 
@@ -393,11 +393,11 @@ export default function EstrategiaPage() {
                         <span className="text-xs font-bold font-mono">X</span>
                       </div>
                       <h3 className="text-sm font-bold text-foreground font-sans">
-                        Sem TOON: Geracao Livre
+                        Sem TOON: Geração Livre
                       </h3>
                     </div>
                     <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                      O LLM gera JSON/XML diretamente. Propenso a alucinacoes de sintaxe,
+                      O LLM gera JSON/XML diretamente. Propenso a alucinações de sintaxe,
                       chaves faltando, campos inventados, e formatos inconsistentes.
                     </p>
                     <div className="rounded-md border border-red-500/20 bg-red-950/20 p-3">
@@ -424,12 +424,12 @@ export default function EstrategiaPage() {
                         <CheckCircle2 className="h-3.5 w-3.5" />
                       </div>
                       <h3 className="text-sm font-bold text-foreground font-sans">
-                        Com TOON: Decodificacao Restrita
+                        Com TOON: Decodificação Restrita
                       </h3>
                     </div>
                     <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                      O LLM gera tokens restritos por gramatica BNF. Um parser valida cada
-                      token antes de aceitar. Erro estrutural impossivel.
+                      O LLM gera tokens restritos por gramática BNF. Um parser valida cada
+                      token antes de aceitar. Erro estrutural impossível.
                     </p>
                     <div className="rounded-md border border-emerald-500/20 bg-emerald-950/20 p-3">
                       <pre className="text-[10px] font-mono leading-relaxed whitespace-pre-wrap">
@@ -450,7 +450,7 @@ export default function EstrategiaPage() {
                       </pre>
                     </div>
                     <p className="text-[10px] text-emerald-400 font-sans">
-                      Taxa de erro estrutural: 0% -- validacao BNF garante conformidade total.
+                      Taxa de erro estrutural: 0% — validação BNF garante conformidade total.
                     </p>
                   </CardContent>
                 </Card>
@@ -462,7 +462,7 @@ export default function EstrategiaPage() {
                   <div className="flex items-center gap-2">
                     <Cpu className="h-4 w-4 text-primary" />
                     <h3 className="text-sm font-bold text-foreground font-sans">
-                      Gramatica BNF do TOON
+                      Gramática BNF do TOON
                     </h3>
                   </div>
 
@@ -491,21 +491,21 @@ export default function EstrategiaPage() {
                       <p className="text-[10px] font-bold text-primary font-mono mb-1">SRC (Source)</p>
                       <p className="text-[10px] text-muted-foreground font-sans">
                         Identificador original do dado bruto. Pode ser tag PLC (DB10.W2),
-                        endpoint API (/temp/v1) ou variavel SCADA.
+                        endpoint API (/temp/v1) ou variável SCADA.
                       </p>
                     </div>
                     <div className="rounded-md border border-border bg-secondary/30 p-3">
                       <p className="text-[10px] font-bold text-amber-400 font-mono mb-1">TGT (Target)</p>
                       <p className="text-[10px] text-muted-foreground font-sans">
-                        IRDI ECLASS ou identificador semantico do Data Space alvo. Ex:
+                        IRDI ECLASS ou identificador semântico do Data Space alvo. Ex:
                         0173-1#02-BAA123 para Velocity.
                       </p>
                     </div>
                     <div className="rounded-md border border-border bg-secondary/30 p-3">
                       <p className="text-[10px] font-bold text-emerald-400 font-mono mb-1">ACTION</p>
                       <p className="text-[10px] text-muted-foreground font-sans">
-                        Operacao de transformacao: DirectMap (1:1), Convert_Unit (conversao)
-                        ou Aggregate (combinacao de fontes).
+                        Operação de transformação: DirectMap (1:1), Convert_Unit (conversão)
+                        ou Aggregate (combinação de fontes).
                       </p>
                     </div>
                   </div>
@@ -522,31 +522,31 @@ export default function EstrategiaPage() {
                     {
                       step: "1",
                       label: "Entrada",
-                      detail: "Tag bruta 'DB10.W2' chega via ingestao (Modulo A)",
+                      detail: "Tag bruta 'DB10.W2' chega via ingestão (Módulo A)",
                       color: "text-muted-foreground",
                     },
                     {
                       step: "2",
                       label: "Inferencia",
-                      detail: "LLM + RAG identificam que DB10.W2 = Velocidade Linear (Modulo B)",
+                      detail: "LLM + RAG identificam que DB10.W2 = Velocidade Linear (Módulo B)",
                       color: "text-blue-400",
                     },
                     {
                       step: "3",
                       label: "TOON",
-                      detail: "LLM gera: MAP{SRC='DB10.W2' | TGT='ECLASS:0173-1#02-BAA123' | ACTION='DirectMap'} (Modulo C)",
+                      detail: "LLM gera: MAP{SRC='DB10.W2' | TGT='ECLASS:0173-1#02-BAA123' | ACTION='DirectMap'} (Módulo C)",
                       color: "text-primary",
                     },
                     {
                       step: "4",
                       label: "Validacao",
-                      detail: "Parser BNF valida 100% dos tokens. Se invalido, Self-Correction (Modulo C)",
+                      detail: "Parser BNF valida 100% dos tokens. Se inválido, Self-Correction (Módulo C)",
                       color: "text-amber-400",
                     },
                     {
                       step: "5",
                       label: "AAS",
-                      detail: "TOON validado e convertido para AAS JSON padronizado + script Node-RED (Modulo D)",
+                      detail: "TOON validado é convertido para AAS JSON padronizado + script Node-RED (Módulo D)",
                       color: "text-emerald-400",
                     },
                   ].map((item) => (
@@ -572,7 +572,7 @@ export default function EstrategiaPage() {
             <div className="flex flex-col items-center gap-4">
               <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
                 <Link href="/agente">
-                  Testar o Agente Semantico
+                  Testar o Agente Semântico
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -584,7 +584,7 @@ export default function EstrategiaPage() {
       <footer className="border-t border-border px-6 py-4">
         <div className="mx-auto max-w-5xl flex flex-col items-center justify-between gap-2 sm:flex-row">
           <p className="text-[10px] text-muted-foreground font-sans">
-            FIESC / UniSENAI / Instituto SENAI de Tecnologia / Instituto SENAI de Inovacao
+            FIESC / UniSENAI / Instituto SENAI de Tecnologia / Instituto SENAI de Inovação
           </p>
           <p className="text-[10px] text-muted-foreground font-mono">
             Pós-graduação em IA Aplicada - 2025/2026
@@ -596,7 +596,7 @@ export default function EstrategiaPage() {
 }
 
 /* ========================================= */
-/* Sub-componentes da pagina                 */
+/* Sub-componentes da página                */
 /* ========================================= */
 
 function PromptTechniqueCard({

@@ -70,14 +70,14 @@ export function ModuleReasoning({ steps, isProcessing, confidence }: ModuleReaso
         <div className="flex flex-col gap-1.5 rounded-md border border-border bg-secondary/30 p-3 min-h-[180px] max-h-[220px] overflow-y-auto">
           {steps.length === 0 && !isProcessing && (
             <p className="text-xs text-muted-foreground italic font-sans">
-              Aguardando dados de entrada do Modulo A...
+              Aguardando dados de entrada do Módulo A...
             </p>
           )}
 
           {isProcessing && steps.length === 0 && (
             <div className="flex items-center gap-2 text-xs text-primary">
               <Loader2 className="h-3 w-3 animate-spin" />
-              <span className="font-sans">Inicializando pipeline de raciocinio...</span>
+              <span className="font-sans">Inicializando pipeline de raciocínio...</span>
             </div>
           )}
 

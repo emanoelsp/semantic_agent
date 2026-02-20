@@ -45,7 +45,7 @@ export function ModuleToon({ toonOutput, isProcessing }: ModuleToonProps) {
         <div className="rounded-md border border-border bg-background p-4 min-h-[80px] flex items-center">
           {!toonOutput && !isProcessing && (
             <p className="text-xs text-muted-foreground italic font-sans">
-              Aguardando resultado do Modulo B...
+              Aguardando resultado do Módulo B...
             </p>
           )}
 

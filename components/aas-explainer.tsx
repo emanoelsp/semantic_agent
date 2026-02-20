@@ -34,7 +34,7 @@ export function AASExplainer() {
                 O que é AAS? (Asset Administration Shell)
               </h3>
               <p className="text-[10px] text-muted-foreground font-sans">
-                Clique para entender o padrao que este agente automatiza
+                Clique para entender o padrão que este agente automatiza
               </p>
             </div>
           </div>
@@ -161,7 +161,7 @@ export function AASExplainer() {
                 <Network className="h-4 w-4 text-amber-400 mb-1" />
                 <span className="text-[10px] font-bold text-foreground font-sans">Data Spaces</span>
                 <span className="text-[10px] text-muted-foreground font-sans">
-                  AAS e a base para participar de Data Spaces industriais (Catena-X, GAIA-X).
+                  AAS é a base para participar de Data Spaces industriais (Catena-X, GAIA-X).
                 </span>
               </div>
               <div className="rounded-md border border-border bg-secondary/30 p-3 flex flex-col gap-1">
@@ -177,7 +177,7 @@ export function AASExplainer() {
               <span className="font-bold text-foreground">Este agente automatiza a criação de AAS:</span>{" "}
               Ao invés de um engenheiro mapear manualmente cada propriedade de cada equipamento
               para o formato AAS (processo que pode levar horas por ativo), o agente TOON faz
-              isso automaticamente usando inferencia semantica via LLM.
+              isso automaticamente usando inferência semântica via LLM.
             </p>
           </div>
         )}

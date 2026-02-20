@@ -57,11 +57,11 @@ export default function AgentePage() {
           <div className="mx-auto max-w-7xl flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-col gap-1">
               <h1 className="text-lg font-bold text-foreground font-sans">
-                Agente Semantico Interativo
+                Agente Semântico Interativo
               </h1>
               <p className="text-xs text-muted-foreground font-sans">
                 Insira uma tag industrial ou endpoint de API e observe o pipeline de
-                mapeamento semantico em acao.
+                mapeamento semântico em ação.
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -108,19 +108,19 @@ export default function AgentePage() {
                 </p>
                 <p className="text-[11px] text-muted-foreground font-sans leading-relaxed">
                   <span className="text-foreground font-medium">1.</span> No{" "}
-                  <span className="text-primary font-medium">Modulo A</span> (canto superior
+                  <span className="text-primary font-medium">Módulo A</span> (canto superior
                   esquerdo), selecione Brownfield ou Greenfield e insira uma tag.
-                  Experimente os exemplos pre-carregados como{" "}
+                  Experimente os exemplos pré-carregados como{" "}
                   <code className="text-primary font-mono text-[10px]">DB10.W2</code> ou{" "}
                   <code className="text-primary font-mono text-[10px]">/temp/v1</code>.{" "}
                   <span className="text-foreground font-medium">2.</span> O{" "}
-                  <span className="text-primary font-medium">Modulo B</span> mostra o raciocinio
+                  <span className="text-primary font-medium">Módulo B</span> mostra o raciocínio
                   passo a passo do agente (simulado).{" "}
                   <span className="text-foreground font-medium">3.</span> O{" "}
-                  <span className="text-primary font-medium">Modulo C</span> exibe o codigo TOON
-                  gerado com syntax highlighting e validacao BNF.{" "}
+                  <span className="text-primary font-medium">Módulo C</span> exibe o código TOON
+                  gerado com syntax highlighting e validação BNF.{" "}
                   <span className="text-foreground font-medium">4.</span> O{" "}
-                  <span className="text-primary font-medium">Modulo D</span> permite exportar o
+                  <span className="text-primary font-medium">Módulo D</span> permite exportar o
                   AAS JSON ou script Node-RED.
                 </p>
               </div>
@@ -128,7 +128,7 @@ export default function AgentePage() {
 
             {/* Pipeline Flow Indicator */}
             <div className="flex items-center justify-center gap-2">
-              <              PipelineStep
+              <PipelineStep
                 label="A"
                 name="Percepção e Ingestão"
                 active={isProcessing}
@@ -178,7 +178,7 @@ export default function AgentePage() {
             {/* Didactic Footer Legend */}
             <div className="rounded-lg border border-border bg-card p-4">
               <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground font-mono mb-2">
-                Legenda dos Modulos
+                Legenda dos Módulos
               </p>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
                 {[

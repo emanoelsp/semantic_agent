@@ -18,11 +18,11 @@ const NAV_ITEMS = [
     label: "Estratégia & TOON",
     shortLabel: "Prompt",
     icon: BrainCircuit,
-    description: "Engenharia de prompt e notacao",
+    description: "Engenharia de prompt e notação",
   },
   {
     href: "/agente",
-    label: "Agente Semantico",
+    label: "Agente Semântico",
     shortLabel: "Agente",
     icon: FlaskConical,
     description: "Dashboard interativo",

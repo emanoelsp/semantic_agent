@@ -34,7 +34,7 @@ híbridos via Alinhamento Semântico Restrito (TOON - Token-Oriented Object Nota
 </regras>
 
 <tarefa>
-1. Criar documentação estratégica: README.md e 5 docs em /docs/ (01-gemini-escopo, 02-notebooklm-prompts, 03-agente-codigo, 04-thinking-process, 05-arquitetura-solucao)
+1. Criar documentação estratégica: README.md e 6 docs em /docs/ (01-gemini-escopo, 02-notebooklm-prompts, 03-prompt-claude-code, 04-agente-codigo, 05-thinking-process, 06-arquitetura-solucao)
 2. Configurar tema dark industrial
 3. Construir endpoint API mock /api/process-ingestion
 4. Construir Dashboard com os 4 módulos

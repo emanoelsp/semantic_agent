@@ -28,7 +28,7 @@ export default function HomePage() {
           <div className="relative w-full aspect-[16/7] max-h-[420px]">
             <Image
               src="/images/residencia-ia.png"
-              alt="Residencia em Inteligencia Artificial - FIESC, UniSENAI, Instituto SENAI"
+              alt="Residência em Inteligência Artificial - FIESC, UniSENAI, Instituto SENAI"
               fill
               className="object-cover object-center"
               priority
@@ -89,12 +89,12 @@ export default function HomePage() {
                 <div className="h-px flex-1 bg-border" />
               </div>
               <h2 className="text-lg lg:text-xl font-bold text-foreground font-sans text-center text-balance">
-                Do Sintatico ao Semantico: O Gargalo da Industria 4.0
+                Do Sintático ao Semântico: O Gargalo da Indústria 4.0
               </h2>
               <p className="text-sm text-muted-foreground text-center max-w-3xl mx-auto font-sans leading-relaxed">
-                A promessa da Indústria 4.0 e a interoperabilidade universal. Padroes como o
-                Asset Administration Shell (AAS) e dicionarios semanticos como ECLASS existem
-                para isso. Mas a realidade no chao de fabrica e bem diferente.
+                A promessa da Indústria 4.0 é a interoperabilidade universal. Padrões como o
+                Asset Administration Shell (AAS) e dicionários semânticos como ECLASS existem
+                para isso. Mas a realidade no chão de fábrica é bem diferente.
               </p>
             </div>
 
@@ -106,14 +106,14 @@ export default function HomePage() {
                   <div className="flex items-center gap-2">
                     <AlertTriangle className="h-4 w-4 text-amber-400" />
                     <h3 className="text-sm font-bold text-foreground font-sans">
-                      Nivel Sintatico (Onde estamos)
+                      Nível Sintático (Onde estamos)
                     </h3>
                   </div>
                   <p className="text-xs text-muted-foreground font-sans leading-relaxed">
                     Hoje, equipamentos industriais falam "línguas" diferentes. Um PLC Siemens
                     usa tags como <code className="text-primary font-mono">DB10.W2</code>, um
-                    sensor IoT expoe <code className="text-primary font-mono">/api/temp/v1</code>.
-                    Cada dado é sintaticamente correto dentro do seu sistema, mas nao carrega
+                    sensor IoT expõe <code className="text-primary font-mono">/api/temp/v1</code>.
+                    Cada dado é sintaticamente correto dentro do seu sistema, mas não carrega
                     significado universal. Um humano precisa interpretar cada tag manualmente.
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -131,7 +131,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Seta de transicao */}
+                {/* Seta de transição */}
                 <div className="flex items-center gap-3 px-4">
                   <div className="h-px flex-1 bg-gradient-to-r from-amber-500/30 to-primary/30" />
                   <div className="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5">
@@ -148,15 +148,15 @@ export default function HomePage() {
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                     <h3 className="text-sm font-bold text-foreground font-sans">
-                      Nivel Semantico (Onde queremos chegar)
+                      Nível Semântico (Onde queremos chegar)
                     </h3>
                   </div>
                   <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                    Com alinhamento semantico, cada dado carrega seu significado universal.{" "}
+                    Com alinhamento semântico, cada dado carrega seu significado universal.{" "}
                     <code className="text-primary font-mono">DB10.W2</code> se torna{" "}
                     <code className="text-emerald-400 font-mono">ECLASS:0173-1#02-BAA123 (Velocity)</code>.
                     Qualquer sistema no Data Space entende automaticamente o que esse dado
-                    representa, sua unidade e como utiliza-lo.
+                    representa, sua unidade e como utilizá-lo.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {[
@@ -195,14 +195,14 @@ export default function HomePage() {
                   </div>
                   <p className="text-xs text-muted-foreground font-sans leading-relaxed">
                     Milhares de equipamentos operam com protocolos brutos (Modbus, Profinet) e
-                    tags cripticas como <code className="text-primary font-mono">DB1.DBX0.1</code>.
-                    Exigem engenharia manual intensiva para mapeamento semantico. Um engenheiro
-                    pode levar horas para mapear um unico ativo.
+                    tags criptográficas como <code className="text-primary font-mono">DB1.DBX0.1</code>.
+                    Exigem engenharia manual intensiva                     para mapeamento semântico. Um engenheiro
+                    pode levar horas para mapear um único ativo.
                   </p>
                   <div className="flex items-center gap-2 rounded border border-border bg-secondary/30 px-3 py-2">
                     <Factory className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                     <span className="text-[10px] text-muted-foreground font-sans">
-                      PLCs, Sensores analogicos, Redes Fieldbus, SCADA legado
+                      PLCs, Sensores analógicos, Redes Fieldbus, SCADA legado
                     </span>
                   </div>
                 </CardContent>
@@ -224,8 +224,8 @@ export default function HomePage() {
                   </div>
                   <p className="text-xs text-muted-foreground font-sans leading-relaxed">
                     Novos Sistemas Ciberfísicos (CPS) expõem APIs e AAS nativos, mas
-                    frequentemente apresentam inconsistencias ontologicas: unidades divergentes,
-                    capacidades nao padronizadas ou isolamento em silos de dados.
+                    frequentemente apresentam inconsistências ontológicas: unidades divergentes,
+                    capacidades não padronizadas ou isolamento em silos de dados.
                   </p>
                   <div className="flex items-center gap-2 rounded border border-border bg-secondary/30 px-3 py-2">
                     <Cpu className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
@@ -249,26 +249,26 @@ export default function HomePage() {
                       Solução Proposta: Agente Cognitivo TOON
                     </h3>
                     <p className="text-[10px] text-muted-foreground font-sans">
-                      Middleware Cognitivo com Decodificacao Restrita
+                      Middleware Cognitivo com Decodificação Restrita
                     </p>
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                  O problema central não é a falta de padrões, mas a ausencia de um{" "}
+                  O problema central não é a falta de padrões, mas a ausência de um{" "}
                   <span className="text-foreground font-medium">middleware cognitivo</span> capaz
-                  de automatizar a "cola" semantica entre a realidade fisica (sinais/APIs) e a
-                  representacao digital (AAS). Este trabalho propoe um agente baseado em LLM
-                  que utiliza a notacao TOON (Token-Oriented Object Notation) para garantir
-                  100% de conformidade sintatica antes da conversao para AAS final.
+                  de automatizar a &quot;cola&quot; semântica entre a realidade física (sinais/APIs) e a
+                  representação digital (AAS). Este trabalho propõe um agente baseado em LLM
+                  que utiliza a notação TOON (Token-Oriented Object Notation) para garantir
+                  100% de conformidade sintática antes da conversão para AAS final.
                 </p>
 
                 {/* Pipeline resumido */}
                 <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
                   {[
-                    { step: "A", name: "Ingestao" },
-                    { step: "B", name: "Raciocinio" },
+                    { step: "A", name: "Ingestão" },
+                    { step: "B", name: "Raciocínio" },
                     { step: "C", name: "TOON" },
-                    { step: "D", name: "Atuacao" },
+                    { step: "D", name: "Atuação" },
                   ].map((item, idx) => (
                     <div key={item.step} className="flex items-center gap-2">
                       <div className="flex items-center gap-1.5 rounded-md border border-primary/20 bg-primary/10 px-3 py-1.5">
@@ -313,7 +313,7 @@ export default function HomePage() {
       <footer className="border-t border-border px-6 py-4">
         <div className="mx-auto max-w-5xl flex flex-col items-center justify-between gap-2 sm:flex-row">
           <p className="text-[10px] text-muted-foreground font-sans">
-            FIESC / UniSENAI / Instituto SENAI de Tecnologia / Instituto SENAI de Inovacao
+            FIESC / UniSENAI / Instituto SENAI de Tecnologia / Instituto SENAI de Inovação
           </p>
           <p className="text-[10px] text-muted-foreground font-mono">
             Pós-graduação em IA Aplicada - 2025/2026
