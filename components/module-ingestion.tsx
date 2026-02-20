@@ -37,7 +37,7 @@ export function ModuleIngestion({ onProcess, isProcessing }: ModuleIngestionProp
               <Upload className="h-3.5 w-3.5" />
             </div>
             <CardTitle className="text-sm font-semibold text-card-foreground font-sans">
-              Módulo A: Percepção e Ingestão
+              Página 1: Preenchimento de Dados
             </CardTitle>
           </div>
           <Badge variant="secondary" className="bg-secondary text-secondary-foreground border border-border text-[10px] font-mono">
@@ -88,7 +88,8 @@ export function ModuleIngestion({ onProcess, isProcessing }: ModuleIngestionProp
             size="sm"
             className="bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
           >
-            <ArrowRight className="h-4 w-4" />
+            {isProcessing ? "..." : "Processar"}
+            <ArrowRight className="ml-1 h-4 w-4" />
           </Button>
         </div>
 

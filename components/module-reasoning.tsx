@@ -57,7 +57,7 @@ export function ModuleReasoning({ steps, isProcessing, confidence }: ModuleReaso
               <Brain className="h-3.5 w-3.5" />
             </div>
             <CardTitle className="text-sm font-semibold text-card-foreground font-sans">
-              Módulo B: Raciocínio Semântico
+              Página 2: Análise Semântica
             </CardTitle>
           </div>
           <Badge variant="secondary" className="bg-secondary text-secondary-foreground border border-border text-[10px] font-mono">
@@ -70,7 +70,7 @@ export function ModuleReasoning({ steps, isProcessing, confidence }: ModuleReaso
         <div className="flex flex-col gap-1.5 rounded-md border border-border bg-secondary/30 p-3 min-h-[180px] max-h-[220px] overflow-y-auto">
           {steps.length === 0 && !isProcessing && (
             <p className="text-xs text-muted-foreground italic font-sans">
-              Aguardando dados de entrada do Módulo A...
+              Aguardando dados de entrada da Página 1...
             </p>
           )}
 

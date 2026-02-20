@@ -32,7 +32,7 @@ export function ModuleToon({ toonOutput, isProcessing }: ModuleToonProps) {
               <Code2 className="h-3.5 w-3.5" />
             </div>
             <CardTitle className="text-sm font-semibold text-card-foreground font-sans">
-              Módulo C: Geração TOON
+              Página 3: Geração TOON
             </CardTitle>
           </div>
           <Badge variant="secondary" className="bg-secondary text-secondary-foreground border border-border text-[10px] font-mono">
@@ -45,7 +45,7 @@ export function ModuleToon({ toonOutput, isProcessing }: ModuleToonProps) {
         <div className="rounded-md border border-border bg-background p-4 min-h-[80px] flex items-center">
           {!toonOutput && !isProcessing && (
             <p className="text-xs text-muted-foreground italic font-sans">
-              Aguardando resultado do Módulo B...
+              Aguardando resultado da Página 2...
             </p>
           )}
 
