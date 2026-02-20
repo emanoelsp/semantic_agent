@@ -43,19 +43,19 @@ export default function HomePage() {
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="flex flex-col gap-2">
                     <Badge className="w-fit bg-primary/10 text-primary border border-primary/20 font-mono text-[10px]">
-                      Avaliacao Intermediaria
+                      Avaliação Intermediária
                     </Badge>
                     <h1 className="text-xl lg:text-2xl font-bold text-foreground font-sans text-balance">
-                      Agente Cognitivo para Instanciacao Automatizada de AAS
+                      Agente Cognitivo para Instanciação Automatizada de AAS
                     </h1>
                     <p className="text-sm text-muted-foreground font-sans">
-                      via Alinhamento Semantico Restrito (TOON)
+                      via Alinhamento Semântico Restrito (TOON)
                     </p>
                   </div>
                   <div className="flex flex-col gap-1.5 text-xs text-muted-foreground font-sans lg:text-right shrink-0">
                     <p>
                       <span className="text-foreground font-medium">Curso:</span>{" "}
-                      Pos-graduacao em IA Aplicada
+                      Pós-graduação em IA Aplicada
                     </p>
                     <p>
                       <span className="text-foreground font-medium">Unidade Curricular:</span>{" "}
@@ -84,7 +84,7 @@ export default function HomePage() {
               <div className="flex items-center gap-2">
                 <div className="h-px flex-1 bg-border" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground font-mono">
-                  Contextualizacao
+                  Contextualização
                 </span>
                 <div className="h-px flex-1 bg-border" />
               </div>
@@ -92,7 +92,7 @@ export default function HomePage() {
                 Do Sintatico ao Semantico: O Gargalo da Industria 4.0
               </h2>
               <p className="text-sm text-muted-foreground text-center max-w-3xl mx-auto font-sans leading-relaxed">
-                A promessa da Industria 4.0 e a interoperabilidade universal. Padroes como o
+                A promessa da Indústria 4.0 e a interoperabilidade universal. Padroes como o
                 Asset Administration Shell (AAS) e dicionarios semanticos como ECLASS existem
                 para isso. Mas a realidade no chao de fabrica e bem diferente.
               </p>
@@ -110,10 +110,10 @@ export default function HomePage() {
                     </h3>
                   </div>
                   <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                    Hoje, equipamentos industriais falam "linguas" diferentes. Um PLC Siemens
+                    Hoje, equipamentos industriais falam "línguas" diferentes. Um PLC Siemens
                     usa tags como <code className="text-primary font-mono">DB10.W2</code>, um
                     sensor IoT expoe <code className="text-primary font-mono">/api/temp/v1</code>.
-                    Cada dado e sintaticamente correto dentro do seu sistema, mas nao carrega
+                    Cada dado é sintaticamente correto dentro do seu sistema, mas nao carrega
                     significado universal. Um humano precisa interpretar cada tag manualmente.
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -188,7 +188,7 @@ export default function HomePage() {
                     </div>
                     <div>
                       <h3 className="text-sm font-bold text-foreground font-sans">
-                        Cenario Brownfield
+                        Cenário Brownfield
                       </h3>
                       <p className="text-[10px] text-muted-foreground font-sans">Legado Industrial</p>
                     </div>
@@ -217,13 +217,13 @@ export default function HomePage() {
                     </div>
                     <div>
                       <h3 className="text-sm font-bold text-foreground font-sans">
-                        Cenario Greenfield
+                        Cenário Greenfield
                       </h3>
                       <p className="text-[10px] text-muted-foreground font-sans">CPS Inteligentes</p>
                     </div>
                   </div>
                   <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                    Novos Sistemas Ciberfisicos (CPS) expoem APIs e AAS nativos, mas
+                    Novos Sistemas Ciberfísicos (CPS) expõem APIs e AAS nativos, mas
                     frequentemente apresentam inconsistencias ontologicas: unidades divergentes,
                     capacidades nao padronizadas ou isolamento em silos de dados.
                   </p>
@@ -246,7 +246,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-foreground font-sans">
-                      Solucao Proposta: Agente Cognitivo TOON
+                      Solução Proposta: Agente Cognitivo TOON
                     </h3>
                     <p className="text-[10px] text-muted-foreground font-sans">
                       Middleware Cognitivo com Decodificacao Restrita
@@ -254,7 +254,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                  O problema central nao e a falta de padroes, mas a ausencia de um{" "}
+                  O problema central não é a falta de padrões, mas a ausencia de um{" "}
                   <span className="text-foreground font-medium">middleware cognitivo</span> capaz
                   de automatizar a "cola" semantica entre a realidade fisica (sinais/APIs) e a
                   representacao digital (AAS). Este trabalho propoe um agente baseado em LLM
@@ -293,7 +293,7 @@ export default function HomePage() {
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
                   <Link href="/estrategia">
-                    Entenda a Estrategia
+                    Entenda a Estratégia
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -316,7 +316,7 @@ export default function HomePage() {
             FIESC / UniSENAI / Instituto SENAI de Tecnologia / Instituto SENAI de Inovacao
           </p>
           <p className="text-[10px] text-muted-foreground font-mono">
-            Pos-graduacao em IA Aplicada - 2025/2026
+            Pós-graduação em IA Aplicada - 2025/2026
           </p>
         </div>
       </footer>

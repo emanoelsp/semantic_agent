@@ -32,7 +32,7 @@ export function ModuleToon({ toonOutput, isProcessing }: ModuleToonProps) {
               <Code2 className="h-3.5 w-3.5" />
             </div>
             <CardTitle className="text-sm font-semibold text-card-foreground font-sans">
-              Modulo C: Geracao TOON
+              Módulo C: Geração TOON
             </CardTitle>
           </div>
           <Badge variant="secondary" className="bg-secondary text-secondary-foreground border border-border text-[10px] font-mono">
@@ -80,7 +80,7 @@ export function ModuleToon({ toonOutput, isProcessing }: ModuleToonProps) {
               <div className="flex items-center gap-2">
                 <Shield className={`h-4 w-4 ${parseResult.valid ? "text-emerald-400" : "text-red-400"}`} />
                 <span className="text-xs font-medium text-foreground font-sans">
-                  Validacao BNF
+                  Validação BNF
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -90,7 +90,7 @@ export function ModuleToon({ toonOutput, isProcessing }: ModuleToonProps) {
                   <XCircle className="h-4 w-4 text-red-400" />
                 )}
                 <span className={`text-xs font-bold font-mono ${parseResult.valid ? "text-emerald-400" : "text-red-400"}`}>
-                  {parseResult.valid ? "VALIDO" : "INVALIDO"}
+                  {parseResult.valid ? "VÁLIDO" : "INVÁLIDO"}
                 </span>
               </div>
             </div>

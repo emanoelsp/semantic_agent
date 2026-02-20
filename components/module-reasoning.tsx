@@ -57,7 +57,7 @@ export function ModuleReasoning({ steps, isProcessing, confidence }: ModuleReaso
               <Brain className="h-3.5 w-3.5" />
             </div>
             <CardTitle className="text-sm font-semibold text-card-foreground font-sans">
-              Modulo B: Raciocinio Semantico
+              Módulo B: Raciocínio Semântico
             </CardTitle>
           </div>
           <Badge variant="secondary" className="bg-secondary text-secondary-foreground border border-border text-[10px] font-mono">
@@ -129,7 +129,7 @@ export function ModuleReasoning({ steps, isProcessing, confidence }: ModuleReaso
 
         {confidence !== null && confidence < 0.85 && visibleSteps >= steps.length && (
           <p className="text-[10px] text-amber-400/80 font-sans">
-            Confidence abaixo de 85%. Recomenda-se validacao humana (Human-in-the-Loop).
+            Confidence abaixo de 85%. Recomenda-se validação humana (Human-in-the-Loop).
           </p>
         )}
       </CardContent>

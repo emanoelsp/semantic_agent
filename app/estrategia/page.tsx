@@ -35,7 +35,7 @@ export default function EstrategiaPage() {
                 <div className="flex items-center gap-2">
                   <div className="h-px flex-1 bg-border" />
                   <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground font-mono">
-                    Estrategia de Prompt
+                    Estratégia de Prompt
                   </span>
                   <div className="h-px flex-1 bg-border" />
                 </div>
@@ -167,19 +167,19 @@ export default function EstrategiaPage() {
                           Etapa 3
                         </Badge>
                         <h3 className="text-sm font-bold text-foreground font-sans">
-                          v0/Claude - Codigo
+                          Claude Code - Código
                         </h3>
                       </div>
                     </div>
                     <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                      O agente de codigo (v0 com Claude) recebeu o prompt estruturado e{" "}
+                      O Claude Code (agente de codificação IA da Anthropic) recebeu o prompt estruturado e{" "}
                       <span className="text-foreground font-medium">executou as tarefas</span>:
                       criou a arquitetura, componentes React, API routes, parser TOON e
                       mock data -- tudo com thinking visivel.
                     </p>
                     <div className="rounded-md border border-border bg-secondary/30 p-3">
                       <p className="text-[10px] font-bold text-foreground font-sans mb-1">
-                        Por que v0/Claude?
+                        Por que Claude Code?
                       </p>
                       <ul className="flex flex-col gap-1">
                         {[
@@ -300,7 +300,7 @@ export default function EstrategiaPage() {
                   Como o Agente de Codigo "Pensa"
                 </h2>
                 <p className="text-sm text-muted-foreground text-center max-w-3xl mx-auto font-sans leading-relaxed">
-                  O agente de programacao (v0/Claude) opera com uma cadeia de pensamento
+                  O Claude Code opera com uma cadeia de pensamento
                   visivel. Cada decisao arquitetural foi raciocinada internamente antes
                   de ser executada.
                 </p>
@@ -587,7 +587,7 @@ export default function EstrategiaPage() {
             FIESC / UniSENAI / Instituto SENAI de Tecnologia / Instituto SENAI de Inovacao
           </p>
           <p className="text-[10px] text-muted-foreground font-mono">
-            Pos-graduacao em IA Aplicada - 2025/2026
+            Pós-graduação em IA Aplicada - 2025/2026
           </p>
         </div>
       </footer>

@@ -31,7 +31,7 @@ export function AASExplainer() {
             </div>
             <div>
               <h3 className="text-sm font-bold text-foreground font-sans">
-                O que e AAS? (Asset Administration Shell)
+                O que é AAS? (Asset Administration Shell)
               </h3>
               <p className="text-[10px] text-muted-foreground font-sans">
                 Clique para entender o padrao que este agente automatiza
@@ -57,15 +57,15 @@ export function AASExplainer() {
             <div className="flex flex-col gap-2">
               <p className="text-xs text-muted-foreground font-sans leading-relaxed">
                 O <span className="text-foreground font-medium">Asset Administration Shell (AAS)</span>{" "}
-                e o padrao internacional (IEC 63278 / Platform Industrie 4.0) que cria um{" "}
-                <span className="text-foreground font-medium">gemeo digital padronizado</span>{" "}
-                para qualquer ativo industrial -- desde um sensor de temperatura ate uma linha
-                de producao completa.
+                é o padrão internacional (IEC 63278 / Platform Industrie 4.0) que cria um{" "}
+                <span className="text-foreground font-medium">gêmeo digital padronizado</span>{" "}
+                para qualquer ativo industrial -- desde um sensor de temperatura até uma linha
+                de produção completa.
               </p>
               <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                Pense no AAS como o <span className="text-foreground font-medium">"passaporte digital"</span>{" "}
-                de uma maquina: ele contem todas as informacoes tecnicas, operacionais e
-                semanticas de forma que qualquer outro sistema na rede consiga entender
+                Pense no AAS como o <span className="text-foreground font-medium">&quot;passaporte digital&quot;</span>{" "}
+                de uma máquina: ele contém todas as informações técnicas, operacionais e
+                semânticas de forma que qualquer outro sistema na rede consiga entender
                 automaticamente.
               </p>
             </div>
@@ -108,7 +108,7 @@ export function AASExplainer() {
                     </div>
 
                     {[
-                      { name: "TechnicalData", desc: "Propriedades tecnicas (temperatura, velocidade, etc.)", highlight: true },
+                      { name: "TechnicalData", desc: "Propriedades técnicas (temperatura, velocidade, etc.)", highlight: true },
                       { name: "Nameplate", desc: "Dados de placa (fabricante, modelo, serial)" },
                       { name: "OperationalData", desc: "Dados operacionais em tempo real" },
                       { name: "Documentation", desc: "Manuais, certificados, datasheets" },
@@ -141,7 +141,7 @@ export function AASExplainer() {
                     </span>
                   </div>
                   <p className="text-[10px] text-muted-foreground font-sans ml-6">
-                    Dicionario semantico: cada propriedade referencia um IRDI ECLASS que
+                    Dicionário semântico: cada propriedade referencia um IRDI ECLASS que
                     define universalmente o que ela significa (ex: 0173-1#02-BAA123 = Velocity)
                   </p>
                 </div>
@@ -154,7 +154,7 @@ export function AASExplainer() {
                 <Globe className="h-4 w-4 text-primary mb-1" />
                 <span className="text-[10px] font-bold text-foreground font-sans">Interoperabilidade</span>
                 <span className="text-[10px] text-muted-foreground font-sans">
-                  Qualquer sistema que "fala AAS" entende os dados sem configuracao manual.
+                  Qualquer sistema que &quot;fala AAS&quot; entende os dados sem configuração manual.
                 </span>
               </div>
               <div className="rounded-md border border-border bg-secondary/30 p-3 flex flex-col gap-1">
@@ -168,14 +168,14 @@ export function AASExplainer() {
                 <Layers className="h-4 w-4 text-emerald-400 mb-1" />
                 <span className="text-[10px] font-bold text-foreground font-sans">Digital Twin</span>
                 <span className="text-[10px] text-muted-foreground font-sans">
-                  O AAS e o formato padronizado para representacao de gemeos digitais industriais.
+                  O AAS é o formato padronizado para representação de gêmeos digitais industriais.
                 </span>
               </div>
             </div>
 
             <p className="text-xs text-primary/80 font-sans leading-relaxed bg-primary/5 border border-primary/10 rounded-md p-3">
-              <span className="font-bold text-foreground">Este agente automatiza a criacao de AAS:</span>{" "}
-              Ao inves de um engenheiro mapear manualmente cada propriedade de cada equipamento
+              <span className="font-bold text-foreground">Este agente automatiza a criação de AAS:</span>{" "}
+              Ao invés de um engenheiro mapear manualmente cada propriedade de cada equipamento
               para o formato AAS (processo que pode levar horas por ativo), o agente TOON faz
               isso automaticamente usando inferencia semantica via LLM.
             </p>

@@ -8,14 +8,14 @@ import { Cpu, BookOpen, BrainCircuit, FlaskConical } from "lucide-react"
 const NAV_ITEMS = [
   {
     href: "/",
-    label: "Introducao",
+    label: "Introdução",
     shortLabel: "Intro",
     icon: BookOpen,
     description: "Contexto do curso e problema",
   },
   {
     href: "/estrategia",
-    label: "Estrategia & TOON",
+    label: "Estratégia & TOON",
     shortLabel: "Prompt",
     icon: BrainCircuit,
     description: "Engenharia de prompt e notacao",
@@ -46,7 +46,7 @@ export function Navigation() {
                 TOON Semantic Agent
               </p>
               <p className="text-[10px] text-muted-foreground font-sans leading-tight">
-                IA Generativa - Avaliacao Intermediaria
+                IA Generativa - Avaliação Intermediária
               </p>
             </div>
           </Link>

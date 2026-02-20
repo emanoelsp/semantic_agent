@@ -48,7 +48,7 @@ export function ModuleActuation({ result, isProcessing }: ModuleActuationProps) 
               <Zap className="h-3.5 w-3.5" />
             </div>
             <CardTitle className="text-sm font-semibold text-card-foreground font-sans">
-              Modulo D: Atuacao e Export
+              Módulo D: Atuação e Export
             </CardTitle>
           </div>
           <Badge variant="secondary" className="bg-secondary text-secondary-foreground border border-border text-[10px] font-mono">
@@ -60,7 +60,7 @@ export function ModuleActuation({ result, isProcessing }: ModuleActuationProps) 
         {!result && !isProcessing && (
           <div className="flex min-h-[180px] items-center justify-center rounded-md border border-border bg-secondary/30 p-4">
             <p className="text-xs text-muted-foreground italic font-sans">
-              Aguardando geracao TOON validada do Modulo C...
+              Aguardando geração TOON validada do Módulo C...
             </p>
           </div>
         )}

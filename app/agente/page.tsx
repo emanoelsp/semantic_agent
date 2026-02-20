@@ -128,30 +128,30 @@ export default function AgentePage() {
 
             {/* Pipeline Flow Indicator */}
             <div className="flex items-center justify-center gap-2">
-              <PipelineStep
+              <              PipelineStep
                 label="A"
-                name="Percepcao e Ingestao"
+                name="Percepção e Ingestão"
                 active={isProcessing}
                 done={!!result}
               />
               <PipelineArrow />
               <PipelineStep
                 label="B"
-                name="Raciocinio Semantico"
+                name="Raciocínio Semântico"
                 active={isProcessing}
                 done={!!result}
               />
               <PipelineArrow />
               <PipelineStep
                 label="C"
-                name="Geracao TOON"
+                name="Geração TOON"
                 active={isProcessing}
                 done={!!result}
               />
               <PipelineArrow />
               <PipelineStep
                 label="D"
-                name="Atuacao e Export"
+                name="Atuação e Export"
                 active={isProcessing}
                 done={!!result}
               />
@@ -184,25 +184,25 @@ export default function AgentePage() {
                 {[
                   {
                     mod: "A",
-                    name: "Percepcao e Ingestao",
+                    name: "Percepção e Ingestão",
                     rfs: "RF-01/03",
-                    desc: "Recebe dados brutos de PLCs (Brownfield) ou APIs de CPS (Greenfield). Faz pre-processamento lexico.",
+                    desc: "Recebe dados brutos de PLCs (Brownfield) ou APIs de CPS (Greenfield). Faz pré-processamento léxico.",
                   },
                   {
                     mod: "B",
-                    name: "Raciocinio Semantico",
+                    name: "Raciocínio Semântico",
                     rfs: "RF-04/06",
-                    desc: "Usa RAG (LLM + Vector DB) para inferir o significado semantico e alinhar com ECLASS. Gera confidence score.",
+                    desc: "Usa RAG (LLM + Vector DB) para inferir o significado semântico e alinhar com ECLASS. Gera confidence score.",
                   },
                   {
                     mod: "C",
-                    name: "Geracao TOON",
+                    name: "Geração TOON",
                     rfs: "RF-07/09",
-                    desc: "Gera tokens TOON validados por gramatica BNF. Garante 0% erro estrutural. Self-Correction se invalido.",
+                    desc: "Gera tokens TOON validados por gramática BNF. Garante 0% erro estrutural. Self-Correction se inválido.",
                   },
                   {
                     mod: "D",
-                    name: "Atuacao e Export",
+                    name: "Atuação e Export",
                     rfs: "RF-10/11",
                     desc: "Converte TOON validado em AAS JSON padronizado e/ou scripts Node-RED para Edge Computing.",
                   },
@@ -236,10 +236,10 @@ export default function AgentePage() {
         <footer className="border-t border-border px-6 py-3">
           <div className="mx-auto max-w-7xl flex flex-col items-center justify-between gap-2 sm:flex-row">
             <p className="text-[10px] text-muted-foreground font-sans">
-              TOON Semantic Agent - Avaliacao Intermediaria IA Generativa
+              TOON Semantic Agent - Avaliação Intermediária IA Generativa
             </p>
             <p className="text-[10px] text-muted-foreground font-mono">
-              Mock Mode | Gramatica BNF v1.0 | ECLASS Simulated
+              Mock Mode | Gramática BNF v1.0 | ECLASS Simulated
             </p>
           </div>
         </footer>

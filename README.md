@@ -1,13 +1,13 @@
 # TOON Semantic Agent - Agente Cognitivo para AAS
 
-> Agente Cognitivo para Instanciacao Automatizada e Orquestracao de Asset Administration Shells (AAS) em Cenarios Industriais Hibridos via Alinhamento Semantico Restrito (TOON)
+> Agente Cognitivo para Instanciação Automatizada e Orquestração de Asset Administration Shells (AAS) em Cenários Industriais Híbridos via Alinhamento Semântico Restrito (TOON)
 
 ---
 
-## Indice
+## Índice
 
 1. [Visao Geral](#visao-geral)
-2. [Estrategia de Construcao](#estrategia-de-construcao)
+2. [Estratégia de Construção](#estratégia-de-construção)
 3. [Arquitetura da Solucao](#arquitetura-da-solucao)
 4. [Modulos do Sistema](#modulos-do-sistema)
 5. [Stack Tecnologica](#stack-tecnologica)
@@ -16,55 +16,55 @@
 
 ---
 
-## Visao Geral
+## Visão Geral
 
-Este projeto implementa um MVP de um **Agente Cognitivo** baseado em LLMs que atua como **orquestrador de interoperabilidade** na Industria 4.0. O agente e capaz de:
+Este projeto implementa um MVP de um **Agente Cognitivo** baseado em LLMs que atua como **orquestrador de interoperabilidade** na Indústria 4.0. O agente é capaz de:
 
 - **Ingerir dados** de fontes legadas (Brownfield) e CPS inteligentes (Greenfield)
-- **Realizar alinhamento semantico** cruzando dados com ontologias industriais (ECLASS)
-- **Gerar codigo TOON** (Token-Oriented Object Notation) com validacao deterministica
-- **Materializar AAS** (Asset Administration Shell) e scripts de integracao
+- **Realizar alinhamento semântico** cruzando dados com ontologias industriais (ECLASS)
+- **Gerar código TOON** (Token-Oriented Object Notation) com validação determinística
+- **Materializar AAS** (Asset Administration Shell) e scripts de integração
 
 ### O Problema Central
 
-A Industria 4.0 sofre com o **"Gargalo da Instanciacao"**: equipamentos legados possuem tags cripticas (ex: `DB1.DBX0.1`) que exigem engenharia manual intensiva para mapeamento semantico. Novos CPS expoe APIs mas com inconsistencias ontologicas. **Nao falta padrao, falta middleware cognitivo.**
+A Indústria 4.0 sofre com o **"Gargalo da Instanciação"**: equipamentos legados possuem tags criptográficas (ex: `DB1.DBX0.1`) que exigem engenharia manual intensiva para mapeamento semântico. Novos CPS expõem APIs mas com inconsistências ontológicas. **Não falta padrão, falta middleware cognitivo.**
 
 ### A Solucao: TOON
 
-**TOON (Token-Oriented Object Notation)** e uma notacao intermediaria de Decodificacao Restrita que forca o LLM a gerar tokens validados por uma gramatica formal (BNF), transformando "geracao de texto" em "raciocinio simbolico estruturado". Isso garante **100% de conformidade sintatica** antes da conversao para o AAS final.
+**TOON (Token-Oriented Object Notation)** é uma notação intermediária de Decodificação Restrita que força o LLM a gerar tokens validados por uma gramática formal (BNF), transformando "geração de texto" em "raciocínio simbólico estruturado". Isso garante **100% de conformidade sintática** antes da conversão para o AAS final.
 
 ---
 
-## Estrategia de Construcao
+## Estratégia de Construção
 
-Este projeto foi construido seguindo uma **pipeline de 3 etapas cognitivas**, cada uma com uma ferramenta especializada. A justificativa para cada escolha esta documentada em `/docs/`.
+Este projeto foi construído seguindo uma **pipeline de 3 etapas cognitivas**, cada uma com uma ferramenta especializada. A justificativa para cada escolha está documentada em `/docs/`.
 
 ### Etapa 1: Gemini - Escopo da Solucao (Contexto)
 
 **Ferramenta:** Google Gemini 1.5 Pro
-**Funcao:** Definicao do escopo, requisitos e contextualizacao do problema
+**Função:** Definição do escopo, requisitos e contextualização do problema
 
 **Por que Gemini?**
-- Janela de contexto massiva (1M+ tokens) permite processar documentacao completa da Platform Industrie 4.0, IDSA e ECLASS simultaneamente
+- Janela de contexto massiva (1M+ tokens) permite processar documentação completa da Platform Industrie 4.0, IDSA e ECLASS simultaneamente
 - Capacidade multimodal para analisar diagramas de arquitetura e fluxogramas industriais
-- Forte em raciocinio analitico para decompor problemas complexos em requisitos funcionais
+- Forte em raciocínio analítico para decompor problemas complexos em requisitos funcionais
 - Custo-beneficio superior para tarefas de analise e planejamento extenso
 
 **O que foi gerado:**
 - Documento de requisitos funcionais (RF-01 a RF-11)
-- Especificacao dos 4 modulos do sistema (Percepcao, Raciocinio, Geracao, Atuacao)
-- Framework de validacao (metricas de avaliacao)
-- Definicao da gramatica TOON em BNF
+- Especificação dos 4 módulos do sistema (Percepção, Raciocínio, Geração, Atuação)
+- Framework de validação (métricas de avaliação)
+- Definição da gramática TOON em BNF
 
 > Veja detalhes em [`/docs/01-gemini-escopo.md`](/docs/01-gemini-escopo.md)
 
 ### Etapa 2: NotebookLM - Engenharia de Prompt (Tecnicas)
 
 **Ferramenta:** Google NotebookLM
-**Funcao:** Refinamento e estruturacao dos prompts usando tecnicas avancadas
+**Função:** Refinamento e estruturação dos prompts usando técnicas avançadas
 
 **Por que NotebookLM?**
-- Permite carregar multiplas fontes (papers, docs AAS, especificacoes ECLASS) como contexto persistente
+- Permite carregar múltiplas fontes (papers, docs AAS, especificações ECLASS) como contexto persistente
 - Gera insights cruzados entre fontes automaticamente
 - Ideal para iterar sobre prompts com base em documentacao tecnica real
 - Capacidade de sumarizacao mantendo fidelidade tecnica
@@ -78,15 +78,15 @@ Este projeto foi construido seguindo uma **pipeline de 3 etapas cognitivas**, ca
 
 > Veja detalhes em [`/docs/02-notebooklm-prompts.md`](/docs/02-notebooklm-prompts.md)
 
-### Etapa 3: Agente de Codigo - Execucao de Tarefas
+### Etapa 3: Agente de Código - Execução de Tarefas
 
-**Ferramenta:** v0 / Claude (Agente de Codificacao)
-**Funcao:** Implementacao do sistema com planejamento e execucao estruturada
+**Ferramenta:** Claude Code (agente de codificação IA da Anthropic)
+**Função:** Implementação do sistema com planejamento e execução estruturada. O prompt original tinha como objetivo registrar o "thing" (ATO) e criar o README e a documentação em `/docs/`.
 
-**Por que um Agente de Codigo?**
+**Por que Claude Code?**
 - Capacidade de analisar o codebase existente antes de implementar
-- Decomposicao automatica de tarefas complexas em steps executaveis
-- Geracao de codigo consistente com padroes do projeto
+- Decomposição automática de tarefas complexas em steps executáveis
+- Geração de código consistente com padrões do projeto
 - Capacidade de debugging iterativo com feedback loop
 
 **Habilidades Expostas:**
@@ -99,7 +99,7 @@ Este projeto foi construido seguindo uma **pipeline de 3 etapas cognitivas**, ca
 
 ---
 
-## Arquitetura da Solucao
+## Arquitetura da Solução
 
 ```
 +------------------------------------------------------------------+
@@ -108,8 +108,8 @@ Este projeto foi construido seguindo uma **pipeline de 3 etapas cognitivas**, ca
 |                                                                    |
 |  +------------------+    +-------------------+                     |
 |  | MODULO A         |    | MODULO B          |                     |
-|  | Percepcao e      |--->| Raciocinio        |                     |
-|  | Ingestao Hibrida |    | Semantico         |                     |
+|  | Percepção e      |--->| Raciocínio        |                     |
+|  | Ingestão Híbrida |    | Semântico         |                     |
 |  |                  |    |                   |                     |
 |  | - Upload CSV/XML |    | - RAG + VectorDB  |                     |
 |  | - API Greenfield |    | - ECLASS Lookup   |                     |
@@ -119,8 +119,8 @@ Este projeto foi construido seguindo uma **pipeline de 3 etapas cognitivas**, ca
 |          v                        v                                |
 |  +------------------+    +-------------------+                     |
 |  | MODULO C         |    | MODULO D          |                     |
-|  | Geracao TOON     |<---| Atuacao e         |                     |
-|  |                  |    | Materializacao    |                     |
+|  | Geração TOON     |<---| Atuação e         |                     |
+|  |                  |    | Materialização    |                     |
 |  | - Grammar BNF    |    |                   |                     |
 |  | - Self-Correction|    | - Export AAS JSON |                     |
 |  | - Confidence     |    | - Script Node-RED |                     |
@@ -138,12 +138,12 @@ Este projeto foi construido seguindo uma **pipeline de 3 etapas cognitivas**, ca
 ### Fluxo de Dados
 
 1. **Entrada:** Usuario envia tag PLC (Brownfield) ou endpoint API (Greenfield)
-2. **Percepcao:** Modulo A realiza analise lexica e normalizacao
-3. **Raciocinio:** Modulo B consulta VectorDB + ECLASS via RAG
-4. **Geracao:** Modulo C produz tokens TOON validados por gramatica BNF
-5. **Saida:** Modulo D converte TOON em AAS JSON e/ou scripts de integracao
+2. **Percepção:** Módulo A realiza análise léxica e normalização
+3. **Raciocínio:** Módulo B consulta VectorDB + ECLASS via RAG
+4. **Geração:** Módulo C produz tokens TOON validados por gramática BNF
+5. **Saída:** Módulo D converte TOON em AAS JSON e/ou scripts de integração
 
-### Gramatica TOON (BNF)
+### Gramática TOON (BNF)
 
 ```bnf
 <TOON>    ::= MAP{ <SOURCE> | <TARGET> | <ACTION> }
@@ -161,16 +161,16 @@ MAP{SRC='DB10.W2' | TGT='ECLASS:0173-1#02-BAA123' | ACTION='DirectMap'}
 
 ## Modulos do Sistema
 
-| Modulo | Nome | Funcao | Status |
+| Módulo | Nome | Função | Status |
 |--------|------|--------|--------|
-| A | Percepcao e Ingestao | Upload de dados, analise lexica | MVP (Mock) |
-| B | Raciocinio Semantico | RAG, ECLASS lookup, CoT | MVP (Mock) |
-| C | Geracao TOON | Parser BNF, validacao, confidence | MVP (Mock) |
-| D | Atuacao | Export AAS, geracao de scripts | MVP (Mock) |
+| A | Percepção e Ingestão | Upload de dados, análise léxica | MVP (Mock) |
+| B | Raciocínio Semântico | RAG, ECLASS lookup, CoT | MVP (Mock) |
+| C | Geração TOON | Parser BNF, validação, confidence | MVP (Mock) |
+| D | Atuação | Export AAS, geração de scripts | MVP (Mock) |
 
 ---
 
-## Stack Tecnologica
+## Stack Tecnológica
 
 | Camada | Tecnologia | Justificativa |
 |--------|-----------|---------------|
@@ -178,7 +178,7 @@ MAP{SRC='DB10.W2' | TGT='ECLASS:0173-1#02-BAA123' | ACTION='DirectMap'}
 | UI Components | shadcn/ui | Componentes acessiveis e temaveis |
 | API | Next.js API Routes | Fullstack integrado, serverless ready |
 | LLM (Futuro) | Gemini 1.5 Pro / GPT-4o | Janela de contexto + raciocinio |
-| Orquestracao (Futuro) | LangGraph | Controle de estado e loops de correcao |
+| Orquestração (Futuro) | LangGraph | Controle de estado e loops de correção |
 | Vector DB (Futuro) | Qdrant | Busca vetorial para ECLASS |
 | Protocolos (Futuro) | OPC UA, MQTT, REST | Padrao industrial |
 
@@ -199,16 +199,17 @@ http://localhost:3000
 
 ---
 
-## Documentacao Detalhada
+## Documentação Detalhada
 
-- [`/docs/01-gemini-escopo.md`](./docs/01-gemini-escopo.md) - Estrategia com Gemini para escopo
+- [`/docs/01-gemini-escopo.md`](./docs/01-gemini-escopo.md) - Estratégia com Gemini para escopo
 - [`/docs/02-notebooklm-prompts.md`](./docs/02-notebooklm-prompts.md) - Engenharia de Prompt com NotebookLM
-- [`/docs/03-agente-codigo.md`](./docs/03-agente-codigo.md) - Agente de Codigo para execucao
+- [`/docs/03-agente-codigo.md`](./docs/03-agente-codigo.md) - Claude Code para execução
 - [`/docs/04-thinking-process.md`](./docs/04-thinking-process.md) - Processo de Thinking do Agente
-- [`/docs/05-arquitetura-solucao.md`](./docs/05-arquitetura-solucao.md) - Arquitetura detalhada da solucao
+- [`/docs/05-arquitetura-solucao.md`](./docs/05-arquitetura-solucao.md) - Arquitetura detalhada da solução
+- [`/docs/06-prompt-claude-code.md`](./docs/06-prompt-claude-code.md) - Prompt final para copiar e colar no Claude Code
 
 ---
 
-## Licenca
+## Licença
 
-Projeto academico - Avaliacao Intermediaria de IA Aplicada.
+Projeto acadêmico - Avaliação Intermediária de IA Aplicada.

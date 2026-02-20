@@ -37,7 +37,7 @@ export function ModuleIngestion({ onProcess, isProcessing }: ModuleIngestionProp
               <Upload className="h-3.5 w-3.5" />
             </div>
             <CardTitle className="text-sm font-semibold text-card-foreground font-sans">
-              Modulo A: Percepcao e Ingestao
+              Módulo A: Percepção e Ingestão
             </CardTitle>
           </div>
           <Badge variant="secondary" className="bg-secondary text-secondary-foreground border border-border text-[10px] font-mono">
@@ -115,8 +115,8 @@ export function ModuleIngestion({ onProcess, isProcessing }: ModuleIngestionProp
         <div className="rounded-md border border-border bg-secondary/30 p-2.5">
           <p className="text-[11px] leading-relaxed text-muted-foreground font-sans">
             {inputType === "brownfield"
-              ? "Insira uma tag de PLC (Siemens S7, Allen-Bradley, etc.) ou identificador de sensor legado para mapeamento semantico."
-              : "Insira um endpoint de API REST, MQTT topic ou GraphQL query de um CPS inteligente para harmonizacao."}
+              ? "Insira uma tag de PLC (Siemens S7, Allen-Bradley, etc.) ou identificador de sensor legado para mapeamento semântico."
+              : "Insira um endpoint de API REST, MQTT topic ou GraphQL query de um CPS inteligente para harmonização."}
           </p>
         </div>
       </CardContent>
