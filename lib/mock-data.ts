@@ -249,44 +249,73 @@ export function generateAASJson(result: ProcessingResult): string {
   return JSON.stringify(aas, null, 2)
 }
 
-// Gerar script Node-RED para exportacao
+// Gerar script Node-RED para exportacao (formato importavel)
+// IDs unicos por tag para permitir integracao em flows existentes
+function nodeRedId(tag: string, suffix: string): string {
+  const base = tag.replace(/[^a-zA-Z0-9]/g, "_").slice(0, 20)
+  return `${base}_${suffix}`
+}
+
 export function generateNodeRedFlow(result: ProcessingResult): string {
+  const tag = result.toonMapping.source
+  const ids = {
+    tab: nodeRedId(tag, "tab"),
+    inject: nodeRedId(tag, "inject"),
+    transform: nodeRedId(tag, "transform"),
+    aas: nodeRedId(tag, "aas"),
+    debug: nodeRedId(tag, "debug"),
+  }
+
   const flow = [
     {
-      id: "flow_001",
+      id: ids.tab,
       type: "tab",
-      label: `TOON Integration - ${result.toonMapping.source}`,
+      label: `TOON - ${tag}`,
+      x: 10,
+      y: 10,
     },
     {
-      id: "node_inject",
+      id: ids.inject,
       type: result.inputType === "brownfield" ? "s7 in" : "http request",
-      name: `Read ${result.toonMapping.source}`,
+      name: `Read ${tag}`,
+      tab: ids.tab,
+      x: 150,
+      y: 100,
       ...(result.inputType === "brownfield"
         ? { variable: result.inputData, interval: "1000" }
         : { url: `http://cps-device${result.inputData}`, method: "GET" }),
-      wires: [["node_transform"]],
+      wires: [[ids.transform]],
     },
     {
-      id: "node_transform",
+      id: ids.transform,
       type: "function",
       name: "TOON Transform",
+      tab: ids.tab,
+      x: 380,
+      y: 100,
       func: result.toonMapping.action === "Convert_Unit"
-        ? `// Conversao de unidade: ${result.toonMapping.actionDetail}\nmsg.payload = (msg.payload - 32) * 5/9;\nmsg.unit = "${result.toonMapping.unit}";\nreturn msg;`
-        : `// DirectMap: ${result.toonMapping.source} -> ${result.toonMapping.target}\nmsg.semanticId = "${result.toonMapping.eclassId}";\nmsg.unit = "${result.toonMapping.unit}";\nreturn msg;`,
-      wires: [["node_aas"]],
+        ? `// Conversao: ${result.toonMapping.actionDetail}\nmsg.payload = (msg.payload - 32) * 5/9;\nmsg.semanticId = "${result.toonMapping.eclassId}";\nmsg.unit = "${result.toonMapping.unit}";\nreturn msg;`
+        : `// ${result.toonMapping.source} -> ${result.toonMapping.target}\nmsg.semanticId = "${result.toonMapping.eclassId}";\nmsg.unit = "${result.toonMapping.unit}";\nreturn msg;`,
+      wires: [[ids.aas]],
     },
     {
-      id: "node_aas",
+      id: ids.aas,
       type: "http request",
-      name: "Publish to AAS Registry",
+      name: "Publish AAS",
+      tab: ids.tab,
+      x: 610,
+      y: 100,
       url: "http://aas-registry:8080/api/v1/submodels/TechnicalData/elements",
       method: "PUT",
-      wires: [["node_debug"]],
+      wires: [[ids.debug]],
     },
     {
-      id: "node_debug",
+      id: ids.debug,
       type: "debug",
-      name: "Log Output",
+      name: "Log",
+      tab: ids.tab,
+      x: 840,
+      y: 100,
     },
   ]
   return JSON.stringify(flow, null, 2)

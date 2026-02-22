@@ -1,0 +1,14 @@
+{
+  "name": "validate_eclass_format",
+  "description": "Valida se um código IRDI ECLASS está no formato esperado (ex: 0173-1#02-BAA123). Retorna true se válido, false caso contrário.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "irdi_code": {
+        "type": "string",
+        "description": "Código IRDI ECLASS a ser validado (ex: 0173-1#02-BAA123 ou ECLASS:0173-1#02-BAA123)"
+      }
+    },
+    "required": ["irdi_code"]
+  }
+}

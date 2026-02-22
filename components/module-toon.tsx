@@ -4,6 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Code2, CheckCircle2, XCircle, Shield } from "lucide-react"
 import { parseToon } from "@/lib/toon-parser"
+import {
+  parseToonOrchestrator,
+  toDisplayParseResult,
+} from "@/lib/toon-orchestrator-parser"
 import type { ToonFormattedSegment } from "@/lib/toon-parser"
 
 interface ModuleToonProps {
@@ -21,7 +25,11 @@ const SEGMENT_COLORS: Record<ToonFormattedSegment["type"], string> = {
 }
 
 export function ModuleToon({ toonOutput, isProcessing }: ModuleToonProps) {
-  const parseResult = toonOutput ? parseToon(toonOutput) : null
+  const parseResult = toonOutput
+    ? toonOutput.includes("⟨")
+      ? toDisplayParseResult(parseToonOrchestrator(toonOutput))
+      : parseToon(toonOutput)
+    : null
 
   return (
     <Card className="border-border bg-card">

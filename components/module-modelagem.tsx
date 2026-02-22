@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Layers, FileJson, GitBranch, FileDown } from "lucide-react"
+import { Layers, FileJson, GitBranch, FileDown, Download } from "lucide-react"
 import type { ProcessingResult } from "@/lib/mock-data"
 import { generateAASJson, generateNodeRedFlow } from "@/lib/mock-data"
 import { generateModelagemFuncionalPDF } from "@/lib/pdf-modelagem"
@@ -21,6 +21,16 @@ export function ModuleModelagem({ result }: ModuleModelagemProps) {
 
   const handleDownloadPDF = () => {
     generateModelagemFuncionalPDF(result)
+  }
+
+  const handleDownloadNodeRed = () => {
+    const blob = new Blob([nodeRedFlow], { type: "application/json" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `nodered-${result.toonMapping.source.replace(/[^a-zA-Z0-9]/g, "_")}.json`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   return (
@@ -72,10 +82,21 @@ export function ModuleModelagem({ result }: ModuleModelagemProps) {
           </TabsContent>
 
           <TabsContent value="nodered" className="mt-3">
-            <div className="max-h-[220px] overflow-auto rounded-md border border-border bg-background p-3">
-              <pre className="text-[10px] text-muted-foreground font-mono leading-relaxed whitespace-pre-wrap">
-                {nodeRedFlow}
-              </pre>
+            <div className="flex flex-col gap-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={handleDownloadNodeRed}
+                className="w-fit"
+              >
+                <Download className="mr-2 h-3.5 w-3.5" />
+                Baixar JSON Node-RED
+              </Button>
+              <div className="max-h-[180px] overflow-auto rounded-md border border-border bg-background p-3">
+                <pre className="text-[10px] text-muted-foreground font-mono leading-relaxed whitespace-pre-wrap">
+                  {nodeRedFlow}
+                </pre>
+              </div>
             </div>
           </TabsContent>
         </Tabs>

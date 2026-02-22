@@ -1,4 +1,4 @@
-# TOON Semantic Agent - Agente Cognitivo para AAS
+# Orquestrador Semântico Industrial
 
 > Agente Cognitivo para Instanciação Automatizada e Orquestração de Asset Administration Shells (AAS) em Cenários Industriais Híbridos via Alinhamento Semântico Restrito (TOON)
 
@@ -6,214 +6,253 @@
 
 ## Índice
 
-1. [Visao Geral](#visao-geral)
-2. [Estratégia de Construção](#estratégia-de-construção)
-3. [Arquitetura da Solucao](#arquitetura-da-solucao)
-4. [Modulos do Sistema](#modulos-do-sistema)
-5. [Stack Tecnologica](#stack-tecnologica)
+1. [Visão Geral do Orquestrador Semântico](#visão-geral-do-orquestrador-semântico)
+2. [Arquitetura de LLM](#arquitetura-de-llm)
+3. [Decisões de Engenharia e Justificativas](#decisões-de-engenharia-e-justificativas)
+4. [Descrição das Tools Disponíveis](#descrição-das-tools-disponíveis)
+5. [Arquitetura da Solução](#arquitetura-da-solução)
 6. [Como Executar](#como-executar)
-7. [Documentacao Detalhada](#documentacao-detalhada)
+7. [Documentação Detalhada](#documentação-detalhada)
 
 ---
 
-## Visão Geral
+## Visão Geral do Orquestrador Semântico
 
-Este projeto implementa um MVP de um **Agente Cognitivo** baseado em LLMs que atua como **orquestrador de interoperabilidade** na Indústria 4.0. O agente é capaz de:
+O **Orquestrador Semântico Industrial** é um sistema que recebe dados descritivos de ativos industriais (textos, tags de PLC, identificadores de sensores) e produz representações padronizadas em:
 
-- **Ingerir dados** de fontes legadas (Brownfield) e CPS inteligentes (Greenfield)
-- **Realizar alinhamento semântico** cruzando dados com ontologias industriais (ECLASS)
-- **Gerar código TOON** (Token-Oriented Object Notation) com validação determinística
-- **Materializar AAS** (Asset Administration Shell) e scripts de integração
+- **AAS (Asset Administration Shell)** – modelo de referência para digitalização de ativos na Indústria 4.0
+- **Mapeamentos ECLASS** – alinhamento ontológico com o dicionário IEC
+- **Fluxos funcionais Node-RED** – integração com sistemas de automação e IoT
 
-### O Problema Central
-
-A Indústria 4.0 sofre com o **"Gargalo da Instanciação"**: equipamentos legados possuem tags criptográficas (ex: `DB1.DBX0.1`) que exigem engenharia manual intensiva para mapeamento semântico. Novos CPS expõem APIs mas com inconsistências ontológicas. **Não falta padrão, falta middleware cognitivo.**
-
-### A Solucao: TOON
-
-**TOON (Token-Oriented Object Notation)** é uma notação intermediária de Decodificação Restrita que força o LLM a gerar tokens validados por uma gramática formal (BNF), transformando "geração de texto" em "raciocínio simbólico estruturado". Isso garante **100% de conformidade sintática** antes da conversão para o AAS final.
+O sistema atua como **middleware cognitivo** entre dados legados (Brownfield) ou CPS inteligentes (Greenfield) e ecossistemas semânticos padronizados, automatizando o mapeamento que hoje exige engenharia manual intensiva.
 
 ---
 
-## Estratégia de Construção
+## Arquitetura de LLM
 
-Este projeto foi construído seguindo uma **pipeline de 4 etapas cognitivas**, cada uma com uma ferramenta especializada. A justificativa para cada escolha está documentada em `/docs/`.
+O fluxo de processamento segue uma pipeline sequencial e determinística:
 
-### Etapa 1: Gemini - Escopo da Solucao (Contexto)
+```
+Input (Frontend)
+    ↓
+1. Guardrail (/api/guardrail) – Filtro de domínio industrial
+    ↓ (se válido)
+2. Orquestrador (/api/orchestrator) – Maestro do fluxo
+    ↓
+3. Agente LLM (/api/agent) – Gemini 1.5 Pro em modo TOON
+    ↓
+4. Resposta TOON (string com tokens ⟨MAP_START⟩⟨SRC:...⟩⟨TGT:...⟩⟨CONF:...⟩⟨MAP_END⟩)
+    ↓
+5. Parser Semântico – Regex/split convertendo TOON → JSON estruturado
+    ↓
+6. Saída JSON – AAS, ECLASS, Node-RED para o frontend
+```
 
-**Ferramenta:** Google Gemini 1.5 Pro
-**Função:** Definição do escopo, requisitos e contextualização do problema
+### Fluxo resumido
 
-**Por que Gemini?**
-- Janela de contexto massiva (1M+ tokens) permite processar documentação completa da Platform Industrie 4.0, IDSA e ECLASS simultaneamente
-- Capacidade multimodal para analisar diagramas de arquitetura e fluxogramas industriais
-- Forte em raciocínio analítico para decompor problemas complexos em requisitos funcionais
-- Custo-beneficio superior para tarefas de analise e planejamento extenso
+**Input** → **Guardrail** (validação heurística) → **Orquestrador** → **LLM (TOON)** → **Parser** → **JSON final**
 
-**O que foi gerado:**
-- Documento de requisitos funcionais (RF-01 a RF-11)
-- Especificação dos 4 módulos do sistema (Percepção, Raciocínio, Geração, Atuação)
-- Framework de validação (métricas de avaliação)
-- Definição da gramática TOON em BNF
+---
 
-> Veja detalhes em [`/docs/01-gemini-escopo.md`](/docs/01-gemini-escopo.md)
+## Decisões de Engenharia e Justificativas
 
-### Etapa 2: NotebookLM - Engenharia de Prompt (Tecnicas)
+### Escolha do Gemini 1.5 Pro
 
-**Ferramenta:** Google NotebookLM
-**Função:** Refinamento e estruturação dos prompts usando técnicas avançadas
+O modelo **Gemini 1.5 Pro** foi selecionado por:
 
-**Por que NotebookLM?**
-- Permite carregar múltiplas fontes (papers, docs AAS, especificações ECLASS) como contexto persistente
-- Gera insights cruzados entre fontes automaticamente
-- Ideal para iterar sobre prompts com base em documentacao tecnica real
-- Capacidade de sumarizacao mantendo fidelidade tecnica
+- **Janela de contexto ampla** (até 1M+ tokens), permitindo carregar documentação AAS/ECLASS como contexto quando necessário
+- **Excelente em tarefas analíticas** e raciocínio estruturado para mapeamento ontológico
+- **Custo-benefício** favorável para workloads de inferência semântica
+- **SDK oficial `@google/genai`** com suporte a function calling e integração serverless na Vercel
 
-**Tecnicas de Prompt Aplicadas:**
-- **XML Tags Structure:** Delimitadores claros (`<contexto>`, `<tarefa>`, `<regras>`) para organizacao hierarquica
-- **Chain-of-Thought (CoT):** Forcando o modelo a exibir passos de raciocinio antes da resposta
-- **Few-Shot Prompting:** Exemplos concretos de entrada/saida TOON para calibrar o formato
-- **Structured Outputs:** Gramatica BNF restringindo a saida para eliminar alucinacoes
-- **System Prompt com Role Definition:** Papel rigido de "Especialista em Interoperabilidade Semantica"
+### Temperatura 0.1
 
-> Veja detalhes em [`/docs/02-notebooklm-prompts.md`](/docs/02-notebooklm-prompts.md)
+A temperatura foi fixada em **0.1** (assim como `topP: 0.8`) para:
 
-### Etapa 3: Agente de Código - Execução de Tarefas
+- **Resultados determinísticos** – reduzir variação entre execuções
+- **Conformidade sintática** – o LLM deve seguir a gramática TOON com precisão
+- **Evitar criatividade desnecessária** – a tarefa é mapeamento, não geração livre
 
-**Ferramenta:** Claude Code (agente de codificação IA da Anthropic)
-**Função:** Implementação do sistema com planejamento e execução estruturada. O prompt original tinha como objetivo registrar o "thing" (ATO) e criar o README e a documentação em `/docs/`.
+### Estratégia TOON – Economia de Tokens e Redução de Alucinações
 
-**Por que Claude Code?**
-- Capacidade de analisar o codebase existente antes de implementar
-- Decomposição automática de tarefas complexas em steps executáveis
-- Geração de código consistente com padrões do projeto
-- Capacidade de debugging iterativo com feedback loop
+A **Token-Oriented Object Notation (TOON)** foi adotada em vez de JSON puro para:
 
-**Habilidades Expostas:**
-- Planejamento via TodoManager (decomposição de milestones)
-- Geração de design com inspiração contextual
-- Leitura/escrita de arquivos com validação
-- Execução de scripts e migrations
+1. **Economia de tokens** – tokens delimitados como `⟨SRC:tag⟩` são mais curtos e previsíveis que JSON aninhado
+2. **Eliminação de alucinações sintáticas** – o LLM frequentemente produz JSON malformado (vírgulas extras, aspas incorretas). A notação TOON é linear e fácil de validar com regex
+3. **Parsing determinístico** – a conversão TOON → JSON é feita em Node.js com regex e split, garantindo 100% de conformidade na saída estruturada
+4. **Extensibilidade** – novos tokens (ex.: `⟨ACTION:GENERATE_NODE_RED⟩`) podem ser adicionados sem alterar a estrutura global
 
-**Após o Claude Code:** o projeto gerado é baixado em arquivo ZIP. Esse ZIP é enviado ao v0.dev na etapa seguinte.
+---
 
-> Veja detalhes em [`/docs/04-agente-codigo.md`](/docs/04-agente-codigo.md)
+## Descrição das Tools Disponíveis
 
-### Etapa 4: v0.dev - Páginas e Publicação
+O agente LLM possui **function calling** habilitado com as seguintes tools:
 
-**Ferramenta:** v0.dev (agente interligado com Vercel e GitHub)
-**Função:** Criar páginas iniciais e de explicação, fazer commit no GitHub e publicar na Vercel.
+### 1. `validate_eclass_format(irdi_code)`
 
-**Fluxo:**
-1. Baixar o arquivo ZIP gerado pelo Claude Code
-2. Fazer upload do ZIP no v0.dev
-3. Solicitar ao v0.dev a criação das páginas iniciais e de explicação
-4. O v0.dev (conectado a GitHub e Vercel) faz o commit no repositório e publica o site na Vercel
+Valida se um código IRDI ECLASS está no formato esperado (ex.: `0173-1#02-BAA123`).
 
-**Por que v0.dev?**
-- Integração nativa com Vercel e GitHub
-- Geração visual de interfaces com React/Next.js
-- Deploy automático e versionamento em repositório
+- **Parâmetro:** `irdi_code` (string) – código a validar
+- **Retorno:** `true` se válido, `false` caso contrário
+
+### 2. `trigger_pdf_generation(asset_data)`
+
+Aciona a geração de PDF com os dados do ativo mapeado (AAS, ECLASS, TOON).
+
+- **Parâmetro:** `asset_data` (objeto) com `source`, `target`, `eclassId`, `confidence`
+- **Uso:** quando o usuário solicita exportação ou download de documentação
 
 ---
 
 ## Arquitetura da Solução
 
-```
-+------------------------------------------------------------------+
-|                    TOON SEMANTIC AGENT                             |
-+------------------------------------------------------------------+
-|                                                                    |
-|  +------------------+    +-------------------+                     |
-|  | MODULO A         |    | MODULO B          |                     |
-|  | Percepção e      |--->| Raciocínio        |                     |
-|  | Ingestão Híbrida |    | Semântico         |                     |
-|  |                  |    |                   |                     |
-|  | - Upload CSV/XML |    | - RAG + VectorDB  |                     |
-|  | - API Greenfield |    | - ECLASS Lookup   |                     |
-|  | - Analise Lexica |    | - CoT Reasoning   |                     |
-|  +------------------+    +-------------------+                     |
-|          |                        |                                |
-|          v                        v                                |
-|  +------------------+    +-------------------+                     |
-|  | MODULO C         |    | MODULO D          |                     |
-|  | Geração TOON     |<---| Atuação e         |                     |
-|  |                  |    | Materialização    |                     |
-|  | - Grammar BNF    |    |                   |                     |
-|  | - Self-Correction|    | - Export AAS JSON |                     |
-|  | - Confidence     |    | - Script Node-RED |                     |
-|  +------------------+    +-------------------+                     |
-|                                                                    |
-+------------------------------------------------------------------+
-|  CAMADA DE DADOS                                                   |
-|  +------------+  +------------+  +-------------+                   |
-|  | Vector DB  |  | ECLASS DB  |  | AAS Registry|                   |
-|  | (Qdrant)   |  | (IEC CDD)  |  | (JSON/AML)  |                   |
-|  +------------+  +------------+  +-------------+                   |
-+------------------------------------------------------------------+
-```
+```mermaid
+graph TD
+    %% Definindo as cores e estilos
+    classDef frontend fill:#333333,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef backend fill:#005577,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef llm fill:#1e8e3e,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef external fill:#cc0000,stroke:#fff,stroke-width:2px,color:#fff;
 
-### Fluxo de Dados
+    %% Atores
+    User((Usuário / Engenheiro))
+    NodeRedExt((Node-RED /\nAplicação Externa)):::external
 
-1. **Entrada:** Usuario envia tag PLC (Brownfield) ou endpoint API (Greenfield)
-2. **Percepção:** Módulo A realiza análise léxica e normalização
-3. **Raciocínio:** Módulo B consulta VectorDB + ECLASS via RAG
-4. **Geração:** Módulo C produz tokens TOON validados por gramática BNF
-5. **Saída:** Módulo D converte TOON em AAS JSON e/ou scripts de integração
+    %% Frontend
+    subgraph "Camada de Apresentação (Vercel)"
+        UI[Frontend Next.js\nsemanticagent.vercel.app]:::frontend
+    end
 
-### Gramática TOON (BNF)
+    %% Backend
+    subgraph "Camada de Negócios e Orquestração (Next.js API Routes)"
+        Orchestrator{/api/orchestrator\nMaestro do Fluxo}:::backend
+        Guardrail[ /api/guardrail\nFiltro de Domínio Industrial]:::backend
+        AgentAPI[ /api/agent\nInterface LLM]:::backend
+        Parser[ Parser Semântico\nTOON -> JSON / AAS]:::backend
+        Tools[ Tools\nGerador de PDF / Validador]:::backend
+    end
 
-```bnf
-<TOON>    ::= MAP{ <SOURCE> | <TARGET> | <ACTION> }
-<SOURCE>  ::= SRC='<identificador_original>'
-<TARGET>  ::= TGT='<eclass_irdi_ou_id_semantico>'
-<ACTION>  ::= ACTION='<DirectMap | Convert_Unit | Aggregate>'
-```
+    %% Motor LLM
+    subgraph "Camada Cognitiva"
+        Gemini[Gemini 1.5 Pro\nTemp: 0.1 | Contexto: Industrial]:::llm
+    end
 
-**Exemplo:**
-```
-MAP{SRC='DB10.W2' | TGT='ECLASS:0173-1#02-BAA123' | ACTION='DirectMap'}
+    %% Fluxo
+    User -- "1. Insere dados do Ativo (Tags)" --> UI
+    UI -- "2. POST JSON" --> Orchestrator
+    
+    Orchestrator -- "3. Solicita Validação" --> Guardrail
+    Guardrail -- "4. Retorna OK (Contexto Válido)" --> Orchestrator
+    
+    Orchestrator -- "5. Envia Prompt Estruturado" --> AgentAPI
+    AgentAPI -- "6. Chamada API via SDK" --> Gemini
+    
+    Gemini -- "7. Responde notação restrita\n⟨MAP|SRC:tag|TGT:eclass⟩" --> AgentAPI
+    AgentAPI -- "8. Repassa string TOON" --> Orchestrator
+    
+    Orchestrator -- "9. Processamento Determinístico" --> Parser
+    Parser -- "10. Estrutura de Dados Limpa" --> Orchestrator
+    
+    Orchestrator -. "11. (Se requisitado) Aciona Tool" .-> Tools
+    Tools -. "Retorna PDF gerado" .-> Orchestrator
+    
+    Orchestrator -- "12. Retorna AAS/Node-RED JSON" --> UI
+    UI -- "13. Visualização e Download" --> User
+    
+    NodeRedExt -- "Consome Endpoint Diretamente\n(Trabalho Futuro)" --> Orchestrator
 ```
 
 ---
 
-## Modulos do Sistema
+## Rotas da API
 
-| Módulo | Nome | Função | Status |
-|--------|------|--------|--------|
-| A | Percepção e Ingestão | Upload de dados, análise léxica | MVP (Mock) |
-| B | Raciocínio Semântico | RAG, ECLASS lookup, CoT | MVP (Mock) |
-| C | Geração TOON | Parser BNF, validação, confidence | MVP (Mock) |
-| D | Atuação | Export AAS, geração de scripts | MVP (Mock) |
-
----
-
-## Stack Tecnológica
-
-| Camada | Tecnologia | Justificativa |
-|--------|-----------|---------------|
-| Frontend | Next.js 16 + TailwindCSS | SSR, performance, Dark Mode nativo |
-| UI Components | shadcn/ui | Componentes acessiveis e temaveis |
-| API | Next.js API Routes | Fullstack integrado, serverless ready |
-| LLM (Futuro) | Gemini 1.5 Pro / GPT-4o | Janela de contexto + raciocinio |
-| Orquestração (Futuro) | LangGraph | Controle de estado e loops de correção |
-| Vector DB (Futuro) | Qdrant | Busca vetorial para ECLASS |
-| Protocolos (Futuro) | OPC UA, MQTT, REST | Padrao industrial |
+| Rota | Método | Função |
+|------|--------|--------|
+| `/api/guardrail` | POST | Valida se o payload está no contexto industrial. Retorna 400 se inválido. |
+| `/api/agent` | POST | Interface com o Gemini Pro. Retorna string TOON. |
+| `/api/orchestrator` | POST | Fluxo completo: Guardrail → Agent → Parser → JSON AAS/Node-RED. |
 
 ---
 
 ## Como Executar
 
 ```bash
-# Instalar dependencias
+# Instalar dependências
 pnpm install
+# ou: npm install
+
+# Configurar variável de ambiente (opcional, para modo LLM real)
+# Crie .env.local com:
+# GEMINI_API_KEY=sua_chave_api
 
 # Executar em modo de desenvolvimento
 pnpm dev
+# ou: npm run dev
 
 # Acessar
 http://localhost:3000
 ```
+
+**Modos de operação:**
+
+- **Com `GEMINI_API_KEY`:** usa o Gemini 2.5 Flash para mapeamento semântico real
+- **Sem `GEMINI_API_KEY`:** usa mapeamentos mock pré-definidos (funcional para testes)
+
+---
+
+## Integração Node-RED
+
+O Orquestrador gera fluxos Node-RED prontos para importação. Siga os passos para obter o nó e integrar ao seu flow.
+
+### 1. Obter o JSON do fluxo
+
+1. Na **Página 4: Modelagem Funcional**, abra a aba **Node-RED**.
+2. Clique em **"Baixar JSON Node-RED"** para salvar o arquivo `.json`,  
+   **ou** copie todo o conteúdo exibido na área de texto.
+
+### 2. Importar no Node-RED
+
+**Opção A – Via menu (recomendado)**
+
+1. No Node-RED, abra o menu (☰) → **Import** → **Clipboard**.
+2. Cole o JSON copiado.
+3. Clique em **Import**.
+
+**Opção B – Via arquivo**
+
+1. Salve o JSON em um arquivo (ex.: `nodered-Mtr_Tmp_01.json`).
+2. Menu → **Import** → **Select a file to import**.
+3. Selecione o arquivo e confirme **Import**.
+
+### 3. Integrar ao flow existente
+
+Após importar, o fluxo aparecerá como uma nova **aba** (tab) no Node-RED.
+
+- **Usar em flow separado:** a aba gerada já está pronta; basta clicar em **Deploy**.
+- **Integrar a um flow existente:** arraste os nós para sua aba, conecte as entradas/saídas conforme necessário e faça o deploy.
+- **Conectar nós externos:** ligue a saída do seu nó ao nó **"Read [tag]"** (entrada do fluxo TOON).
+
+### 4. IDs dos nós gerados
+
+Cada fluxo usa IDs únicos por tag para evitar conflitos:
+
+| Nó           | Sufixo   | Função                                  |
+|--------------|----------|-----------------------------------------|
+| Tab          | `_tab`   | Aba do fluxo                            |
+| Read [tag]   | `_inject`| Entrada (PLC/API)                       |
+| TOON Transform | `_transform` | Mapeamento semântico para ECLASS |
+| Publish AAS  | `_aas`   | Envio para o registry AAS               |
+| Log          | `_debug` | Saída de depuração                      |
+
+### 5. Dependências (contrib nodes)
+
+Para **Brownfield (PLC)**: o nó de entrada usa `s7 in`. Instale o pacote:
+
+```bash
+cd ~/.node-red && npm install node-red-contrib-s7
+```
+
+Para **Greenfield (API REST)**: usa o nó nativo `http request`. Nenhuma instalação extra é necessária.
 
 ---
 
@@ -225,9 +264,10 @@ http://localhost:3000
 - [`/docs/04-agente-codigo.md`](./docs/04-agente-codigo.md) - Claude Code para execução
 - [`/docs/05-thinking-process.md`](./docs/05-thinking-process.md) - Processo de Thinking do Agente
 - [`/docs/06-arquitetura-solucao.md`](./docs/06-arquitetura-solucao.md) - Arquitetura detalhada da solução
+- [`/docs/07-integracao-nodered.md`](./docs/07-integracao-nodered.md) - Como integrar o fluxo Node-RED ao seu flow
 
 ---
 
 ## Licença
 
-Projeto acadêmico - Avaliação Intermediária de IA Aplicada.
+Projeto acadêmico - Avaliação Final de IA Generativa.

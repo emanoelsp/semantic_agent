@@ -1,0 +1,21 @@
+{
+  "name": "trigger_pdf_generation",
+  "description": "Aciona a geração de PDF com os dados do ativo mapeado (AAS, ECLASS, TOON). Utilizar quando o usuário solicitar exportação ou download de documentação.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "asset_data": {
+        "type": "object",
+        "description": "Dados do ativo mapeado contendo source, target, eclassId, confidence",
+        "properties": {
+          "source": { "type": "string", "description": "Tag ou identificador de origem" },
+          "target": { "type": "string", "description": "Descrição do mapeamento ECLASS" },
+          "eclassId": { "type": "string", "description": "Código IRDI ECLASS" },
+          "confidence": { "type": "number", "description": "Confiança do mapeamento (0.0 a 1.0)" }
+        },
+        "required": ["source", "eclassId"]
+      }
+    },
+    "required": ["asset_data"]
+  }
+}

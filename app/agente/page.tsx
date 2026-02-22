@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button"
 import { Activity, Wifi, ChevronRight, ChevronLeft } from "lucide-react"
 import type { ProcessingResult } from "@/lib/mock-data"
 
+type AgentResult = ProcessingResult & { source?: "llm" | "mock" }
+
 const STEPS = [
   { id: 1, name: "Dados", short: "1" },
   { id: 2, name: "Análise", short: "2" },
@@ -21,29 +23,38 @@ const STEPS = [
 export default function AgentePage() {
   const [step, setStep] = useState(1)
   const [isProcessing, setIsProcessing] = useState(false)
-  const [result, setResult] = useState<ProcessingResult | null>(null)
+  const [result, setResult] = useState<AgentResult | null>(null)
   const [lastProcessingTime, setLastProcessingTime] = useState<number | undefined>()
+  const [error, setError] = useState<string | null>(null)
 
   const handleProcess = useCallback(
     async (inputData: string, inputType: "brownfield" | "greenfield") => {
       setIsProcessing(true)
       setResult(null)
+      setError(null)
 
       try {
         const startTime = Date.now()
-        const response = await fetch("/api/process-ingestion", {
+        const response = await fetch("/api/orchestrator", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ inputData, inputType }),
         })
 
-        if (!response.ok) throw new Error("Erro no processamento")
+        const data = await response.json().catch(() => ({}))
 
-        const data: ProcessingResult = await response.json()
-        setResult(data)
+        if (!response.ok) {
+          const msg = typeof data?.error === "string" ? data.error : `Erro ${response.status}: ${response.statusText}`
+          setError(msg)
+          return
+        }
+
+        setResult(data as AgentResult)
         setLastProcessingTime(Date.now() - startTime)
-      } catch (error) {
-        console.error("Erro:", error)
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : "Erro de conexão"
+        setError(msg)
+        console.error("Erro:", err)
       } finally {
         setIsProcessing(false)
       }
@@ -97,10 +108,14 @@ export default function AgentePage() {
               </Badge>
               <Badge
                 variant="secondary"
-                className="flex items-center gap-1.5 bg-emerald-950/50 text-emerald-400 border border-emerald-500/20 font-mono text-xs"
+                className={`flex items-center gap-1.5 font-mono text-xs ${
+                  result?.source === "llm"
+                    ? "bg-primary/20 text-primary border border-primary/30"
+                    : "bg-emerald-950/50 text-emerald-400 border border-emerald-500/20"
+                }`}
               >
                 <Wifi className="h-3 w-3" />
-                Mock
+                {result?.source === "llm" ? "LLM" : "Mock"}
               </Badge>
             </div>
           </div>
@@ -146,6 +161,11 @@ export default function AgentePage() {
             {step === 1 && (
               <>
                 <ModuleIngestion onProcess={handleProcess} isProcessing={isProcessing} />
+                {error && (
+                  <div className="rounded-md border border-red-500/30 bg-red-950/30 p-3 text-sm text-red-400">
+                    {error}
+                  </div>
+                )}
                 {result && !isProcessing && (
                   <Button onClick={handleNext} className="w-full sm:w-auto">
                     Avançar para Análise
