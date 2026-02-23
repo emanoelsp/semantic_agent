@@ -171,7 +171,6 @@ graph TD
     UI -- "13. Visualização e Download" --> User
     
     NodeRedExt -- "Consome Endpoint Diretamente\n(Trabalho Futuro)" --> Orchestrator
-```
 
 ---
 
