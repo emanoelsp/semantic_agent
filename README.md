@@ -126,25 +126,25 @@ graph TD
 
     %% Atores
     User((Usuário / Engenheiro))
-    NodeRedExt((Node-RED /\nAplicação Externa)):::external
+    NodeRedExt((Node-RED / Aplicação Externa)):::external
 
     %% Frontend
     subgraph "Camada de Apresentação (Vercel)"
-        UI[Frontend Next.js\nsemanticagent.vercel.app]:::frontend
+        UI[Frontend Next.js<br>semanticagent.vercel.app]:::frontend
     end
 
     %% Backend
     subgraph "Camada de Negócios e Orquestração (Next.js API Routes)"
-        Orchestrator{/api/orchestrator\nMaestro do Fluxo}:::backend
-        Guardrail[ /api/guardrail\nFiltro de Domínio Industrial]:::backend
-        AgentAPI[ /api/agent\nInterface LLM]:::backend
-        Parser[ Parser Semântico\nTOON -> JSON / AAS]:::backend
-        Tools[ Tools\nGerador de PDF / Validador]:::backend
+        Orchestrator{/api/orchestrator<br>Maestro do Fluxo}:::backend
+        Guardrail[ /api/guardrail<br>Filtro de Domínio Industrial]:::backend
+        AgentAPI[ /api/agent<br>Interface LLM]:::backend
+        Parser[ Parser Semântico<br>TOON para JSON / AAS]:::backend
+        Tools[ Tools<br>Gerador de PDF / Validador]:::backend
     end
 
     %% Motor LLM
     subgraph "Camada Cognitiva"
-        Gemini[Gemini 1.5 Pro\nTemp: 0.1 | Contexto: Industrial]:::llm
+        Gemini[Gemini 1.5 Pro<br>Temp: 0.1 - Contexto: Industrial]:::llm
     end
 
     %% Fluxo
@@ -152,24 +152,25 @@ graph TD
     UI -- "2. POST JSON" --> Orchestrator
     
     Orchestrator -- "3. Solicita Validação" --> Guardrail
-    Guardrail -- "4. Retorna OK (Contexto Válido)" --> Orchestrator
+    Guardrail -- "4. Retorna OK" --> Orchestrator
     
     Orchestrator -- "5. Envia Prompt Estruturado" --> AgentAPI
     AgentAPI -- "6. Chamada API via SDK" --> Gemini
     
-    Gemini -- "7. Responde notação restrita\n⟨MAP|SRC:tag|TGT:eclass⟩" --> AgentAPI
+    Gemini -- "7. Responde notação restrita<br>⟨MAP_START⟩⟨SRC:tag⟩..." --> AgentAPI
     AgentAPI -- "8. Repassa string TOON" --> Orchestrator
     
     Orchestrator -- "9. Processamento Determinístico" --> Parser
-    Parser -- "10. Estrutura de Dados Limpa" --> Orchestrator
+    Parser -- "10. Estrutura JSON Limpa" --> Orchestrator
     
-    Orchestrator -. "11. (Se requisitado) Aciona Tool" .-> Tools
-    Tools -. "Retorna PDF gerado" .-> Orchestrator
+    Orchestrator -. "11. (Opcional) Aciona Tool" .-> Tools
+    Tools -. "Retorna PDF" .-> Orchestrator
     
-    Orchestrator -- "12. Retorna AAS/Node-RED JSON" --> UI
+    Orchestrator -- "12. Retorna AAS/Node-RED" --> UI
     UI -- "13. Visualização e Download" --> User
     
-    NodeRedExt -- "Consome Endpoint Diretamente\n(Trabalho Futuro)" --> Orchestrator
+    NodeRedExt -- "Consome Endpoint Diretamente<br>(Trabalho Futuro)" --> Orchestrator
+```
 
 ---
 
