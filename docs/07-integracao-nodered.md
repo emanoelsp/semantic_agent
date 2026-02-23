@@ -18,7 +18,7 @@ O fluxo pode ser importado como uma nova aba ou seus nós podem ser copiados par
 
 ## Passo 1: Obter o JSON
 
-1. Processe uma tag no Orquestrador (ex.: `Mtr_Tmp_01`).
+1. Processe uma tag no Orquestrador (ex.: `DB1.W0` com descrição "Comando de marcha da esteira", ou `Mtr_Tmp_01`).
 2. Avance até a **Página 4: Modelagem Funcional**.
 3. Abra a aba **Node-RED**.
 4. Clique em **"Baixar JSON Node-RED"** ou copie o JSON exibido.

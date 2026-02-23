@@ -10,6 +10,8 @@ import {
   type ReasoningStep,
   type ToonMapping as MockToonMapping,
 } from "@/lib/mock-data"
+import { getEclassCandidates } from "@/lib/eclass-fallback"
+import { getInterpretation } from "@/lib/interpretation"
 
 // POST /api/orchestrator
 // Fluxo: Input -> Guardrail -> Agent (LLM) -> Parser TOON -> JSON estruturado
@@ -18,9 +20,11 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json()
-    const { inputData, inputType, useLLM } = body as {
+    const { inputData, inputType, description, datatype } = body as {
       inputData: string
       inputType: "brownfield" | "greenfield"
+      description?: string
+      datatype?: string
       useLLM?: boolean
     }
 
@@ -40,26 +44,43 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    let toonOutput: string
-    let usedLLM = false
+    // B/C. Chamar agente LLM (obrigatório; sem mock)
+    if (!process.env.GEMINI_API_KEY) {
+      return NextResponse.json(
+        {
+          error: "API do Gemini não configurada. Configure GEMINI_API_KEY no .env.local ou na Vercel.",
+          code: "GEMINI_API_KEY_MISSING",
+        },
+        { status: 503 }
+      )
+    }
 
-    // B/C. Chamar agente LLM se useLLM=true e API key disponível
-    if (useLLM !== false && process.env.GEMINI_API_KEY) {
-      try {
-        const agentResult = await invokeAgent({ inputData, inputType })
-        toonOutput = agentResult.toonOutput
-        usedLLM = true
-      } catch (agentErr) {
-        const message = agentErr instanceof Error ? agentErr.message : "Falha no agente"
-        return NextResponse.json(
-          { error: message, fallback: "Use useLLM: false para modo mock" },
-          { status: 502 }
-        )
-      }
-    } else {
-      // Fallback: mock TOON no formato esperado
-      const mockMapping = getMockToonForInput(inputData, inputType)
-      toonOutput = mockMapping
+    let toonOutput: string
+    try {
+      const agentResult = await invokeAgent({
+        inputData,
+        inputType,
+        ...(description?.trim() && { description: String(description).trim() }),
+        ...(datatype?.trim() && { datatype: String(datatype).trim() }),
+      })
+      toonOutput = agentResult.toonOutput
+    } catch (agentErr) {
+      const message = agentErr instanceof Error ? agentErr.message : "Falha no agente"
+      const isQuotaOrRateLimit =
+        /quota|rate.?limit|resource.?exhausted|429|503/i.test(message) ||
+        /billing|credit|exceeded/i.test(message)
+      const isNetwork = /network|fetch|connection|timeout|ECONNREFUSED/i.test(message)
+      return NextResponse.json(
+        {
+          error: isQuotaOrRateLimit
+            ? "API do Gemini fora ou recursos esgotados. Verifique quota/créditos no Google AI Studio."
+            : isNetwork
+              ? "Falha de conexão com a API do Gemini. Tente novamente."
+              : message,
+          code: isQuotaOrRateLimit ? "GEMINI_QUOTA" : isNetwork ? "GEMINI_NETWORK" : "GEMINI_ERROR",
+        },
+        { status: 502 }
+      )
     }
 
     // D/E. Parse TOON e converter para JSON estruturado
@@ -76,6 +97,12 @@ export async function POST(request: NextRequest) {
         { status: 422 }
       )
     }
+
+    // Propor candidatos ECLASS quando score < 70%
+    const eclassCandidates =
+      primaryMapping.confidence < 0.7
+        ? getEclassCandidates(primaryMapping.source)
+        : undefined
 
     // Fallback ECLASS: força modelagem AAS com código ECLASS quando LLM retorna UNKNOWN
     const enriched = applyEclassFallback(
@@ -124,11 +151,33 @@ export async function POST(request: NextRequest) {
       unit: enriched.unit,
     }
 
-    const result: ProcessingResult & { source?: "llm" | "mock" } = {
+    // Interpretação contextual (variável única ou API)
+    let interpretation: string | undefined
+    try {
+      interpretation = await getInterpretation({
+        inputData: String(inputData).trim(),
+        inputType,
+        mapping: {
+          source: primaryMapping.source,
+          target: enriched.target,
+          eclassId: enriched.eclassId,
+        },
+      })
+    } catch {
+      // não falha o fluxo se interpretação falhar
+    }
+
+    const result: ProcessingResult & {
+      source?: "llm"
+      eclassCandidates?: Array<{ eclassId: string; target: string; unit: string }>
+      interpretation?: string
+    } = {
       status: enriched.confidence >= 0.85 ? "success" : "warning",
       inputType,
       inputData: String(inputData).trim(),
-      source: usedLLM ? "llm" : "mock",
+      source: "llm",
+      ...(eclassCandidates && eclassCandidates.length > 0 ? { eclassCandidates } : {}),
+      ...(interpretation ? { interpretation } : {}),
       reasoningSteps,
       toonOutput,
       toonMapping,
@@ -169,24 +218,6 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
-}
-
-function getMockToonForInput(inputData: string, inputType: string): string {
-  const tag = String(inputData).trim()
-  const known: Record<string, string> = {
-    "DB10.W2":
-      "⟨MAP_START⟩⟨SRC:DB10.W2⟩⟨TGT:ECLASS:0173-1#02-BAA123⟩⟨CONF:0.92⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩",
-    "DB1.DBX0.1":
-      "⟨MAP_START⟩⟨SRC:DB1.DBX0.1⟩⟨TGT:ECLASS:0173-1#02-BAF321#004⟩⟨CONF:0.95⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩",
-    "/temp/v1":
-      "⟨MAP_START⟩⟨SRC:/temp/v1⟩⟨TGT:ECLASS:0173-1#02-AAB713#005⟩⟨CONF:0.88⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩",
-    "Mtr_Tmp_01":
-      "⟨MAP_START⟩⟨SRC:Mtr_Tmp_01⟩⟨TGT:ECLASS:0173-1#02-AAB713#005⟩⟨CONF:0.90⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩",
-  }
-  return (
-    known[tag] ??
-    `⟨MAP_START⟩⟨SRC:${tag}⟩⟨TGT:ECLASS:0173-1#02-AAA000⟩⟨CONF:0.72⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩`
-  )
 }
 
 function inferUnit(target: string): string {

@@ -1,0 +1,17 @@
+# Few-Shot Examples para o Agente TOON
+
+## Exemplo 1: Comando de Acionar Esteira (enriquecido com description)
+Input: ⟨REQ⟩⟨TAG:DB1.W0⟩⟨DESC:Comando de marcha da esteira⟩⟨DATATYPE:BOOL⟩⟨TYPE:brownfield⟩⟨REQ_END⟩
+Output: ⟨MAP_START⟩⟨SRC:DB1.W0⟩⟨TGT:ECLASS:0173-1#02-BAB014#005⟩⟨CONF:0.95⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩
+
+## Exemplo 2: Velocidade Esteira (Brownfield)
+Input: ⟨REQ⟩⟨TAG:DB10.W2⟩⟨DESC:Velocidade linear da esteira transportadora⟩⟨TYPE:brownfield⟩⟨REQ_END⟩
+Output: ⟨MAP_START⟩⟨SRC:DB10.W2⟩⟨TGT:ECLASS:0173-1#02-BAA123⟩⟨CONF:0.92⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩
+
+## Exemplo 3: Sensor de Temperatura
+Input: ⟨REQ⟩⟨TAG:Mtr_Tmp_01⟩⟨DESC:Temperatura de rolamento do motor⟩⟨TYPE:brownfield⟩⟨REQ_END⟩
+Output: ⟨MAP_START⟩⟨SRC:Mtr_Tmp_01⟩⟨TGT:ECLASS:0173-1#02-AAB713#005⟩⟨CONF:0.90⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩
+
+## Exemplo 4: Endpoint Greenfield
+Input: ⟨REQ⟩⟨TAG:/temp/v1⟩⟨TYPE:greenfield⟩⟨REQ_END⟩
+Output: ⟨MAP_START⟩⟨SRC:/temp/v1⟩⟨TGT:ECLASS:0173-1#02-AAB713#005⟩⟨CONF:0.88⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩

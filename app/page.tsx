@@ -43,7 +43,7 @@ export default function HomePage() {
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="flex flex-col gap-2">
                     <Badge className="w-fit bg-primary/10 text-primary border border-primary/20 font-mono text-[10px]">
-                      Avaliação Intermediária
+                      Avaliação Final
                     </Badge>
                     <h1 className="text-xl lg:text-2xl font-bold text-foreground font-sans text-balance">
                       Agente Cognitivo para Instanciação Automatizada de AAS
@@ -290,7 +290,7 @@ export default function HomePage() {
 
             {/* CTA */}
             <div className="flex flex-col items-center gap-4 pt-4">
-              <div className="flex flex-col gap-2 sm:flex-row">
+              <div className="flex flex-col gap-2 sm:flex-row flex-wrap justify-center">
                 <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
                   <Link href="/estrategia">
                     Entenda a Estratégia
@@ -301,6 +301,11 @@ export default function HomePage() {
                   <Link href="/agente">
                     Ir para o Agente
                     <Layers className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="border-primary/30">
+                  <Link href="/portfolio">
+                    Portfólio de Serviços
                   </Link>
                 </Button>
               </div>

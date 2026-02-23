@@ -33,45 +33,55 @@ O sistema atua como **middleware cognitivo** entre dados legados (Brownfield) ou
 O fluxo de processamento segue uma pipeline sequencial e determinística:
 
 ```
-Input (Frontend)
+Input (Frontend) – tag/endpoint + description opcional (Brownfield)
     ↓
 1. Guardrail (/api/guardrail) – Filtro de domínio industrial
     ↓ (se válido)
 2. Orquestrador (/api/orchestrator) – Maestro do fluxo
     ↓
-3. Agente LLM (/api/agent) – Gemini 1.5 Pro em modo TOON
+3. Agente LLM (Gemini 2.5 Flash) – Inferência em modo TOON (⟨TAG⟩⟨DESC⟩⟨DATATYPE⟩)
     ↓
-4. Resposta TOON (string com tokens ⟨MAP_START⟩⟨SRC:...⟩⟨TGT:...⟩⟨CONF:...⟩⟨MAP_END⟩)
+4. Resposta TOON (⟨MAP_START⟩⟨SRC:...⟩⟨TGT:ECLASS:...|UNKNOWN⟩⟨CONF:0.0-1.0⟩⟨MAP_END⟩)
     ↓
-5. Parser Semântico – Regex/split convertendo TOON → JSON estruturado
+5. Parser Semântico – TOON → JSON estruturado
     ↓
-6. Saída JSON – AAS, ECLASS, Node-RED para o frontend
+6. Interpretação contextual + Fallback ECLASS (se UNKNOWN ou score < 70%)
+    ↓
+7. Saída JSON – AAS, ECLASS, Node-RED, interpretation, eclassCandidates
 ```
+
+**Alternativa Datasheet PDF:** `POST /api/extract-datasheet` – extrai variáveis via Gemini e mapeia em lote.
 
 ### Fluxo resumido
 
-**Input** → **Guardrail** (validação heurística) → **Orquestrador** → **LLM (TOON)** → **Parser** → **JSON final**
+**Input enriquecido** (tag + description + datatype) → **Guardrail** → **Orquestrador** → **LLM (TOON)** → **Parser** → **Interpretação** → **JSON final**
 
 ---
 
 ## Decisões de Engenharia e Justificativas
 
-### Escolha do Gemini 1.5 Pro
+### Escolha do Gemini 2.5 Flash
 
-O modelo **Gemini 1.5 Pro** foi selecionado por:
+O modelo **Gemini 2.5 Flash** foi selecionado por:
 
-- **Janela de contexto ampla** (até 1M+ tokens), permitindo carregar documentação AAS/ECLASS como contexto quando necessário
+- **Baixa latência** e custo otimizado para inferência semântica em produção
 - **Excelente em tarefas analíticas** e raciocínio estruturado para mapeamento ontológico
-- **Custo-benefício** favorável para workloads de inferência semântica
 - **SDK oficial `@google/genai`** com suporte a function calling e integração serverless na Vercel
 
-### Temperatura 0.1
+### Temperatura 0.1 e Parâmetros
 
-A temperatura foi fixada em **0.1** (assim como `topP: 0.8`) para:
+A temperatura foi fixada em **0.1**; `topP: 0.8`, `topK: 40`, `maxOutputTokens: 1024` para:
 
 - **Resultados determinísticos** – reduzir variação entre execuções
 - **Conformidade sintática** – o LLM deve seguir a gramática TOON com precisão
 - **Evitar criatividade desnecessária** – a tarefa é mapeamento, não geração livre
+
+**topP e topK:** Restringem o espaço de amostragem; com TOON já limitamos o vocabulário de saída, então valores moderados evitam tokens inesperados sem travar o modelo.  
+**maxOutputTokens:** TOON é compacto; 1024 tokens são suficientes para o mapeamento e reduz custo de inferência.
+
+### Por que não LangChain?
+
+O fluxo é **controlado e previsível** (Guardrail → Orchestrator → Agent → Parser). LangChain adicionaria camadas (chains, memory, abstrações) desnecessárias. Optamos por **chamada direta ao SDK `@google/genai`** para manter controle total da engenharia de prompts e reduzir complexidade em ambiente serverless (Vercel).
 
 ### Estratégia TOON – Economia de Tokens e Redução de Alucinações
 
@@ -106,7 +116,7 @@ Aciona a geração de PDF com os dados do ativo mapeado (AAS, ECLASS, TOON).
 
 ## Arquitetura da Solução
 
-```mermaid
+```
 graph TD
     %% Definindo as cores e estilos
     classDef frontend fill:#333333,stroke:#fff,stroke-width:2px,color:#fff;
@@ -164,13 +174,47 @@ graph TD
 
 ---
 
+## O que funcionou
+
+- **TOON em vez de JSON** – Eliminou erros de sintaxe (vírgulas, aspas) e reduziu tokens de saída.
+- **Temperatura 0.1** – Comportamento estável e previsível; inferência semântica coerente.
+- **Guardrail pré-LLM** – Bloqueia inputs fora do domínio industrial e economiza tokens.
+- **Parser determinístico** – Regex/split sobre TOON garante saída JSON válida e AAS consistente.
+- **Entrada enriquecida** – Tag + `description` + `datatype` para Brownfield aumenta precisão (ex.: DB1.W0 + "Comando de marcha da esteira" → ECLASS 0173-1#02-BAB014#005).
+- **Regra UNKNOWN** – Variável isolada sem contexto retorna `⟨TGT:UNKNOWN⟩ ⟨CONF:0.0⟩` em vez de alucinar; Human-in-the-Loop para revisão.
+- **Interpretação contextual** – Bloco "Interpretação do agente" descreve o que o LLM inferiu (variável, API, equipamento).
+- **Candidatos ECLASS** – Quando score < 70%, o usuário pode escolher entre candidatos sugeridos.
+- **Datasheet PDF** – Extração e mapeamento em lote via Gemini; geração de AAS multi-variável.
+
+---
+
+## O que não funcionou
+
+- **JSON direto do LLM** – Quebrava com frequência (vírgulas extras, chaves abertas).
+- **Temperatura > 0.3** – Gerava inconsistências e IRDIs variados para mesma tag.
+- **Sem restrição de output** – O modelo às vezes justificava em texto ou saía do formato.
+- **Muitos requisitos ao mesmo tempo** – O LLM não entendia todos os requisitos quando instruído de uma só vez; era necessário fracionar o escopo ou priorizar itens.
+- **Modelagem aceitável no software** – O modelo tinha dificuldade em traduzir requisitos AAS/ECLASS em implementação coerente; foi preciso regras determinísticas e fallbacks para garantir conformidade.
+
+---
+
+## Trabalhos futuros (RAG)
+
+- **RAG com base vetorial ECLASS** – Incorporar catálogos oficiais e submodelos AAS para grounding.
+- **Grounding com templates AAS** – Reduzir alucinação em códigos IRDI e aumentar precisão.
+- **Arquitetura multi-agente** – Separar módulos de geração, validação e orquestração em agentes distintos.
+
+---
+
 ## Rotas da API
 
 | Rota | Método | Função |
 |------|--------|--------|
 | `/api/guardrail` | POST | Valida se o payload está no contexto industrial. Retorna 400 se inválido. |
-| `/api/agent` | POST | Interface com o Gemini Pro. Retorna string TOON. |
-| `/api/orchestrator` | POST | Fluxo completo: Guardrail → Agent → Parser → JSON AAS/Node-RED. |
+| `/api/agent` | POST | Interface com o Gemini 2.5 Flash. Retorna string TOON. |
+| `/api/orchestrator` | POST | Fluxo completo: Guardrail → Agent → Parser → Interpretação → JSON AAS/Node-RED. Aceita `inputData`, `inputType`, `description?`, `datatype?`. |
+| `/api/extract-datasheet` | POST | Upload de PDF de datasheet. Extrai variáveis via Gemini e gera multi-MAP TOON + AAS. |
+| `/api/status` | GET | Retorna status da API (ex.: se GEMINI_API_KEY está configurada). |
 
 ---
 
@@ -195,8 +239,21 @@ http://localhost:3000
 
 **Modos de operação:**
 
-- **Com `GEMINI_API_KEY`:** usa o Gemini 2.5 Flash para mapeamento semântico real
-- **Sem `GEMINI_API_KEY`:** usa mapeamentos mock pré-definidos (funcional para testes)
+- **Com `GEMINI_API_KEY`:** usa o Gemini 2.5 Flash para mapeamento semântico real (orquestrador e datasheet)
+- **Sem `GEMINI_API_KEY`:** o orquestrador retorna erro 503; use `.env.local` com a chave
+
+**Formato de entrada recomendado (Brownfield):**
+
+```json
+{
+  "inputData": "DB1.W0",
+  "inputType": "brownfield",
+  "description": "Comando de marcha da esteira",
+  "datatype": "BOOL"
+}
+```
+
+Sem `description`, o agente pode retornar UNKNOWN para tags isoladas (evitando alucinação em ambientes críticos).
 
 ---
 
@@ -265,6 +322,7 @@ Para **Greenfield (API REST)**: usa o nó nativo `http request`. Nenhuma instala
 - [`/docs/05-thinking-process.md`](./docs/05-thinking-process.md) - Processo de Thinking do Agente
 - [`/docs/06-arquitetura-solucao.md`](./docs/06-arquitetura-solucao.md) - Arquitetura detalhada da solução
 - [`/docs/07-integracao-nodered.md`](./docs/07-integracao-nodered.md) - Como integrar o fluxo Node-RED ao seu flow
+- [`/docs/08-avaliacao-final-checklist.md`](./docs/08-avaliacao-final-checklist.md) - Checklist da Avaliação Final
 
 ---
 

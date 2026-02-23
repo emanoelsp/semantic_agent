@@ -1,22 +1,116 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Layers, FileJson, GitBranch, FileDown, Download } from "lucide-react"
+import { Layers, FileJson, GitBranch, FileDown, Download, ChevronDown, ChevronRight, Box } from "lucide-react"
 import type { ProcessingResult } from "@/lib/mock-data"
 import { generateAASJson, generateNodeRedFlow } from "@/lib/mock-data"
 import { generateModelagemFuncionalPDF } from "@/lib/pdf-modelagem"
 
+type ResultWithDatasheet = ProcessingResult & {
+  aasJson?: object
+  datasheetMappings?: Array<{ source: string; target: string; eclassId: string; description?: string }>
+}
+
 interface ModuleModelagemProps {
-  result: ProcessingResult | null
+  result: ResultWithDatasheet | null
+}
+
+// Bloco visual AAS expansível
+function AASBlockVisual({ result }: { result: ResultWithDatasheet }) {
+  const assetName = (result.aasPreview.idShort as string) || "Asset"
+  const [expanded, setExpanded] = useState(true)
+
+  const submodelElements =
+    "datasheetMappings" in result && result.datasheetMappings
+      ? [
+          { name: "OperationalVariables", type: "Submodel" as const },
+          ...result.datasheetMappings.map((m) => ({
+            name: m.description ?? m.target,
+            type: "Property" as const,
+            eclass: m.eclassId,
+            unit: undefined as string | undefined,
+          })),
+        ]
+      : [
+          { name: "TechnicalData", type: "Submodel" as const },
+          { name: result.toonMapping.target, type: "Property" as const, eclass: result.toonMapping.eclassId, unit: result.toonMapping.unit },
+        ]
+
+  return (
+    <div className="rounded-lg border border-primary/30 bg-card overflow-hidden">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="flex w-full items-center gap-2 px-3 py-2.5 bg-primary/10 hover:bg-primary/15 transition-colors text-left"
+      >
+        {expanded ? <ChevronDown className="h-3.5 w-3.5 text-primary shrink-0" /> : <ChevronRight className="h-3.5 w-3.5 text-primary shrink-0" />}
+        <Layers className="h-3.5 w-3.5 text-primary shrink-0" />
+        <span className="text-xs font-semibold font-sans text-foreground">{assetName}</span>
+        <Badge variant="secondary" className="ml-auto text-[9px] font-mono shrink-0">AAS</Badge>
+      </button>
+          {expanded && (
+        <div className="border-t border-border p-2 space-y-1">
+          {submodelElements.map((el, i) => (
+            <div key={i} className="flex items-center gap-2 rounded border border-border bg-background/80 px-2 py-1.5">
+              <Box className="h-3 w-3 text-muted-foreground shrink-0" />
+              <span className="text-[10px] font-mono text-foreground">{el.name}</span>
+              {"eclass" in el && (
+                <>
+                  <span className="text-[9px] text-muted-foreground font-mono">ECLASS: {el.eclass}</span>
+                  {"unit" in el && el.unit && (
+                    <Badge variant="outline" className="text-[8px] font-mono ml-auto">{el.unit}</Badge>
+                  )}
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// Ilustração visual do fluxo Node-RED
+function NodeRedFlowIllustration({ result }: { result: ProcessingResult }) {
+  const nodes = [
+    { id: "in", label: result.inputType === "brownfield" ? "S7 / PLC" : "HTTP", color: "bg-blue-500/20 border-blue-500/40" },
+    { id: "fn", label: "TOON Transform", color: "bg-primary/20 border-primary/40" },
+    { id: "out", label: "AAS Registry", color: "bg-emerald-500/20 border-emerald-500/40" },
+  ]
+  return (
+    <div className="rounded-lg border border-border bg-background/50 p-3">
+      <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground font-mono mb-3">
+        Fluxo gerado (exemplo)
+      </p>
+      <div className="flex items-center gap-2 flex-wrap">
+        {nodes.map((n, i) => (
+          <div key={n.id} className="flex items-center gap-2">
+            <div className={`rounded-md border px-2 py-1.5 ${n.color}`}>
+              <span className="text-[10px] font-mono">{n.label}</span>
+            </div>
+            {i < nodes.length - 1 && (
+              <span className="text-muted-foreground">→</span>
+            )}
+          </div>
+        ))}
+      </div>
+      <p className="text-[9px] text-muted-foreground mt-2 font-sans">
+        Leitura de {result.toonMapping.source} → mapeamento TOON → publicação AAS.
+      </p>
+    </div>
+  )
 }
 
 export function ModuleModelagem({ result }: ModuleModelagemProps) {
   if (!result) return null
 
-  const aasJson = generateAASJson(result)
+  const aasJsonStr =
+    "aasJson" in result && result.aasJson
+      ? JSON.stringify(result.aasJson, null, 2)
+      : generateAASJson(result)
   const nodeRedFlow = generateNodeRedFlow(result)
 
   const handleDownloadPDF = () => {
@@ -61,6 +155,14 @@ export function ModuleModelagem({ result }: ModuleModelagemProps) {
           e fluxo Node-RED para integração. Formato TOON validado.
         </p>
 
+        {/* Bloco visual AAS */}
+        <div className="rounded-md border border-border bg-secondary/20 p-3">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground font-mono mb-2">
+            Modelagem funcional do ativo (visual)
+          </p>
+          <AASBlockVisual result={result} />
+        </div>
+
         <Tabs defaultValue="aas" className="w-full">
           <TabsList className="grid w-full grid-cols-2 bg-secondary/50">
             <TabsTrigger value="aas" className="flex items-center gap-1.5 text-xs font-sans">
@@ -73,30 +175,29 @@ export function ModuleModelagem({ result }: ModuleModelagemProps) {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="aas" className="mt-3">
-            <div className="max-h-[220px] overflow-auto rounded-md border border-border bg-background p-3">
+          <TabsContent value="aas" className="mt-3 space-y-3">
+            <div className="max-h-[180px] overflow-auto rounded-md border border-border bg-background p-3">
               <pre className="text-[10px] text-muted-foreground font-mono leading-relaxed whitespace-pre-wrap">
-                {aasJson}
+                {aasJsonStr}
               </pre>
             </div>
           </TabsContent>
 
-          <TabsContent value="nodered" className="mt-3">
-            <div className="flex flex-col gap-2">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={handleDownloadNodeRed}
-                className="w-fit"
-              >
-                <Download className="mr-2 h-3.5 w-3.5" />
-                Baixar JSON Node-RED
-              </Button>
-              <div className="max-h-[180px] overflow-auto rounded-md border border-border bg-background p-3">
-                <pre className="text-[10px] text-muted-foreground font-mono leading-relaxed whitespace-pre-wrap">
-                  {nodeRedFlow}
-                </pre>
-              </div>
+          <TabsContent value="nodered" className="mt-3 space-y-3">
+            <NodeRedFlowIllustration result={result} />
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={handleDownloadNodeRed}
+              className="w-fit"
+            >
+              <Download className="mr-2 h-3.5 w-3.5" />
+              Baixar JSON Node-RED
+            </Button>
+            <div className="max-h-[140px] overflow-auto rounded-md border border-border bg-background p-3">
+              <pre className="text-[10px] text-muted-foreground font-mono leading-relaxed whitespace-pre-wrap">
+                {nodeRedFlow}
+              </pre>
             </div>
           </TabsContent>
         </Tabs>

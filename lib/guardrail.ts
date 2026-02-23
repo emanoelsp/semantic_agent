@@ -27,6 +27,14 @@ const INDUSTRIAL_PATTERNS = [
   /^[\w.\-_/]+$/,
 ]
 
+/** Palavras que indicam conteúdo claramente fora do escopo industrial */
+const NON_INDUSTRIAL_WORDS = [
+  "futebol", "futebolista", "gol", "bola", "campo", "time", "jogo", "partida",
+  "futebolista", "torcida", "campeonato", "copa", "liga", "esporte", "esportivo",
+  "receita", "culinaria", "comida", "restaurante", "filme", "musica", "cinema",
+  "politica", "eleicao", "noticia", "entretenimento", "viagem", "turismo",
+]
+
 /** Padrões que indicam conteúdo malicioso ou fora de escopo */
 const BLOCKED_PATTERNS = [
   /<script|javascript:|on\w+\s*=/i,
@@ -79,9 +87,22 @@ export function validateIndustrialContext(payload: unknown): GuardrailResult {
   const hasIndustrialMatch = INDUSTRIAL_PATTERNS.some((p) => p.test(textToAnalyze))
 
   if (!hasIndustrialMatch) {
-    // Fallback: strings curtas que parecem tags ou identificadores
+    // Bloquear palavras claramente fora do escopo
+    const lower = textToAnalyze.toLowerCase()
+    const isBlocked = NON_INDUSTRIAL_WORDS.some(
+      (w) => lower === w || lower.includes(` ${w} `) || lower.startsWith(`${w} `) || lower.endsWith(` ${w}`)
+    )
+    if (isBlocked) {
+      return {
+        valid: false,
+        reason: "Input fora do escopo industrial (sensores, PLCs, telemetria, AAS, ECLASS)",
+      }
+    }
+    // Fallback: strings curtas que parecem tags técnicas (ex: DB10.W2, Mtr_Tmp)
     const looksLikeTag =
-      textToAnalyze.length <= 80 && /^[\w.\-_/:#]+$/.test(textToAnalyze)
+      textToAnalyze.length <= 80 &&
+      /^[\w.\-_/:#]+$/.test(textToAnalyze) &&
+      (/\d/.test(textToAnalyze) || /[A-Z_\.]/.test(textToAnalyze) || /^(db|mw|md|%|api\/)/i.test(textToAnalyze))
     if (looksLikeTag) {
       return { valid: true }
     }

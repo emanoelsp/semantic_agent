@@ -18,8 +18,8 @@ A arquitetura do TOON Semantic Agent segue o padrao **Modular Pipeline** com 4 e
 |  | Percepcao & Ingestao      |  | Raciocinio Semantico      |               |
 |  |                           |  |                           |               |
 |  | [Upload CSV/XML]          |  | [Log de Raciocinio CoT]  |               |
-|  | [Input Tag Manual]        |  | [ECLASS Match Display]   |               |
-|  | [Toggle Brownfield/Green] |  | [Confidence Gauge]       |               |
+|  | [Input Tag + Description] |  | [Interpretação do Agente] |               |
+|  | [Toggle Brownfield/Green] |  | [ECLASS Match / Candidatos] |               |
 |  +---------------------------+  +---------------------------+               |
 |                                                                             |
 |  +---------------------------+  +---------------------------+               |
@@ -39,31 +39,24 @@ A arquitetura do TOON Semantic Agent segue o padrao **Modular Pipeline** com 4 e
 |                          CAMADA DE API                                       |
 |                          (Next.js API Routes)                                |
 |                                                                             |
-|  POST /api/process-ingestion                                                |
-|  |                                                                          |
-|  |-> Recebe: { type: "brownfield"|"greenfield", data: string|File }        |
-|  |-> Processa: Mock com delay simulando LLM                                |
-|  |-> Retorna: { reasoning_steps, toon_output, confidence, aas_preview }    |
+|  POST /api/orchestrator (inputData, inputType, description?, datatype?)     |
+|  |-> Fluxo: Guardrail -> Agent (Gemini) -> Parser -> Interpretação          |
+|  |-> Retorna: reasoningSteps, confidence, interpretation, eclassCandidates |
 |                                                                             |
-|  GET /api/eclass-lookup                                                     |
-|  |                                                                          |
-|  |-> Recebe: { query: string }                                             |
-|  |-> Retorna: { matches: EclassProperty[] }                                |
+|  POST /api/extract-datasheet (FormData PDF) -> multi-MAP TOON + AAS        |
 |                                                                             |
 +============================================================================+
                                     |
-                                    | (Futuro: LLM API + VectorDB)
                                     v
 +============================================================================+
-|                          CAMADA DE INTELIGENCIA (FUTURO)                    |
+|                          CAMADA DE INTELIGENCIA                             |
 |                                                                             |
 |  +------------------+  +------------------+  +------------------+           |
-|  | LLM Engine       |  | RAG Pipeline     |  | TOON Parser      |           |
-|  | (Gemini/GPT-4o)  |  | (LangGraph)      |  | (BNF Validator)  |           |
+|  | LLM (Gemini 2.5) |  | ECLASS Fallback  |  | TOON Parser      |           |
 |  |                  |  |                  |  |                  |           |
-|  | - Inferencia     |  | - Embedding      |  | - Tokenizacao    |           |
-|  | - CoT Reasoning  |  | - Retrieval      |  | - Validacao      |           |
-|  | - Few-Shot       |  | - Re-ranking     |  | - Self-Correct   |           |
+|  | - Inferência     |  | - UNKNOWN→heur.  |  | - Tokenização    |           |
+|  | - Input TOON     |  | - Candidatos     |  | - Validação      |           |
+|  | ⟨TAG⟩⟨DESC⟩      |  | score < 70%      |  | - BNF conform.   |           |
 |  +------------------+  +------------------+  +------------------+           |
 |                                                                             |
 +============================================================================+
@@ -99,18 +92,16 @@ Cada modulo tem uma **responsabilidade unica**:
 
 **Beneficio:** Cada modulo pode ser testado, evoluido e substituido independentemente.
 
-### Principio 2: Mock-First Development
+### Principio 2: Entrada Enriquecida (Brownfield)
 
-A arquitetura foi desenhada para ser **mock-first**:
+Para variáveis isoladas de PLC/sensor legado, o mapeamento exige **contexto semântico**:
 
 ```
-[MVP Atual]                    [Projeto Final]
-Mock Handler     ------->      LLM API + RAG
-Mock Data        ------->      Vector DB + ECLASS
-Static Response  ------->      Dynamic Inference
+[Envio incorreto]              [Envio correto]
+{"tag": "DB1.W0"}      --->    {"tag": "DB1.W0", "description": "Comando de marcha da esteira", "datatype": "BOOL"}
 ```
 
-**Beneficio:** A interface e a API estao prontas. Basta substituir os mocks por implementacoes reais.
+**Benefício:** Sem description, o agente retorna `⟨TGT:UNKNOWN⟩ ⟨CONF:0.0⟩` em vez de alucinar. Human-in-the-Loop para ambientes críticos.
 
 ### Principio 3: Pipeline Linear com Feedback
 
@@ -165,30 +156,35 @@ O fluxo e linear (A -> B -> C -> D) mas com **feedback loop** no Modulo C:
 ```
 /
 ├── app/
-│   ├── layout.tsx              # Layout root com tema dark
-│   ├── page.tsx                # Dashboard principal
-│   ├── globals.css             # Tokens de design (dark industrial)
+│   ├── layout.tsx
+│   ├── page.tsx
+│   ├── agente/page.tsx         # Página principal do agente (4 módulos)
+│   ├── globals.css
 │   └── api/
-│       └── process-ingestion/
-│           └── route.ts        # Mock endpoint principal
+│       ├── orchestrator/       # Fluxo principal (Guardrail → Agent → Parser)
+│       ├── extract-datasheet/  # Datasheet PDF → multi-MAP TOON + AAS
+│       ├── agent/              # Interface LLM (Gemini)
+│       ├── guardrail/          # Filtro domínio industrial
+│       ├── status/             # Status da API (GEMINI_API_KEY)
+│       └── process-ingestion/  # Mock legado (compatibilidade)
 ├── components/
-│   ├── ui/                     # shadcn/ui components
-│   ├── dashboard-header.tsx    # Header do dashboard
-│   ├── module-ingestion.tsx    # Modulo A
-│   ├── module-reasoning.tsx    # Modulo B
-│   ├── module-toon.tsx         # Modulo C
-│   └── module-actuation.tsx    # Modulo D
+│   ├── module-ingestion.tsx    # Input tag + description + datasheet upload
+│   ├── module-reasoning.tsx    # Steps, interpretation, confidence, eclassCandidates
+│   ├── module-toon.tsx         # TOON display
+│   └── module-modelagem.tsx    # AAS + Node-RED
 ├── lib/
-│   ├── utils.ts                # Utilidades gerais
-│   ├── mock-data.ts            # Dados mock realistas
-│   └── toon-parser.ts          # Parser/validator TOON
+│   ├── agent.ts                # invokeAgent, inputToToon (⟨TAG⟩⟨DESC⟩⟨DATATYPE⟩)
+│   ├── guardrail.ts
+│   ├── interpretation.ts       # getInterpretation (contexto variável/API/equipamento)
+│   ├── eclass-fallback.ts      # UNKNOWN fallback, getEclassCandidates
+│   ├── toon-orchestrator-parser.ts
+│   ├── datasheet-agent.ts      # Extração PDF + mapeamento
+│   └── aas-datasheet.ts        # Geração AAS multi-variável
+├── prompts/
+│   ├── system_prompt.txt       # Regra UNKNOWN, ECLASS 0173-1#02-BAB014#005
+│   └── few_shot_examples.txt
+├── tools/                      # validate_eclass_format, trigger_pdf_generation
 ├── docs/
-│   ├── 01-gemini-escopo.md
-│   ├── 02-notebooklm-prompts.md
-│   ├── 03-prompt-claude-code.md
-│   ├── 04-agente-codigo.md
-│   ├── 05-thinking-process.md
-│   └── 06-arquitetura-solucao.md
 └── README.md
 ```
 
@@ -218,8 +214,10 @@ O fluxo e linear (A -> B -> C -> D) mas com **feedback loop** no Modulo C:
 
 | Fase | Descricao | Status |
 |------|-----------|--------|
-| MVP (Atual) | Dashboard + Mocks + Documentacao | Em desenvolvimento |
-| v1.0 | Integracao Gemini/GPT-4o real | Planejado |
-| v1.5 | RAG com Qdrant + ECLASS | Planejado |
-| v2.0 | Self-Correction loop + Human-in-the-Loop | Planejado |
+| v1.0 | Integracao Gemini 2.5 Flash real | Concluído |
+| v1.1 | Entrada enriquecida (description, datatype) | Concluído |
+| v1.2 | Regra UNKNOWN + Human-in-the-Loop | Concluído |
+| v1.3 | Interpretação contextual + Candidatos ECLASS | Concluído |
+| v1.4 | Datasheet PDF (extração + multi-MAP) | Concluído |
+| v2.0 | RAG com Qdrant + ECLASS | Planejado |
 | v3.0 | Edge deployment com OPC UA/MQTT | Futuro |

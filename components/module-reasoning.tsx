@@ -3,16 +3,28 @@
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Brain, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react"
-import type { ReasoningStep } from "@/lib/mock-data"
+import { Button } from "@/components/ui/button"
+import { Brain, CheckCircle2, AlertTriangle, Loader2, Lightbulb } from "lucide-react"
+import type { ReasoningStep, ToonMapping } from "@/lib/mock-data"
 
 interface ModuleReasoningProps {
   steps: ReasoningStep[]
   isProcessing: boolean
   confidence: number | null
+  interpretation?: string
+  eclassCandidates?: Array<{ eclassId: string; target: string; unit: string }>
+  toonMapping?: ToonMapping
+  onSelectEclass?: (eclassId: string, target: string, unit: string) => void
 }
 
-export function ModuleReasoning({ steps, isProcessing, confidence }: ModuleReasoningProps) {
+export function ModuleReasoning({
+  steps,
+  isProcessing,
+  confidence,
+  interpretation,
+  eclassCandidates,
+  onSelectEclass,
+}: ModuleReasoningProps) {
   const [visibleSteps, setVisibleSteps] = useState<number>(0)
 
   // Animacao progressiva dos steps
@@ -108,6 +120,23 @@ export function ModuleReasoning({ steps, isProcessing, confidence }: ModuleReaso
           )}
         </div>
 
+        {/* Interpretação contextual (o que o agente acha que é) */}
+        {interpretation && visibleSteps >= steps.length && (
+          <div className="rounded-md border border-primary/20 bg-primary/5 p-3">
+            <div className="flex items-start gap-2">
+              <Lightbulb className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-primary font-mono mb-1">
+                  Interpretação do agente
+                </p>
+                <p className="text-xs text-foreground font-sans leading-relaxed">
+                  {interpretation}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Confidence Score */}
         {confidence !== null && visibleSteps >= steps.length && (
           <div className={`flex items-center justify-between rounded-md border p-3 ${getConfidenceBg(confidence)}`}>
@@ -132,6 +161,32 @@ export function ModuleReasoning({ steps, isProcessing, confidence }: ModuleReaso
             Confidence abaixo de 85%. Recomenda-se validação humana (Human-in-the-Loop).
           </p>
         )}
+
+        {/* Candidatos ECLASS quando score < 70% */}
+        {eclassCandidates &&
+          eclassCandidates.length > 0 &&
+          confidence !== null &&
+          confidence < 0.7 &&
+          visibleSteps >= steps.length && (
+            <div className="rounded-md border border-amber-500/30 bg-amber-950/20 p-3">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-amber-400 font-mono mb-2">
+                Candidatos ECLASS — escolha um (score &lt; 70%)
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {eclassCandidates.map((c) => (
+                  <Button
+                    key={c.eclassId}
+                    variant="secondary"
+                    size="sm"
+                    className="h-auto py-1.5 px-2 text-[10px] font-mono border border-border hover:border-primary/50"
+                    onClick={() => onSelectEclass?.(c.eclassId, c.target, c.unit)}
+                  >
+                    {c.eclassId} — {c.target}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
       </CardContent>
     </Card>
   )

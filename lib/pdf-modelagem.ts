@@ -2,7 +2,9 @@ import { jsPDF } from "jspdf"
 import type { ProcessingResult } from "./mock-data"
 import { generateAASJson, generateNodeRedFlow } from "./mock-data"
 
-export function generateModelagemFuncionalPDF(result: ProcessingResult): void {
+type ResultWithDatasheet = ProcessingResult & { aasJson?: object }
+
+export function generateModelagemFuncionalPDF(result: ResultWithDatasheet): void {
   const doc = new jsPDF({ unit: "mm", format: "a4" })
   const margin = 15
   const pageWidth = doc.internal.pageSize.getWidth()
@@ -74,7 +76,11 @@ export function generateModelagemFuncionalPDF(result: ProcessingResult): void {
   )
 
   // 4. AAS (Asset Administration Shell)
-  addSection("4. AAS - Asset Administration Shell", generateAASJson(result))
+  const aasStr =
+    result.aasJson != null
+      ? JSON.stringify(result.aasJson, null, 2)
+      : generateAASJson(result)
+  addSection("4. AAS - Asset Administration Shell", aasStr)
 
   // 5. Node-RED (Modelagem de Integração)
   addSection("5. Node-RED - Fluxo de Integração", generateNodeRedFlow(result))

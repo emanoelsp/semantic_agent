@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
-import { Cpu, BookOpen, BrainCircuit, FlaskConical } from "lucide-react"
+import { Cpu, BookOpen, BrainCircuit, FlaskConical, LayoutGrid } from "lucide-react"
 
 const NAV_ITEMS = [
   {
@@ -27,6 +27,13 @@ const NAV_ITEMS = [
     icon: FlaskConical,
     description: "Dashboard interativo",
   },
+  {
+    href: "/portfolio",
+    label: "Portfólio",
+    shortLabel: "API",
+    icon: LayoutGrid,
+    description: "Serviços e APIs",
+  },
 ]
 
 export function Navigation() {
@@ -46,7 +53,7 @@ export function Navigation() {
                 TOON Semantic Agent
               </p>
               <p className="text-[10px] text-muted-foreground font-sans leading-tight">
-                IA Generativa - Avaliação Intermediária
+                IA Generativa - Avaliação Final
               </p>
             </div>
           </Link>
@@ -82,7 +89,7 @@ export function Navigation() {
             variant="secondary"
             className="hidden sm:flex items-center gap-1.5 bg-emerald-950/50 text-emerald-400 border border-emerald-500/20 font-mono text-[10px] shrink-0"
           >
-            MVP Mock
+            LLM
           </Badge>
         </div>
       </div>

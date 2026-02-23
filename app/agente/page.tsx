@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { Navigation } from "@/components/navigation"
 import { ModuleIngestion } from "@/components/module-ingestion"
 import { ModuleReasoning } from "@/components/module-reasoning"
@@ -11,7 +11,11 @@ import { Button } from "@/components/ui/button"
 import { Activity, Wifi, ChevronRight, ChevronLeft } from "lucide-react"
 import type { ProcessingResult } from "@/lib/mock-data"
 
-type AgentResult = ProcessingResult & { source?: "llm" | "mock" }
+type AgentResult = ProcessingResult & {
+  source?: "llm"
+  interpretation?: string
+  eclassCandidates?: Array<{ eclassId: string; target: string; unit: string }>
+}
 
 const STEPS = [
   { id: 1, name: "Dados", short: "1" },
@@ -26,19 +30,35 @@ export default function AgentePage() {
   const [result, setResult] = useState<AgentResult | null>(null)
   const [lastProcessingTime, setLastProcessingTime] = useState<number | undefined>()
   const [error, setError] = useState<string | null>(null)
+  const [geminiConfigured, setGeminiConfigured] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    fetch("/api/status")
+      .then((r) => r.json())
+      .then((d) => setGeminiConfigured(d.geminiConfigured === true))
+      .catch(() => setGeminiConfigured(false))
+  }, [])
 
   const handleProcess = useCallback(
-    async (inputData: string, inputType: "brownfield" | "greenfield") => {
+    async (
+      inputData: string,
+      inputType: "brownfield" | "greenfield",
+      description?: string,
+      datatype?: string
+    ) => {
       setIsProcessing(true)
       setResult(null)
       setError(null)
 
       try {
         const startTime = Date.now()
+        const body: Record<string, string> = { inputData, inputType }
+        if (description?.trim()) body.description = description.trim()
+        if (datatype?.trim()) body.datatype = datatype.trim()
         const response = await fetch("/api/orchestrator", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ inputData, inputType }),
+          body: JSON.stringify(body),
         })
 
         const data = await response.json().catch(() => ({}))
@@ -61,6 +81,40 @@ export default function AgentePage() {
     },
     []
   )
+
+  const handleProcessDatasheet = useCallback(async (file: File) => {
+    setIsProcessing(true)
+    setResult(null)
+    setError(null)
+
+    try {
+      const startTime = Date.now()
+      const formData = new FormData()
+      formData.append("file", file)
+
+      const response = await fetch("/api/extract-datasheet", {
+        method: "POST",
+        body: formData,
+      })
+
+      const data = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        const msg = typeof data?.error === "string" ? data.error : `Erro ${response.status}: ${response.statusText}`
+        setError(msg)
+        return
+      }
+
+      setResult(data as AgentResult)
+      setLastProcessingTime(Date.now() - startTime)
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Erro de conexão"
+      setError(msg)
+      console.error("Erro:", err)
+    } finally {
+      setIsProcessing(false)
+    }
+  }, [])
 
   const canAdvance = () => {
     if (step === 1) return !!result && !isProcessing
@@ -108,14 +162,10 @@ export default function AgentePage() {
               </Badge>
               <Badge
                 variant="secondary"
-                className={`flex items-center gap-1.5 font-mono text-xs ${
-                  result?.source === "llm"
-                    ? "bg-primary/20 text-primary border border-primary/30"
-                    : "bg-emerald-950/50 text-emerald-400 border border-emerald-500/20"
-                }`}
+                className="flex items-center gap-1.5 font-mono text-xs bg-primary/20 text-primary border border-primary/30"
               >
                 <Wifi className="h-3 w-3" />
-                {result?.source === "llm" ? "LLM" : "Mock"}
+                LLM
               </Badge>
             </div>
           </div>
@@ -160,7 +210,16 @@ export default function AgentePage() {
             {/* Página 1: Dados */}
             {step === 1 && (
               <>
-                <ModuleIngestion onProcess={handleProcess} isProcessing={isProcessing} />
+                {geminiConfigured === false && (
+                  <div className="rounded-md border border-amber-500/40 bg-amber-950/30 p-3 text-sm text-amber-400">
+                    API do Gemini não configurada ou indisponível. Configure GEMINI_API_KEY no .env.local ou na Vercel.
+                  </div>
+                )}
+                <ModuleIngestion
+                  onProcess={handleProcess}
+                  onProcessDatasheet={handleProcessDatasheet}
+                  isProcessing={isProcessing}
+                />
                 {error && (
                   <div className="rounded-md border border-red-500/30 bg-red-950/30 p-3 text-sm text-red-400">
                     {error}
@@ -182,6 +241,26 @@ export default function AgentePage() {
                   steps={result?.reasoningSteps || []}
                   isProcessing={false}
                   confidence={result?.confidence ?? null}
+                  interpretation={result?.interpretation}
+                  eclassCandidates={result?.eclassCandidates}
+                  toonMapping={result?.toonMapping}
+                  onSelectEclass={(eclassId, target, unit) => {
+                    if (!result) return
+                    setResult({
+                      ...result,
+                      toonMapping: {
+                        ...result.toonMapping,
+                        eclassId,
+                        target,
+                        unit: unit ?? result.toonMapping.unit,
+                      },
+                      aasPreview: {
+                        ...result.aasPreview,
+                        semanticId: eclassId,
+                      },
+                      confidence: 0.75,
+                    })
+                  }}
                 />
                 <div className="flex gap-2">
                   <Button variant="secondary" onClick={handleBack}>
@@ -237,7 +316,7 @@ export default function AgentePage() {
               TOON Semantic Agent - Avaliação Intermediária IA Generativa
             </p>
             <p className="text-[10px] text-muted-foreground font-mono">
-              Mock Mode | Gramática BNF v1.0 | ECLASS Simulado
+              LLM (Gemini) | Gramática BNF v1.0 | ECLASS
             </p>
           </div>
         </footer>

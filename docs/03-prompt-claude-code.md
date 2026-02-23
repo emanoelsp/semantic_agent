@@ -23,14 +23,15 @@ híbridos via Alinhamento Semântico Restrito (TOON - Token-Oriented Object Nota
 <stack>
 - Next.js App Router + TailwindCSS + shadcn/ui
 - Dark mode industrial (estética SCADA)
-- API Routes para /api/process-ingestion (mock)
-- 4 módulos: Percepção/Ingestão (A), Raciocínio (B), TOON (C), Atuação (D)
+- API Routes: /api/orchestrator (LLM real), /api/extract-datasheet (PDF)
+- 4 módulos: Ingestão (tag+description), Raciocínio (interpretation), TOON, Modelagem (AAS/Node-RED)
 </stack>
 
 <regras>
-- Use MOCKS para todas as respostas de IA (sem integração real com LLMs)
-- O sistema deve ter 4 módulos visuais claros no dashboard
-- Gramática BNF para TOON: MAP{SRC='...' | TGT='ECLASS:...' | ACTION='DirectMap|Convert_Unit|Aggregate'}
+- Integração real com Gemini 2.5 Flash (GEMINI_API_KEY)
+- Entrada enriquecida: tag + description + datatype para Brownfield
+- Regra UNKNOWN: tag isolada sem contexto retorna UNKNOWN (evitar alucinação)
+- Gramática TOON: ⟨MAP_START⟩⟨SRC⟩⟨TGT:ECLASS:...|UNKNOWN⟩⟨CONF⟩⟨MAP_END⟩
 </regras>
 
 <tarefa>

@@ -67,6 +67,36 @@ const KNOWN_MAPPINGS: Record<string, Omit<ProcessingResult, "inputData" | "proce
       qualifiers: [{ type: "Unit", value: "m/s" }],
     },
   },
+  "DB1.W0": {
+    status: "success",
+    inputType: "brownfield",
+    reasoningSteps: [
+      { step: 1, action: "Analise Lexica", detail: "Identificando tag 'DB1.W0' - padrao Siemens S7 (Data Block 1, Word 0)", timestamp: "0.10s" },
+      { step: 2, action: "Contexto Enriquecido", detail: "Description: 'Comando de marcha da esteira' - identificador semantico claro", timestamp: "0.15s" },
+      { step: 3, action: "Consulta ECLASS", detail: "Buscando IRDI para comando de acionamento de motor...", timestamp: "0.45s" },
+      { step: 4, action: "Alinhamento ECLASS", detail: "Mapeado para ECLASS: 0173-1#02-BAB014#005 (Sinal de controle de acionamento / Motor Forward)", timestamp: "0.95s" },
+      { step: 5, action: "Validacao TOON", detail: "Token gerado e validado pela gramatica BNF. Conformidade: 100%", timestamp: "1.12s" },
+    ],
+    toonOutput: "MAP{SRC='DB1.W0' | TGT='ECLASS:0173-1#02-BAB014#005' | ACTION='DirectMap'}",
+    toonMapping: {
+      source: "DB1.W0",
+      target: "Comando de Acionamento / Motor Forward",
+      eclassId: "0173-1#02-BAB014#005",
+      action: "DirectMap",
+      unit: "boolean",
+    },
+    confidence: 0.95,
+    aasPreview: {
+      idShort: "Comando_Acionamento_Esteira",
+      semanticId: "0173-1#02-BAB014#005",
+      valueType: "xs:boolean",
+      value: "dynamic",
+      qualifiers: [
+        { type: "Mapping_Source", value: "DB1.W0" },
+        { type: "Protocol", value: "S7 Comm / OPC UA" },
+      ],
+    },
+  },
   "DB1.DBX0.1": {
     status: "success",
     inputType: "brownfield",
@@ -204,12 +234,43 @@ export function getMockResult(inputData: string, inputType: "brownfield" | "gree
   return generateGenericResponse(cleanInput, inputType)
 }
 
-// Exemplos pre-carregados para o usuario selecionar
+// Exemplos pré-carregados para o usuário selecionar
+// Brownfield: variáveis isoladas DEVEM ser enriquecidas com description para mapeamento confiável.
+// Sem contexto, o agente retorna UNKNOWN (evitar alucinação em ambientes críticos).
 export const EXAMPLE_TAGS = [
-  { label: "DB10.W2 - Velocidade Esteira", value: "DB10.W2", type: "brownfield" as const },
-  { label: "DB1.DBX0.1 - Motor Start/Stop", value: "DB1.DBX0.1", type: "brownfield" as const },
-  { label: "/temp/v1 - Sensor Temperatura (API)", value: "/temp/v1", type: "greenfield" as const },
-  { label: "Mtr_Tmp_01 - Temperatura Motor", value: "Mtr_Tmp_01", type: "brownfield" as const },
+  {
+    label: "DB1.W0 - Comando Acionar Esteira",
+    value: "DB1.W0",
+    type: "brownfield" as const,
+    description: "Comando de marcha da esteira (botão start)",
+    datatype: "BOOL",
+  },
+  {
+    label: "DB10.W2 - Velocidade Esteira",
+    value: "DB10.W2",
+    type: "brownfield" as const,
+    description: "Velocidade linear da esteira transportadora",
+    datatype: "REAL",
+  },
+  {
+    label: "DB1.DBX0.1 - Motor Start/Stop",
+    value: "DB1.DBX0.1",
+    type: "brownfield" as const,
+    description: "Comando Start/Stop do motor",
+    datatype: "BOOL",
+  },
+  {
+    label: "/temp/v1 - Sensor Temperatura (API)",
+    value: "/temp/v1",
+    type: "greenfield" as const,
+  },
+  {
+    label: "Mtr_Tmp_01 - Temperatura Motor",
+    value: "Mtr_Tmp_01",
+    type: "brownfield" as const,
+    description: "Temperatura de rolamento do motor",
+    datatype: "REAL",
+  },
 ]
 
 // Gerar AAS JSON completo para exportacao

@@ -620,12 +620,17 @@ export default function EstrategiaPage() {
               </div>
             </section>
 
-            {/* CTA para agente */}
-            <div className="flex flex-col items-center gap-4">
+            {/* CTA para agente e portfólio */}
+            <div className="flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap justify-center">
               <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
                 <Link href="/agente">
                   Testar o Agente Semântico
                   <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="secondary" className="border-border">
+                <Link href="/portfolio">
+                  Portfólio de Serviços
                 </Link>
               </Button>
             </div>

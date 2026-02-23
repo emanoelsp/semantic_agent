@@ -104,7 +104,7 @@ export function parseToonOrchestrator(input: string): ToonParseOutput {
       currentMap = {}
     } else if (key === "MAP_END") {
       if (inMap && currentMap.source && currentMap.target) {
-        pushMapping(mappings, currentMap)
+        pushMapping(mappings, { ...currentMap, source: currentMap.source, target: currentMap.target })
       }
       inMap = false
       currentMap = {}
@@ -122,7 +122,7 @@ export function parseToonOrchestrator(input: string): ToonParseOutput {
 
   // Flush último mapeamento se não terminou com MAP_END
   if (inMap && currentMap.source && currentMap.target) {
-    pushMapping(mappings, currentMap)
+    pushMapping(mappings, { ...currentMap, source: currentMap.source, target: currentMap.target })
   }
 
   // Fallback: tokens SRC/TGT soltos (sem MAP_START/MAP_END) - LLM pode retornar formato simplificado

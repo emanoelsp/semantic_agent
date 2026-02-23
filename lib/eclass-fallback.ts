@@ -33,9 +33,16 @@ const ECLASS_PATTERNS: Array<{
     target: "Velocity (linear)",
     unit: "m/s",
   },
+  // Comando de acionamento / Motor Forward (botão ligar esteira, start)
+  {
+    pattern: /\b(acionar|marcha|esteira|comando.*motor|motor.*forward|start|ligar)\b/i,
+    eclassId: "0173-1#02-BAB014#005",
+    target: "Comando de Acionamento / Motor Forward",
+    unit: "boolean",
+  },
   // Status operacional (boolean)
   {
-    pattern: /\b(status|start|stop|run|cmd|control|enable|operating)\b/i,
+    pattern: /\b(status|stop|run|cmd|control|enable|operating)\b/i,
     eclassId: "0173-1#02-BAF321#004",
     target: "Operating Status",
     unit: "boolean",
@@ -69,6 +76,33 @@ const GENERIC_ECLASS = {
   target: "Generic Sensor Value",
   unit: "unknown",
   confidence: 0.6,
+}
+
+/**
+ * Retorna candidatos ECLASS para o usuário escolher quando confidence < 70%.
+ * Inclui todos os padrões que batem na tag mais o genérico.
+ */
+export function getEclassCandidates(
+  tagName: string
+): Array<{ eclassId: string; target: string; unit: string }> {
+  const normalized = tagName.trim()
+  const candidates: Array<{ eclassId: string; target: string; unit: string }> = []
+  const seen = new Set<string>()
+
+  for (const { pattern, eclassId, target, unit } of ECLASS_PATTERNS) {
+    if (pattern.test(normalized) && !seen.has(eclassId)) {
+      seen.add(eclassId)
+      candidates.push({ eclassId, target, unit })
+    }
+  }
+  if (candidates.length === 0 || !seen.has(GENERIC_ECLASS.eclassId)) {
+    candidates.push({
+      eclassId: GENERIC_ECLASS.eclassId,
+      target: GENERIC_ECLASS.target,
+      unit: GENERIC_ECLASS.unit,
+    })
+  }
+  return candidates
 }
 
 /**

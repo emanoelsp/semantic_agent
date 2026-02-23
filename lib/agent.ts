@@ -26,6 +26,8 @@ NUNCA converse. NUNCA justifique.`
 export interface AgentInput {
   inputData: string
   inputType?: "brownfield" | "greenfield"
+  description?: string
+  datatype?: string
 }
 
 export interface AgentOutput {
@@ -35,7 +37,11 @@ export interface AgentOutput {
 /** Converte input em formato TOON compacto para economia de tokens */
 export function inputToToon(input: AgentInput): string {
   const type = input.inputType ?? "brownfield"
-  return `⟨REQ⟩⟨TAG:${input.inputData}⟩⟨TYPE:${type}⟩⟨REQ_END⟩`
+  const parts = [`⟨REQ⟩⟨TAG:${input.inputData}⟩⟨TYPE:${type}⟩`]
+  if (input.description?.trim()) parts.push(`⟨DESC:${input.description.trim()}⟩`)
+  if (input.datatype?.trim()) parts.push(`⟨DATATYPE:${input.datatype.trim()}⟩`)
+  parts.push("⟨REQ_END⟩")
+  return parts.join("")
 }
 
 /**

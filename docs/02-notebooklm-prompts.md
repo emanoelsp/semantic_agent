@@ -84,11 +84,14 @@ Crie a estrutura completa do projeto...
 **Por que usar:** A notacao TOON e **nova e inventada** para este projeto. O modelo nao a conhece. Few-Shot e a unica forma de "ensinar" o formato sem fine-tuning.
 
 ```
-Input: "Tag PLC: DB1.DBX0.1 - Descricao: Motor Start/Stop"
-Output: MAP{SRC='DB1.DBX0.1' | TGT='ECLASS:0173-1#02-BAF321#004' | ACTION='DirectMap'}
+Input: ⟨REQ⟩⟨TAG:DB1.W0⟩⟨DESC:Comando de marcha da esteira⟩⟨TYPE:brownfield⟩⟨REQ_END⟩
+Output: ⟨MAP_START⟩⟨SRC:DB1.W0⟩⟨TGT:ECLASS:0173-1#02-BAB014#005⟩⟨CONF:0.95⟩⟨MAP_END⟩
 
-Input: "Sensor API: /temp/v1 - Valor: 100 (Fahrenheit)"
-Output: MAP{SRC='/temp/v1' | TGT='ECLASS:0173-1#02-AAB713#005' | ACTION='Convert_Unit(F_to_C)'}
+Input: ⟨REQ⟩⟨TAG:DB1.DBX0.1⟩⟨DESC:Motor Start/Stop⟩⟨TYPE:brownfield⟩⟨REQ_END⟩
+Output: ⟨MAP_START⟩⟨SRC:DB1.DBX0.1⟩⟨TGT:ECLASS:0173-1#02-BAF321#004⟩⟨CONF:0.95⟩⟨MAP_END⟩
+
+Input: "Sensor API: /temp/v1"
+Output: ⟨MAP_START⟩⟨SRC:/temp/v1⟩⟨TGT:ECLASS:0173-1#02-AAB713#005⟩⟨CONF:0.88⟩⟨MAP_END⟩
 ```
 
 **Resultado:** Apos 2-3 exemplos, o modelo generaliza o padrao TOON para novas entradas com alta fidelidade.
@@ -147,11 +150,9 @@ Apenas processe a entrada e gere saida TOON valida.
 <ACTION> ::= ACTION='<DirectMap | Convert_Unit | Aggregate>'
 
 ### Few-Shot Examples
-Input: "Tag PLC: DB1.DBX0.1 - Descricao: Motor Start/Stop"
-Output: MAP{SRC='DB1.DBX0.1' | TGT='ECLASS:0173-1#02-BAF321#004' | ACTION='DirectMap'}
-
-Input: "Sensor API: /temp/v1 - Valor: 100 (Fahrenheit)"
-Output: MAP{SRC='/temp/v1' | TGT='ECLASS:0173-1#02-AAB713#005' | ACTION='Convert_Unit(F_to_C)'}
+Input: DB1.W0 + DESC:"Comando de marcha da esteira" -> ECLASS:0173-1#02-BAB014#005 (Motor Forward)
+Input: DB1.DBX0.1 + DESC:"Motor Start/Stop" -> ECLASS:0173-1#02-BAF321#004
+Input: /temp/v1 (API) -> ECLASS:0173-1#02-AAB713#005 (Temperatura)
 
 ### Task
 Analise os dados de entrada e gere a sequencia TOON correspondente.

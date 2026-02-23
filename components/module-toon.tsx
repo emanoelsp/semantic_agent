@@ -25,9 +25,14 @@ const SEGMENT_COLORS: Record<ToonFormattedSegment["type"], string> = {
 }
 
 export function ModuleToon({ toonOutput, isProcessing }: ModuleToonProps) {
+  const orchestrated = toonOutput?.includes("⟨")
+    ? parseToonOrchestrator(toonOutput)
+    : null
   const parseResult = toonOutput
-    ? toonOutput.includes("⟨")
-      ? toDisplayParseResult(parseToonOrchestrator(toonOutput))
+    ? orchestrated
+      ? orchestrated.mappings.length > 1
+        ? { valid: true, formatted: [{ text: toonOutput, type: "identifier" as const }], tokens: [], raw: toonOutput, errors: [] }
+        : toDisplayParseResult(orchestrated)
       : parseToon(toonOutput)
     : null
 
