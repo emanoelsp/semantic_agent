@@ -116,7 +116,8 @@ Aciona a geração de PDF com os dados do ativo mapeado (AAS, ECLASS, TOON).
 
 ## Arquitetura da Solução
 
-```
+````markdown
+```mermaid
 graph TD
     %% Definindo as cores e estilos
     classDef frontend fill:#333333,stroke:#fff,stroke-width:2px,color:#fff;
