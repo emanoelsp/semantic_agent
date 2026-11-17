@@ -139,10 +139,10 @@ export default function AgentePage() {
           <div className="mx-auto max-w-3xl flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-lg font-bold text-foreground font-sans">
-                Semantic Agent
+                Workspace Semantic Agent
               </h1>
               <p className="text-xs text-muted-foreground font-sans">
-                Da tag cega à inteligência industrial: dados → análise → TOON → AAS
+                Transforme um sinal industrial em um ativo pronto para operar.
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -165,7 +165,7 @@ export default function AgentePage() {
                 className="flex items-center gap-1.5 font-mono text-xs bg-primary/20 text-primary border border-primary/30"
               >
                 <Wifi className="h-3 w-3" />
-                LLM
+                Motor semântico
               </Badge>
             </div>
           </div>
@@ -313,10 +313,10 @@ export default function AgentePage() {
         <footer className="border-t border-border px-6 py-3">
           <div className="mx-auto max-w-3xl flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="text-[10px] text-muted-foreground font-sans">
-              Semantic Agent · Processamento sintático, semântico e cognitivo
+              Semantic Agent · Workspace de inteligência industrial
             </p>
             <p className="text-[10px] text-muted-foreground font-mono">
-              Gemini · TOON · ECLASS · AAS v3.0 · Node-RED
+              ECLASS · AAS v3.0 · Node-RED
             </p>
           </div>
         </footer>

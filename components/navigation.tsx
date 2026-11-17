@@ -2,98 +2,48 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Badge } from "@/components/ui/badge"
-import { Cpu, BookOpen, BrainCircuit, FlaskConical, LayoutGrid } from "lucide-react"
-import { PRODUCT_NAME, PRODUCT_TAGLINE } from "@/lib/brand"
+import { ArrowUpRight, Menu, Waypoints, X } from "lucide-react"
+import { useState } from "react"
+import { PRODUCT_NAME } from "@/lib/brand"
 
 const NAV_ITEMS = [
-  {
-    href: "/",
-    label: "Produto",
-    shortLabel: "Produto",
-    icon: BookOpen,
-    description: "Problema, posicionamento e proposta de valor",
-  },
-  {
-    href: "/estrategia",
-    label: "Arquitetura",
-    shortLabel: "Stack",
-    icon: BrainCircuit,
-    description: "Camadas sintática, semântica e cognitiva",
-  },
-  {
-    href: "/agente",
-    label: "Agente",
-    shortLabel: "Agente",
-    icon: FlaskConical,
-    description: "Mapeamento industrial interativo",
-  },
-  {
-    href: "/portfolio",
-    label: "Portfólio",
-    shortLabel: "API",
-    icon: LayoutGrid,
-    description: "Serviços e APIs",
-  },
+  { href: "/", label: "Produto" },
+  { href: "/#como-funciona", label: "Como funciona" },
+  { href: "/estrategia", label: "Integrações" },
+  { href: "/portfolio", label: "Soluções" },
 ]
 
 export function Navigation() {
   const pathname = usePathname()
+  const [open, setOpen] = useState(false)
 
   return (
-    <nav className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
-      <div className="mx-auto max-w-7xl px-4 lg:px-6">
-        <div className="flex items-center justify-between h-14">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <Cpu className="h-4 w-4" />
-            </div>
-            <div className="hidden sm:block">
-              <p className="text-sm font-bold text-foreground font-sans leading-tight">
-                {PRODUCT_NAME}
-              </p>
-              <p className="text-[10px] text-muted-foreground font-sans leading-tight">
-                {PRODUCT_TAGLINE}
-              </p>
-            </div>
-          </Link>
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-xl">
+      <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between px-5 lg:px-8">
+        <Link href="/" className="group flex items-center gap-3" onClick={() => setOpen(false)}>
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-[0_0_22px_rgba(77,208,225,0.22)] transition group-hover:scale-105">
+            <Waypoints className="h-4.5 w-4.5" />
+          </span>
+          <span className="text-sm font-semibold tracking-[-0.02em] text-foreground">{PRODUCT_NAME}</span>
+        </Link>
 
-          {/* Nav Links */}
-          <div className="flex items-center gap-1">
-            {NAV_ITEMS.map((item, index) => {
-              const isActive = pathname === item.href
-              const Icon = item.icon
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-                    isActive
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                  }`}
-                >
-                  <span className="flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold font-mono bg-secondary/70 text-muted-foreground border border-border shrink-0">
-                    {index + 1}
-                  </span>
-                  <Icon className="h-3.5 w-3.5 shrink-0" />
-                  <span className="hidden md:inline font-sans">{item.label}</span>
-                  <span className="md:hidden font-sans">{item.shortLabel}</span>
-                </Link>
-              )
-            })}
-          </div>
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="Navegação principal">
+          {NAV_ITEMS.map((item) => {
+            const isActive = item.href === "/" ? pathname === "/" : pathname === item.href
+            return <Link key={item.href} href={item.href} className={`text-sm transition ${isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}>{item.label}</Link>
+          })}
+        </nav>
 
-          {/* Status Badge */}
-          <Badge
-            variant="secondary"
-            className="hidden sm:flex items-center gap-1.5 bg-emerald-950/50 text-emerald-400 border border-emerald-500/20 font-mono text-[10px] shrink-0"
-          >
-            PROD
-          </Badge>
+        <div className="hidden items-center gap-3 lg:flex">
+          <Link href="/agente" className="text-sm text-muted-foreground transition hover:text-foreground">Entrar</Link>
+          <Link href="/agente" className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground transition hover:brightness-110">Começar agora<ArrowUpRight className="h-3.5 w-3.5" /></Link>
         </div>
+
+        <button type="button" aria-label={open ? "Fechar menu" : "Abrir menu"} onClick={() => setOpen((value) => !value)} className="flex h-10 w-10 items-center justify-center rounded-lg border border-border text-foreground lg:hidden">
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
       </div>
-    </nav>
+      {open && <div className="border-t border-border/70 bg-background px-5 py-5 lg:hidden"><nav className="flex flex-col gap-1" aria-label="Navegação móvel">{NAV_ITEMS.map((item) => <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="rounded-lg px-3 py-3 text-sm text-muted-foreground transition hover:bg-card hover:text-foreground">{item.label}</Link>)}<Link href="/agente" onClick={() => setOpen(false)} className="mt-3 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary text-sm font-semibold text-primary-foreground">Começar agora<ArrowUpRight className="h-4 w-4" /></Link></nav></div>}
+    </header>
   )
 }

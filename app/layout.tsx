@@ -10,7 +10,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: `${PRODUCT_NAME} | ${PRODUCT_TAGLINE}`,
   description: PRODUCT_DESCRIPTOR,
-  generator: 'v0.app',
+  generator: 'Semantic Agent',
   icons: {
     icon: [
       {
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#1a2332',
+  themeColor: '#0c151b',
   userScalable: true,
 }
 
