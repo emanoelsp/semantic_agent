@@ -22,13 +22,13 @@ export const semanticMappingRequestSchema = z
 
 export const billingQuoteSchema = z
   .object({
-    operation: z.enum(["mapping", "datasheet", "telemetry"]),
+    operation: z.enum(["mapping", "datasheet", "telemetry", "aasx"]),
     inputData: boundedText(512).optional(),
     description: boundedText(2000).optional(),
-    dataPoints: z.number().int().min(0).max(2000).optional(),
     pdfBytes: z.number().int().min(0).max(20 * 1024 * 1024).optional(),
     telemetryPoints: z.number().int().min(0).max(10_000_000).optional(),
     edgeMessages: z.number().int().min(0).max(10_000_000).optional(),
+    dataPoints: z.number().int().min(0).max(2000).optional(),
   })
   .strict()
 

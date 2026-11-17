@@ -4,10 +4,18 @@ import {
   generateAasxPackageBuffer,
   type AASEnvironmentV3,
 } from "@/lib/aas-v3"
-import { authenticateRequest, saveAssetPackage } from "@/lib/firebase/admin"
+import {
+  authenticateRequest,
+  consumeQuotaTransactional,
+  refundQuotaTransactional,
+  saveAssetPackage,
+} from "@/lib/firebase/admin"
+import { quoteBilling } from "@/lib/pricing"
 
 // POST /api/export-aasx -> Generates an IEC 63278-1 / IDTA-01005-3-0 `.aasx` binary package
 export async function POST(request: NextRequest) {
+  let chargedUid: string | undefined
+  let chargedCredits = 0
   try {
     const auth = await authenticateRequest(request)
     if (!auth.authenticated || !auth.user) {
@@ -41,6 +49,28 @@ export async function POST(request: NextRequest) {
 
     const aasxBuffer = await generateAasxPackageBuffer(env)
 
+    const quote = quoteBilling({
+      operation: "aasx",
+      dataPoints: Math.max(1, env.conceptDescriptions.length),
+    })
+    const quota = await consumeQuotaTransactional({
+      uid: auth.user.uid,
+      creditsToConsume: quote.credits,
+    })
+    if (!quota.allowed || !quota.profile) {
+      return NextResponse.json(
+        {
+          error: quota.reason || "Créditos insuficientes para gerar o pacote AASX",
+          code: quota.code || "QUOTA_DEPLETED",
+          quote,
+          topupUrl: "/faturamento",
+        },
+        { status: quota.code === "PAYMENT_REQUIRED" ? 402 : 402 }
+      )
+    }
+    chargedUid = auth.user.uid
+    chargedCredits = quote.credits
+
     const shell = env.assetAdministrationShells[0]
     await saveAssetPackage(
       {
@@ -63,9 +93,13 @@ export async function POST(request: NextRequest) {
       headers: {
         "Content-Type": "application/asset-administration-shell-package+xml",
         "Content-Disposition": `attachment; filename="${safeFilename}.aasx"`,
+        "X-Semantic-Agent-Charged-Credits": String(chargedCredits),
       },
     })
   } catch (err) {
+    if (chargedUid && chargedCredits > 0) {
+      await refundQuotaTransactional({ uid: chargedUid, creditsToRefund: chargedCredits }).catch(() => {})
+    }
     console.error("[api/export-aasx]", err)
     return NextResponse.json(
       { error: "Erro ao empacotar arquivo AASX" },

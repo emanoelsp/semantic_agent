@@ -290,13 +290,26 @@ function nodeRedId(tag: string, suffix: string): string {
  */
 export function generateNodeRedFlow(
   result: ProcessingResult,
-  options?: { plcVendor?: string; edgeToken?: string }
+  options?: { plcVendor?: string; edgeToken?: string; platformUrl?: string }
 ): string {
   const tag = result.toonMapping.source
+  const safeTag = tag.replace(/[^a-zA-Z0-9_]/g, "_")
+  const platformUrl = (options?.platformUrl || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000").replace(/\/+$/, "")
+  const edgeToken = options?.edgeToken || "{{SEMANTIC_EDGE_TOKEN}}"
+  const sourceTagLiteral = JSON.stringify(tag)
+  const assetIdLiteral = JSON.stringify(safeTag)
+  const eclassLiteral = JSON.stringify(result.toonMapping.eclassId)
+  const targetLiteral = JSON.stringify(result.toonMapping.target)
+  const unitLiteral = JSON.stringify(result.toonMapping.unit || "unitless")
+  const platformUrlLiteral = JSON.stringify(platformUrl)
+  const edgeTokenLiteral = JSON.stringify(edgeToken)
   const ids = {
     tab: nodeRedId(tag, "tab"),
     plcIn: nodeRedId(tag, "plc_in"),
     semanticNode: nodeRedId(tag, "semantic_agent_node"),
+    payloadBuilder: nodeRedId(tag, "aas_api_payload"),
+    aasJsonApi: nodeRedId(tag, "aas_json_api"),
+    aasxApi: nodeRedId(tag, "aasx_api"),
     aasOut: nodeRedId(tag, "aas_registry"),
     localApi: nodeRedId(tag, "local_http_endpoint"),
     debug: nodeRedId(tag, "debug"),
@@ -308,7 +321,7 @@ export function generateNodeRedFlow(
       type: "tab",
       label: `Industrial Edge — ${tag}`,
       disabled: false,
-      info: "Fluxo gerado pelo Semantic Agent com validação por créditos e cache offline.",
+      info: "Fluxo gerado pelo Semantic Agent: PLC/IoT → AAS JSON → AASX. Substitua {{SEMANTIC_EDGE_TOKEN}} se o fluxo não foi exportado autenticado.",
     },
     {
       id: ids.plcIn,
@@ -334,12 +347,49 @@ export function generateNodeRedFlow(
       unit: result.toonMapping.unit || "unitless",
       actionMode: result.toonMapping.action,
       outputMode: "aas-v3-and-local-api",
-      platformUrl: "http://localhost:3000",
-      licenseToken: options?.edgeToken || "sk_edge_ind40_prod_9f8a7b6c5d4e3f2a",
+      platformUrl,
+      licenseToken: edgeToken,
       offlineGraceLimit: 500,
       x: 430,
       y: 120,
-      wires: [[ids.aasOut], [ids.debug]],
+      wires: [[ids.payloadBuilder], [ids.debug]],
+    },
+    {
+      id: ids.payloadBuilder,
+      type: "function",
+      z: ids.tab,
+      name: "Build Semantic Agent API payload",
+      func: `const raw = msg.payload && typeof msg.payload === "object" ? msg.payload : { value: msg.payload };\nconst body = {\n  assetId: ${assetIdLiteral},\n  sourceTag: ${sourceTagLiteral},\n  eclassIrdi: ${eclassLiteral},\n  targetName: ${targetLiteral},\n  unit: ${unitLiteral},\n  confidence: ${Number(result.confidence || 0).toFixed(4)}\n};\nconst shouldExportAasx = msg.exportAasx === true;\nmsg.semanticAgent = { sourceTag: body.sourceTag, assetId: body.assetId, rawValue: raw.value ?? raw, aasxOnDemand: true };\nconst platform = ${platformUrlLiteral};\nconst token = ${edgeTokenLiteral};\nconst jsonMsg = { ...msg, method: "POST", url: platform + "/api/aasx", headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" }, payload: body };\nconst aasxMsg = { ...msg, method: "POST", url: platform + "/api/export-aasx", headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" }, payload: body };\nreturn [jsonMsg, shouldExportAasx ? aasxMsg : null];`,
+      outputs: 2,
+      x: 670,
+      y: 120,
+      wires: [[ids.aasJsonApi], [ids.aasxApi]],
+    },
+    {
+      id: ids.aasJsonApi,
+      type: "http request",
+      z: ids.tab,
+      name: "AAS v3 JSON API",
+      method: "use",
+      ret: "obj",
+      paytoqs: "ignore",
+      url: "",
+      x: 930,
+      y: 90,
+      wires: [[ids.aasOut]],
+    },
+    {
+      id: ids.aasxApi,
+      type: "http request",
+      z: ids.tab,
+      name: "AASX Package API (.aasx)",
+      method: "use",
+      ret: "bin",
+      paytoqs: "ignore",
+      url: "",
+      x: 930,
+      y: 170,
+      wires: [[ids.debug]],
     },
     {
       id: ids.aasOut,
@@ -347,9 +397,8 @@ export function generateNodeRedFlow(
       z: ids.tab,
       name: "IDTA AAS v3.0 Submodel Repository",
       method: "PUT",
-      url: "http://aas-registry.local:8080/submodels/OperationalData/submodel-elements/" +
-        tag.replace(/[^a-zA-Z0-9_]/g, "_"),
-      x: 740,
+      url: "http://aas-registry.local:8080/shells/" + safeTag,
+      x: 1190,
       y: 90,
       wires: [[ids.debug]],
     },
@@ -360,8 +409,8 @@ export function generateNodeRedFlow(
       name: "Edge Telemetry & License Status",
       active: true,
       tosidebar: true,
-      x: 740,
-      y: 160,
+      x: 1190,
+      y: 220,
       wires: [],
     },
   ]

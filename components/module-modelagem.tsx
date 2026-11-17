@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Layers, FileJson, GitBranch, FileDown, Download, ChevronDown, ChevronRight, Box } from "lucide-react"
+import { Layers, FileJson, GitBranch, FileDown, Download, ChevronDown, ChevronRight, Box, Braces } from "lucide-react"
 import type { ProcessingResult } from "@/lib/mock-data"
 import { generateAASJson, generateNodeRedFlow } from "@/lib/mock-data"
 import { generateModelagemFuncionalPDF } from "@/lib/pdf-modelagem"
@@ -78,7 +78,8 @@ function NodeRedFlowIllustration({ result }: { result: ProcessingResult }) {
   const nodes = [
     { id: "in", label: result.inputType === "brownfield" ? "S7 / PLC" : "HTTP", color: "bg-blue-500/20 border-blue-500/40" },
     { id: "fn", label: "TOON Transform", color: "bg-primary/20 border-primary/40" },
-    { id: "out", label: "AAS Registry", color: "bg-emerald-500/20 border-emerald-500/40" },
+    { id: "json", label: "AAS JSON API", color: "bg-cyan-500/20 border-cyan-500/40" },
+    { id: "out", label: "AASX API", color: "bg-emerald-500/20 border-emerald-500/40" },
   ]
   return (
     <div className="rounded-lg border border-border bg-background/50 p-3">
@@ -98,7 +99,7 @@ function NodeRedFlowIllustration({ result }: { result: ProcessingResult }) {
         ))}
       </div>
       <p className="text-[9px] text-muted-foreground mt-2 font-sans">
-        Leitura de {result.toonMapping.source} → mapeamento TOON → publicação AAS.
+        Leitura de {result.toonMapping.source} → mapeamento semântico → JSON AAS ou pacote binário AASX.
       </p>
     </div>
   )
@@ -176,6 +177,19 @@ export function ModuleModelagem({ result }: ModuleModelagemProps) {
           </TabsList>
 
           <TabsContent value="aas" className="mt-3 space-y-3">
+            <div className="rounded-md border border-primary/25 bg-primary/5 p-3">
+              <div className="flex items-center gap-2">
+                <Braces className="h-3.5 w-3.5 text-primary" />
+                <span className="text-[10px] font-semibold font-mono text-foreground">API de saída industrial</span>
+                <Badge variant="outline" className="ml-auto text-[9px] font-mono">AAS v3 JSON</Badge>
+              </div>
+              <p className="mt-1.5 text-[10px] text-muted-foreground font-sans">
+                <code className="text-primary">POST /api/aasx</code> retorna o ambiente AAS pronto para conectar ao registry ou ao seu dataspace.
+              </p>
+              <p className="mt-1 text-[10px] text-muted-foreground font-sans">
+                Para o arquivo padronizado: <code className="text-primary">POST /api/export-aasx</code> gera o pacote <code className="text-primary">.aasx</code> sob demanda, evitando gerar um arquivo a cada amostra de telemetria.
+              </p>
+            </div>
             <div className="max-h-[180px] overflow-auto rounded-md border border-border bg-background p-3">
               <pre className="text-[10px] text-muted-foreground font-mono leading-relaxed whitespace-pre-wrap">
                 {aasJsonStr}

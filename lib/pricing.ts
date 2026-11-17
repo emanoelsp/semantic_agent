@@ -1,4 +1,4 @@
-export type BillingOperation = "mapping" | "datasheet" | "telemetry"
+export type BillingOperation = "mapping" | "datasheet" | "telemetry" | "aasx"
 
 export interface BillingQuoteInput {
   operation: BillingOperation
@@ -87,6 +87,28 @@ export function quoteBilling(input: BillingQuoteInput): BillingQuote {
     breakdown.messageCredits = messageCredits
     rawCredits = pointCredits + messageCredits
   }
+
+  if (input.operation === "aasx") {
+    const base = envNumber("BILLING_AASX_BASE_CREDITS", 10, 0)
+    const perDataPoint = envNumber("BILLING_AASX_PER_DATAPOINT_CREDITS", 1, 0)
+    const dataPoints = Math.max(1, Math.floor(input.dataPoints || 1))
+
+    breakdown.base = base
+    breakdown.dataPoints = dataPoints
+    breakdown.dataPointCredits = dataPoints * perDataPoint
+    rawCredits = base + breakdown.dataPointCredits
+  }
+
+  // The operation values above are internal cost units. A multiplier of 11x
+  // represents 1,000% profit over cost (price = cost + 1,000% of cost).
+  // It is deliberately applied in one place so pricing cannot silently ignore
+  // the commercial policy configured in the environment.
+  const marginMultiplier = envNumber("BILLING_MARGIN_MULTIPLIER", 1, 1)
+  const preMarginCredits = rawCredits
+  rawCredits = Math.ceil(rawCredits * marginMultiplier)
+  breakdown.preMarginCredits = preMarginCredits
+  breakdown.marginMultiplier = marginMultiplier
+  breakdown.marginCredits = rawCredits
 
   const credits = clampCredits(rawCredits)
   return {

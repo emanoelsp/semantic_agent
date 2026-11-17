@@ -371,7 +371,11 @@ export async function POST(request: NextRequest) {
     if (exportFormat === "nodered") {
       return NextResponse.json({
         ...result,
-        exportData: generateNodeRedFlow(result, { edgeToken: quotaCheck.profile.apiKey }),
+        exportData: generateNodeRedFlow(result, {
+          edgeToken: quotaCheck.profile.apiKey,
+          platformUrl:
+            process.env.NEXT_PUBLIC_APP_URL || process.env.APP_URL || "http://localhost:3000",
+        }),
         exportFormat: "nodered",
       })
     }
