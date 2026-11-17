@@ -4,28 +4,29 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
 import { Cpu, BookOpen, BrainCircuit, FlaskConical, LayoutGrid } from "lucide-react"
+import { PRODUCT_NAME, PRODUCT_TAGLINE } from "@/lib/brand"
 
 const NAV_ITEMS = [
   {
     href: "/",
-    label: "Introdução",
-    shortLabel: "Intro",
+    label: "Produto",
+    shortLabel: "Produto",
     icon: BookOpen,
-    description: "Contexto do curso e problema",
+    description: "Problema, posicionamento e proposta de valor",
   },
   {
     href: "/estrategia",
-    label: "Estratégia & TOON",
-    shortLabel: "Prompt",
+    label: "Arquitetura",
+    shortLabel: "Stack",
     icon: BrainCircuit,
-    description: "Engenharia de prompt e notação",
+    description: "Camadas sintática, semântica e cognitiva",
   },
   {
     href: "/agente",
-    label: "Agente Semântico",
+    label: "Agente",
     shortLabel: "Agente",
     icon: FlaskConical,
-    description: "Dashboard interativo",
+    description: "Mapeamento industrial interativo",
   },
   {
     href: "/portfolio",
@@ -50,10 +51,10 @@ export function Navigation() {
             </div>
             <div className="hidden sm:block">
               <p className="text-sm font-bold text-foreground font-sans leading-tight">
-                TOON Semantic Agent
+                {PRODUCT_NAME}
               </p>
               <p className="text-[10px] text-muted-foreground font-sans leading-tight">
-                IA Generativa - Avaliação Final
+                {PRODUCT_TAGLINE}
               </p>
             </div>
           </Link>
@@ -89,7 +90,7 @@ export function Navigation() {
             variant="secondary"
             className="hidden sm:flex items-center gap-1.5 bg-emerald-950/50 text-emerald-400 border border-emerald-500/20 font-mono text-[10px] shrink-0"
           >
-            LLM
+            PROD
           </Badge>
         </div>
       </div>

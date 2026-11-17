@@ -22,6 +22,8 @@ export interface ToonParseOutput {
   errors: string[]
 }
 
+const ECLASS_IRDI_PATTERN = /^\d{4}-\d+#\d{2}-[A-Z0-9]+(?:#\d+)?$/i
+
 // Aceita ⟨⟩ (Unicode) e <> (ASCII). Valor opcional para tokens como MAP_START/MAP_END
 const TOKEN_REGEX = /[⟨<]([^:>⟩]+)(?::([^>⟩]*))?[⟩>]/g
 
@@ -36,15 +38,18 @@ function pushMapping(
   mappings: ToonMapping[],
   m: Partial<ToonMapping> & { source: string; target: string }
 ): void {
+  const safeSource = m.source.trim().replace(/[⟨⟩<>\r\n]/g, "").slice(0, 256)
+  const safeTarget = m.target.trim().replace(/[⟨⟩<>\r\n]/g, "").slice(0, 128)
   const eclassId =
-    m.target?.startsWith("ECLASS:") || m.target === "UNKNOWN"
-      ? m.target.replace(/^ECLASS:/, "")
-      : m.target
+    safeTarget.startsWith("ECLASS:") || safeTarget === "UNKNOWN"
+      ? safeTarget.replace(/^ECLASS:/, "")
+      : safeTarget
+  const isKnownFormat = eclassId === "UNKNOWN" || ECLASS_IRDI_PATTERN.test(eclassId)
   mappings.push({
-    source: m.source,
-    target: m.target,
-    eclassId: eclassId === "UNKNOWN" ? "0173-1#02-AAA000" : eclassId,
-    confidence: m.confidence ?? 0.5,
+    source: safeSource,
+    target: isKnownFormat ? safeTarget : "UNKNOWN",
+    eclassId: isKnownFormat && eclassId !== "UNKNOWN" ? eclassId : "0173-1#02-AAA000",
+    confidence: isKnownFormat ? m.confidence ?? 0.5 : Math.min(m.confidence ?? 0.5, 0.35),
     action: m.action,
   })
 }

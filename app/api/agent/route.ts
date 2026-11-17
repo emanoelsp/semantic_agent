@@ -1,24 +1,24 @@
 import { NextRequest, NextResponse } from "next/server"
 import { invokeAgent } from "@/lib/agent"
+import { semanticMappingRequestSchema } from "@/lib/validation"
 
 // POST /api/agent
 // Interface com o Gemini Pro - retorna string TOON
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { inputData, inputType } = body as {
-      inputData: string
-      inputType?: "brownfield" | "greenfield"
-    }
-
-    if (!inputData || typeof inputData !== "string") {
+    if (process.env.NODE_ENV === "production") {
       return NextResponse.json(
-        { error: "Campo 'inputData' obrigatório e deve ser string" },
-        { status: 400 }
+        { error: "Endpoint interno desativado. Use /api/orchestrator.", code: "INTERNAL_ENDPOINT" },
+        { status: 410 }
       )
     }
 
-    const result = await invokeAgent({ inputData, inputType })
+    const parsed = semanticMappingRequestSchema.safeParse(await request.json().catch(() => null))
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Payload inválido", details: parsed.error.flatten() }, { status: 400 })
+    }
+
+    const result = await invokeAgent(parsed.data)
     return NextResponse.json(result)
   } catch (err) {
     console.error("[api/agent]", err)

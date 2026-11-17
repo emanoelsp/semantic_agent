@@ -35,17 +35,17 @@ export default function EstrategiaPage() {
                 <div className="flex items-center gap-2">
                   <div className="h-px flex-1 bg-border" />
                   <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground font-mono">
-                    Estratégia de Prompt
+                    Arquitetura do Semantic Agent
                   </span>
                   <div className="h-px flex-1 bg-border" />
                 </div>
                 <h2 className="text-lg lg:text-xl font-bold text-foreground font-sans text-center text-balance">
-                  Pipeline de 4 Etapas com IA
+                  Três camadas para inteligência industrial
                 </h2>
                 <p className="text-sm text-muted-foreground text-center max-w-3xl mx-auto font-sans leading-relaxed">
-                  A estratégia deste trabalho utiliza quatro etapas com IA: Gemini, NotebookLM,
-                  Claude Code e v0.dev. Após o Claude Code, o ZIP é enviado ao v0.dev para
-                  criação das páginas, commit no GitHub e publicação na Vercel.
+                  O produto combina processamento sintático, semântico e cognitivo. A entrada
+                  chega do CLP, IoT ou datasheet; o contexto é enriquecido com ECLASS/RAG; e a
+                  camada cognitiva gera uma saída validada para AAS, APIs e Node-RED.
                 </p>
               </div>
 
@@ -63,15 +63,14 @@ export default function EstrategiaPage() {
                           Etapa 1
                         </Badge>
                         <h3 className="text-sm font-bold text-foreground font-sans">
-                          Gemini - Escopo
+                          Gemini - Raciocínio
                         </h3>
                       </div>
                     </div>
                     <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                      O Gemini (Google DeepMind) foi usado para construir o{" "}
-                      <span className="text-foreground font-medium">contexto completo do problema</span>.
-                      Sua janela de contexto de 1M+ tokens                       permite processar a especificação
-                      AAS, dicionários ECLASS e papers de Indústria 4.0 simultaneamente.
+                      O Gemini é a camada cognitiva do produto: interpreta contexto industrial,
+                      propõe o significado da tag e devolve uma representação TOON limitada por
+                      regras e schemas.
                     </p>
                     <div className="rounded-md border border-border bg-secondary/30 p-3">
                       <p className="text-[10px] font-bold text-foreground font-sans mb-1">
@@ -79,10 +78,10 @@ export default function EstrategiaPage() {
                       </p>
                       <ul className="flex flex-col gap-1">
                         {[
-                          "Janela de contexto massiva (1M+ tokens)",
-                          "Capacidade multimodal (texto + diagramas)",
-                          "Custo-benefício para análise de documentos longos",
-                          "Grounding com Google Search para padrões atualizados",
+                        "Inferência estruturada com saída JSON",
+                        "Interpretação de tags, descrições e datasheets",
+                        "Integração com embeddings para RAG",
+                        "Separação entre evidência e instrução",
                         ].map((item) => (
                           <li key={item} className="flex items-start gap-1.5">
                             <CheckCircle2 className="h-3 w-3 text-blue-400 shrink-0 mt-0.5" />
@@ -96,14 +95,13 @@ export default function EstrategiaPage() {
                         Output gerado:
                       </p>
                       <p className="text-[10px] text-muted-foreground font-sans">
-                        Especificação de requisitos (RF-01 a RF-11), definição dos 4 módulos,
-                        gramática BNF para TOON e framework de validação.
+                        Mapeamento semântico candidato, confiança, TOON e contexto recuperado.
                       </p>
                     </div>
                   </CardContent>
                 </Card>
 
-                {/* NotebookLM */}
+                {/* Contexto semantico */}
                 <Card className="border-border bg-card">
                   <CardContent className="flex flex-col gap-4 p-5">
                     <div className="flex items-center gap-3">
@@ -115,26 +113,25 @@ export default function EstrategiaPage() {
                           Etapa 2
                         </Badge>
                         <h3 className="text-sm font-bold text-foreground font-sans">
-                          NotebookLM - Prompts
+                          ECLASS + Pinecone - Contexto
                         </h3>
                       </div>
                     </div>
                     <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                      O NotebookLM (Google) serviu como{" "}
-                      <span className="text-foreground font-medium">engenheiro de prompts</span>.
-                      Alimentado com o escopo do Gemini e materiais da disciplina, ele
-                      estruturou os prompts finais usando técnicas avançadas da Aula 04.
+                      O índice semântico fornece evidências para o agente: propriedades ECLASS,
+                      unidades e candidatos próximos são recuperados antes da decisão, sem virar
+                      uma fonte de instrução para o modelo.
                     </p>
                     <div className="rounded-md border border-border bg-secondary/30 p-3">
                       <p className="text-[10px] font-bold text-foreground font-sans mb-1">
-                        Por que NotebookLM?
+                        Por que RAG semântico?
                       </p>
                       <ul className="flex flex-col gap-1">
                         {[
-                          "Síntese cruzada de múltiplos documentos-fonte",
-                          "Criação de prompts contextualizados com grounding",
-                          "Referência cruzada com materiais de aula (Aula 04)",
-                          "Iteração rápida sobre diferentes técnicas de prompt",
+                          "Reduz ambiguidade em tags legadas",
+                          "Mantém evidência próxima da decisão",
+                          "Permite atualização do catálogo sem retreinar o agente",
+                          "Suporta revisão e rastreabilidade do mapeamento",
                         ].map((item) => (
                           <li key={item} className="flex items-start gap-1.5">
                             <CheckCircle2 className="h-3 w-3 text-amber-400 shrink-0 mt-0.5" />
@@ -148,14 +145,13 @@ export default function EstrategiaPage() {
                         Output gerado:
                       </p>
                       <p className="text-[10px] text-muted-foreground font-sans">
-                        Mega-prompt estruturado com XML Tags, Few-Shot, CoT e System Prompt
-                        com gramática BNF embutida.
+                        Evidência recuperada, candidatos ECLASS e metadados para o raciocínio.
                       </p>
                     </div>
                   </CardContent>
                 </Card>
 
-                {/* Agente de Codigo */}
+                {/* Validacao */}
                 <Card className="border-border bg-card">
                   <CardContent className="flex flex-col gap-4 p-5">
                     <div className="flex items-center gap-3">
@@ -167,26 +163,25 @@ export default function EstrategiaPage() {
                           Etapa 3
                         </Badge>
                         <h3 className="text-sm font-bold text-foreground font-sans">
-                          Claude Code - Código
+                          Guardrails - Validação
                         </h3>
                       </div>
                     </div>
                     <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                      O Claude Code (agente de codificação IA da Anthropic) recebeu o prompt estruturado e{" "}
-                      <span className="text-foreground font-medium">executou as tarefas</span>:
-                      criou a arquitetura, componentes React, API routes, parser TOON e
-                      mock data. O projeto é baixado em ZIP e enviado ao v0.dev na etapa seguinte.
+                      O núcleo determinístico valida o resultado do agente: schema Zod, parser TOON,
+                      catálogo ECLASS, unidades, quota, autenticação e revisão humana protegem a
+                      operação antes da geração dos artefatos.
                     </p>
                     <div className="rounded-md border border-border bg-secondary/30 p-3">
                       <p className="text-[10px] font-bold text-foreground font-sans mb-1">
-                        Por que Claude Code?
+                        O que é validado?
                       </p>
                       <ul className="flex flex-col gap-1">
                         {[
-                          "Thinking chain visível e rastreável",
-                          "Capacidade de gerar código production-ready",
-                          "Entendimento profundo de Next.js/React/TailwindCSS",
-                          "Planejamento com TodoManager para tarefas complexas",
+                          "Formato e limites do payload",
+                          "IRDI e unidade de engenharia",
+                          "Confiança e encaminhamento para HITL",
+                          "Segredos, sessão e cobrança por créditos",
                         ].map((item) => (
                           <li key={item} className="flex items-start gap-1.5">
                             <CheckCircle2 className="h-3 w-3 text-primary shrink-0 mt-0.5" />
@@ -200,14 +195,13 @@ export default function EstrategiaPage() {
                         Output gerado:
                       </p>
                       <p className="text-[10px] text-muted-foreground font-sans">
-                        Aplicação completa Next.js com 4 módulos, API route, parser BNF,
-                        mock data realista. Download em ZIP para upload no v0.dev.
+                        Resultado confiável ou falha explícita; não há fallback demo em produção.
                       </p>
                     </div>
                   </CardContent>
                 </Card>
 
-                {/* v0.dev */}
+                {/* Saidas */}
                 <Card className="border-border bg-card">
                   <CardContent className="flex flex-col gap-4 p-5">
                     <div className="flex items-center gap-3">
@@ -219,26 +213,24 @@ export default function EstrategiaPage() {
                           Etapa 4
                         </Badge>
                         <h3 className="text-sm font-bold text-foreground font-sans">
-                          v0.dev - Páginas e Deploy
+                          AAS + Node-RED - Operação
                         </h3>
                       </div>
                     </div>
                     <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                      Após baixar o ZIP do Claude Code, fazer upload no{" "}
-                      <span className="text-foreground font-medium">v0.dev</span> (agente
-                      interligado com Vercel e GitHub). Solicitar a criação das páginas
-                      iniciais e de explicação. O v0.dev faz commit no GitHub e publica na Vercel.
+                      A camada de saída transforma o mapeamento aprovado em ativos utilizáveis:
+                      AAS v3.0/AASX, JSON industrial e fluxo Node-RED para integração com o edge.
                     </p>
                     <div className="rounded-md border border-border bg-secondary/30 p-3">
                       <p className="text-[10px] font-bold text-foreground font-sans mb-1">
-                        Fluxo:
+                        Saídas:
                       </p>
                       <ul className="flex flex-col gap-1">
                         {[
-                          "1. Baixar ZIP do Claude Code",
-                          "2. Upload no v0.dev",
-                          "3. Pedir criação das páginas iniciais e de explicação",
-                          "4. Commit no GitHub + publicação na Vercel",
+                          "AAS v3.0 e exportação AASX",
+                          "JSON semântico para APIs",
+                          "Fluxo Node-RED para o edge",
+                          "Histórico e revisão do mapeamento",
                         ].map((item) => (
                           <li key={item} className="flex items-start gap-1.5">
                             <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0 mt-0.5" />
@@ -252,8 +244,7 @@ export default function EstrategiaPage() {
                         Output gerado:
                       </p>
                       <p className="text-[10px] text-muted-foreground font-sans">
-                        Páginas iniciais e de explicação criadas. Repositório no GitHub
-                        e site publicado na Vercel.
+                        Artefatos prontos para integração com a operação industrial.
                       </p>
                     </div>
                   </CardContent>
@@ -274,7 +265,7 @@ export default function EstrategiaPage() {
                   <div className="h-px flex-1 bg-border" />
                 </div>
                 <h2 className="text-lg lg:text-xl font-bold text-foreground font-sans text-center text-balance">
-                  5 Técnicas de Engenharia de Prompt
+                  Guardrails e técnicas de engenharia de prompt
                 </h2>
               </div>
 
@@ -287,7 +278,7 @@ export default function EstrategiaPage() {
                   description="Separação clara entre contexto, regras, exemplos e instruções usando tags XML. Permite ao modelo distinguir dados de instruções sem ambiguidade."
                   example={'<contexto>\n  Voce e um Arquiteto de Software Senior...\n</contexto>\n<regras_de_negocio>\n  1. O sistema NAO deve integrar LLMs reais...\n</regras_de_negocio>'}
                   why="Reduz alucinações em 30-40% vs. prompts não delimitados. O modelo processa cada seção como um bloco semântico distinto."
-                  reference="Aula 04 - Delimitadores e Formatação"
+                  reference="Padrão interno - Delimitadores e Formatação"
                 />
 
                 {/* Tecnica 2 */}
@@ -295,10 +286,10 @@ export default function EstrategiaPage() {
                   number={2}
                   title="Chain-of-Thought (CoT)"
                   icon={<BrainCircuit className="h-4 w-4" />}
-                  description="Instrução explícita para raciocinar passo a passo antes de gerar a saída. Presente tanto no prompt do Claude Code quanto no System Prompt do TOON."
+                  description="Instrução explícita para analisar contexto, evidência e restrições antes de gerar a saída TOON."
                   example={'"Pense passo a passo (Chain of Thought).\nPrimeiro, crie a estrutura de pastas.\nDepois, configure o Backend.\nEm seguida, crie os componentes React.\nPor fim, estilize."'}
                   why="Modelos com CoT demonstram +15% de precisão em tarefas complexas de raciocínio (Wei et al., 2022). Essencial para tarefas de mapeamento semântico."
-                  reference="Aula 03 - Modelos de Raciocínio"
+                  reference="Padrão interno - Raciocínio controlado"
                 />
 
                 {/* Tecnica 3 */}
@@ -309,7 +300,7 @@ export default function EstrategiaPage() {
                   description="Exemplos concretos de entrada/saída para calibrar o formato esperado. Usado no System Prompt do TOON para ensinar a gramática ao modelo."
                   example={'Input: "Tag PLC: DB1.DBX0.1"\nReasoning: O dado e um booleano de controle.\nOutput: MAP{SRC=\'DB1.DBX0.1\' | TGT=\'ECLASS:0173-1#02-BAF321#004\' | ACTION=\'DirectMap\'}'}
                   why="Few-Shot é a técnica mais eficaz para formatos de saída rígidos. Cada exemplo é um 'molde' que restringe o espaço de geração do modelo."
-                  reference="Aula 04 - Exemplos no Prompt"
+                  reference="Padrão interno - Exemplos de mapeamento"
                 />
 
                 {/* Tecnica 4 */}
@@ -320,7 +311,7 @@ export default function EstrategiaPage() {
                   description="Definição formal da estrutura de saída usando Backus-Naur Form. O modelo é forçado a gerar tokens que obedecem a esta gramática, eliminando alucinações estruturais."
                   example={'<TOON> ::= MAP{ <SOURCE> | <TARGET> | <ACTION> }\n<SOURCE> ::= SRC=\'<identificador>\'\n<TARGET> ::= TGT=\'<eclass_irdi>\'\n<ACTION> ::= ACTION=\'<DirectMap | Convert_Unit | Aggregate>\''}
                   why="Transforma 'geração de texto livre' em 'raciocínio simbólico estruturado'. Garante 100% de conformidade sintática — esta é a inovação central do TOON."
-                  reference="Aula 05 - Structured Outputs"
+                  reference="Padrão interno - Structured Outputs"
                 />
 
                 {/* Tecnica 5 */}
@@ -331,7 +322,7 @@ export default function EstrategiaPage() {
                   description="Definição clara do papel do modelo: 'Você é um Especialista em Interoperabilidade Semântica Industrial'. Direciona o vocabulário e o nível técnico da resposta."
                   example={'### Role\nVoce e um Especialista em Interoperabilidade\nSemantica Industrial. Sua funcao e traduzir\ndados brutos de chao de fabrica (OT) para\no padrao AAS usando estritamente a notacao TOON.'}
                   why="Roles especializados melhoram a precisão em domínios técnicos. O modelo ativa conhecimento específico sobre ECLASS, AAS e protocolos industriais."
-                  reference="Aula 04 - System Prompts"
+                  reference="Padrão interno - System Prompts"
                 />
               </div>
             </section>
@@ -344,17 +335,17 @@ export default function EstrategiaPage() {
                 <div className="flex items-center gap-2">
                   <div className="h-px flex-1 bg-border" />
                   <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground font-mono">
-                    Thinking Process
+                    Processo de decisão
                   </span>
                   <div className="h-px flex-1 bg-border" />
                 </div>
                 <h2 className="text-lg lg:text-xl font-bold text-foreground font-sans text-center text-balance">
-                  Como o Claude Code &quot;Pensa&quot;
+                  Como o agente toma decisões
                 </h2>
                 <p className="text-sm text-muted-foreground text-center max-w-3xl mx-auto font-sans leading-relaxed">
-                  O Claude Code opera com uma cadeia de pensamento
-                  visível. Cada decisão arquitetural foi raciocinada internamente antes
-                  de ser executada.
+                  O agente percorre etapas controladas de interpretação, evidência, validação
+                  e geração. O produto expõe o resultado e os sinais de confiança sem depender
+                  de uma cadeia de pensamento privada.
                 </p>
               </div>
 
@@ -431,8 +422,8 @@ export default function EstrategiaPage() {
                   TOON: Token-Oriented Object Notation
                 </h2>
                 <p className="text-sm text-muted-foreground text-center max-w-3xl mx-auto font-sans leading-relaxed">
-                  A contribuição científica principal deste trabalho. Uma notação intermediária
-                  que transforma a &quot;geração de texto livre&quot; em &quot;raciocínio simbólico estruturado&quot;.
+                  A camada TOON transforma geração de texto livre em representação simbólica
+                  estruturada, auditável e validável antes da conversão para AAS.
                 </p>
               </div>
 
@@ -644,7 +635,7 @@ export default function EstrategiaPage() {
             FIESC / UniSENAI / Instituto SENAI de Tecnologia / Instituto SENAI de Inovação
           </p>
           <p className="text-[10px] text-muted-foreground font-mono">
-            Pós-graduação em IA Aplicada - 2025/2026
+            Semantic Agent · Da tag cega à inteligência industrial
           </p>
         </div>
       </footer>

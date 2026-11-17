@@ -6,6 +6,15 @@ import { getMockResult, generateAASJson, generateNodeRedFlow } from "@/lib/mock-
 // o resultado do processamento semantico mockado.
 export async function POST(request: NextRequest) {
   try {
+    if (process.env.NODE_ENV === "production") {
+      return NextResponse.json(
+        {
+          error: "Endpoint de demonstração desativado em produção. Use /api/orchestrator.",
+          code: "DEMO_ENDPOINT_DISABLED",
+        },
+        { status: 410 }
+      )
+    }
     const body = await request.json()
     const { inputData, inputType, exportFormat } = body as {
       inputData: string

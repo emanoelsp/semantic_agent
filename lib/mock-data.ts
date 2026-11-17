@@ -1,14 +1,8 @@
 // =============================================================================
-// TOON Semantic Agent - Mock Data System
+// Semantic Agent - Core Types & IDTA v3.0 / Node-RED Generators
 // =============================================================================
-// Este arquivo contem todos os dados mockados que simulam a resposta de um LLM
-// real processando tags industriais e mapeando para ECLASS via TOON.
-//
-// No MVP, esses mocks substituem:
-// - Chamada ao Gemini/GPT-4o (inferencia semantica)
-// - Consulta ao Qdrant (vector search ECLASS)
-// - Validacao BNF do parser TOON
-// =============================================================================
+
+import { buildIdtaAASEnvironment, type AASEnvironmentV3 } from "@/lib/aas-v3"
 
 export interface ReasoningStep {
   step: number
@@ -36,51 +30,53 @@ export interface ProcessingResult {
   confidence: number
   aasPreview: Record<string, unknown>
   processingTimeMs: number
+  hitlReviewId?: string
+  uncertaintyReasons?: string[]
+  physicalWarning?: string
+  remainingCredits?: number
 }
 
-// Banco de mapeamentos conhecidos (simula o Vector DB)
 const KNOWN_MAPPINGS: Record<string, Omit<ProcessingResult, "inputData" | "processingTimeMs">> = {
   "DB10.W2": {
     status: "success",
     inputType: "brownfield",
     reasoningSteps: [
-      { step: 1, action: "Analise Lexica", detail: "Identificando tag 'DB10.W2' - padrao Siemens S7 (Data Block 10, Word 2)", timestamp: "0.12s" },
-      { step: 2, action: "Consulta Vector DB", detail: "Buscando embeddings similares no dicionario ECLASS...", timestamp: "0.45s" },
-      { step: 3, action: "Inferencia Semantica", detail: "Alta probabilidade (92%) de ser 'Velocidade de Esteira Transportadora'", timestamp: "1.02s" },
-      { step: 4, action: "Alinhamento ECLASS", detail: "Mapeado para ECLASS: 0173-1#02-BAA123 (Velocity - linear)", timestamp: "1.34s" },
-      { step: 5, action: "Validacao TOON", detail: "Token gerado e validado pela gramatica BNF. Conformidade: 100%", timestamp: "1.52s" },
+      { step: 1, action: "Análise Léxica CLP", detail: "Tag 'DB10.W2' — Siemens S7 (Data Block 10, Word 2)", timestamp: "0.12s" },
+      { step: 2, action: "Catálogo ECLASS 14.0", detail: "Buscando IRDI e especificação IEC 61360...", timestamp: "0.45s" },
+      { step: 3, action: "Inferência Semântica", detail: "Probabilidade 92% para 'Linear Velocity (Conveyor)'", timestamp: "1.02s" },
+      { step: 4, action: "Alinhamento IDTA", detail: "Mapeado para ECLASS: 0173-1#02-BAA123#003 (Linear Velocity)", timestamp: "1.34s" },
+      { step: 5, action: "Validação TOON", detail: "Gramática BNF validada (100% conformidade)", timestamp: "1.52s" },
     ],
-    toonOutput: "MAP{SRC='DB10.W2' | TGT='ECLASS:0173-1#02-BAA123' | ACTION='DirectMap'}",
+    toonOutput: "⟨MAP_START⟩⟨SRC:DB10.W2⟩⟨TGT:ECLASS:0173-1#02-BAA123#003⟩⟨CONF:0.92⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩",
     toonMapping: {
       source: "DB10.W2",
-      target: "Velocity (linear)",
-      eclassId: "0173-1#02-BAA123",
+      target: "Linear Velocity",
+      eclassId: "0173-1#02-BAA123#003",
       action: "DirectMap",
       unit: "m/s",
     },
     confidence: 0.92,
     aasPreview: {
       idShort: "ConveyorBeltSpeed",
-      semanticId: "0173-1#02-BAA123",
+      semanticId: "0173-1#02-BAA123#003",
       valueType: "xs:double",
-      value: "dynamic",
-      qualifiers: [{ type: "Unit", value: "m/s" }],
+      value: "0.0",
+      qualifiers: [{ type: "Unit", valueType: "xs:string", value: "m/s" }],
     },
   },
   "DB1.W0": {
     status: "success",
     inputType: "brownfield",
     reasoningSteps: [
-      { step: 1, action: "Analise Lexica", detail: "Identificando tag 'DB1.W0' - padrao Siemens S7 (Data Block 1, Word 0)", timestamp: "0.10s" },
-      { step: 2, action: "Contexto Enriquecido", detail: "Description: 'Comando de marcha da esteira' - identificador semantico claro", timestamp: "0.15s" },
-      { step: 3, action: "Consulta ECLASS", detail: "Buscando IRDI para comando de acionamento de motor...", timestamp: "0.45s" },
-      { step: 4, action: "Alinhamento ECLASS", detail: "Mapeado para ECLASS: 0173-1#02-BAB014#005 (Sinal de controle de acionamento / Motor Forward)", timestamp: "0.95s" },
-      { step: 5, action: "Validacao TOON", detail: "Token gerado e validado pela gramatica BNF. Conformidade: 100%", timestamp: "1.12s" },
+      { step: 1, action: "Análise Léxica CLP", detail: "Tag 'DB1.W0' — Siemens S7 (Data Block 1, Word 0)", timestamp: "0.10s" },
+      { step: 2, action: "Contexto Funcional", detail: "Descrição 'Comando de marcha da esteira'", timestamp: "0.15s" },
+      { step: 3, action: "Alinhamento ECLASS", detail: "Mapeado para ECLASS: 0173-1#02-BAB014#005 (Drive Actuation Command)", timestamp: "0.95s" },
+      { step: 4, action: "Validação TOON", detail: "Gramática BNF validada (100% conformidade)", timestamp: "1.12s" },
     ],
-    toonOutput: "MAP{SRC='DB1.W0' | TGT='ECLASS:0173-1#02-BAB014#005' | ACTION='DirectMap'}",
+    toonOutput: "⟨MAP_START⟩⟨SRC:DB1.W0⟩⟨TGT:ECLASS:0173-1#02-BAB014#005⟩⟨CONF:0.95⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩",
     toonMapping: {
       source: "DB1.W0",
-      target: "Comando de Acionamento / Motor Forward",
+      target: "Drive Actuation Command (Motor Forward)",
       eclassId: "0173-1#02-BAB014#005",
       action: "DirectMap",
       unit: "boolean",
@@ -90,10 +86,10 @@ const KNOWN_MAPPINGS: Record<string, Omit<ProcessingResult, "inputData" | "proce
       idShort: "Comando_Acionamento_Esteira",
       semanticId: "0173-1#02-BAB014#005",
       valueType: "xs:boolean",
-      value: "dynamic",
+      value: "false",
       qualifiers: [
-        { type: "Mapping_Source", value: "DB1.W0" },
-        { type: "Protocol", value: "S7 Comm / OPC UA" },
+        { type: "MappingSourceTag", valueType: "xs:string", value: "DB1.W0" },
+        { type: "Protocol", valueType: "xs:string", value: "S7comm / OPC UA" },
       ],
     },
   },
@@ -101,16 +97,13 @@ const KNOWN_MAPPINGS: Record<string, Omit<ProcessingResult, "inputData" | "proce
     status: "success",
     inputType: "brownfield",
     reasoningSteps: [
-      { step: 1, action: "Analise Lexica", detail: "Identificando tag 'DB1.DBX0.1' - padrao Siemens S7 (Data Block 1, Bit 0.1)", timestamp: "0.10s" },
-      { step: 2, action: "Consulta Vector DB", detail: "Buscando embeddings similares para tipo booleano...", timestamp: "0.38s" },
-      { step: 3, action: "Inferencia Semantica", detail: "Alta probabilidade (95%) de ser 'Motor Start/Stop Control'", timestamp: "0.89s" },
-      { step: 4, action: "Alinhamento ECLASS", detail: "Mapeado para ECLASS: 0173-1#02-BAF321#004 (Operating Status)", timestamp: "1.15s" },
-      { step: 5, action: "Validacao TOON", detail: "Token gerado e validado pela gramatica BNF. Conformidade: 100%", timestamp: "1.28s" },
+      { step: 1, action: "Análise Léxica CLP", detail: "Tag 'DB1.DBX0.1' — Siemens S7 (Data Block 1, Bit 0.1)", timestamp: "0.10s" },
+      { step: 2, action: "Alinhamento ECLASS", detail: "Mapeado para ECLASS: 0173-1#02-BAF321#004 (Operating Status)", timestamp: "1.15s" },
     ],
-    toonOutput: "MAP{SRC='DB1.DBX0.1' | TGT='ECLASS:0173-1#02-BAF321#004' | ACTION='DirectMap'}",
+    toonOutput: "⟨MAP_START⟩⟨SRC:DB1.DBX0.1⟩⟨TGT:ECLASS:0173-1#02-BAF321#004⟩⟨CONF:0.95⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩",
     toonMapping: {
       source: "DB1.DBX0.1",
-      target: "Operating Status (boolean)",
+      target: "Operating Status",
       eclassId: "0173-1#02-BAF321#004",
       action: "DirectMap",
       unit: "boolean",
@@ -120,39 +113,36 @@ const KNOWN_MAPPINGS: Record<string, Omit<ProcessingResult, "inputData" | "proce
       idShort: "MotorOperatingStatus",
       semanticId: "0173-1#02-BAF321#004",
       valueType: "xs:boolean",
-      value: "dynamic",
-      qualifiers: [{ type: "Category", value: "VARIABLE" }],
+      value: "false",
+      qualifiers: [{ type: "Category", valueType: "xs:string", value: "VARIABLE" }],
     },
   },
   "/temp/v1": {
     status: "warning",
     inputType: "greenfield",
     reasoningSteps: [
-      { step: 1, action: "Analise de Endpoint", detail: "Identificando API '/temp/v1' - padrao REST sensor CPS", timestamp: "0.08s" },
-      { step: 2, action: "Crawling AAS Nativo", detail: "CPS expoe AAS com submodelo TechnicalData...", timestamp: "0.55s" },
-      { step: 3, action: "Deteccao de Conflito", detail: "ALERTA: CPS informa temperatura em Fahrenheit. Data Space exige Celsius.", timestamp: "0.92s" },
-      { step: 4, action: "Resolucao de Conflito", detail: "Funcao de conversao necessaria: F_to_C = (F - 32) * 5/9", timestamp: "1.18s" },
-      { step: 5, action: "Alinhamento ECLASS", detail: "Mapeado para ECLASS: 0173-1#02-AAB713#005 (Temperature)", timestamp: "1.45s" },
-      { step: 6, action: "Validacao TOON", detail: "Token com ACTION='Convert_Unit' validado. Conformidade: 100%", timestamp: "1.62s" },
+      { step: 1, action: "Análise de Endpoint CPS", detail: "Identificando API '/temp/v1' — REST Telemetry", timestamp: "0.08s" },
+      { step: 2, action: "Guardrail Dimensional", detail: "Conversão automática parametrizada para degC (IEC 61360)", timestamp: "0.92s" },
+      { step: 3, action: "Alinhamento ECLASS", detail: "Mapeado para ECLASS: 0173-1#02-AAB713#005 (Temperature)", timestamp: "1.45s" },
     ],
-    toonOutput: "MAP{SRC='/temp/v1' | TGT='ECLASS:0173-1#02-AAB713#005' | ACTION='Convert_Unit(F_to_C)'}",
+    toonOutput: "⟨MAP_START⟩⟨SRC:/temp/v1⟩⟨TGT:ECLASS:0173-1#02-AAB713#005⟩⟨CONF:0.88⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩",
     toonMapping: {
       source: "/temp/v1",
-      target: "Temperature (Celsius)",
+      target: "Temperature",
       eclassId: "0173-1#02-AAB713#005",
       action: "Convert_Unit",
       actionDetail: "F_to_C: (value - 32) * 5/9",
-      unit: "C",
+      unit: "degC",
     },
     confidence: 0.88,
     aasPreview: {
       idShort: "SensorTemperature",
       semanticId: "0173-1#02-AAB713#005",
       valueType: "xs:double",
-      value: "dynamic",
+      value: "0.0",
       qualifiers: [
-        { type: "Unit", value: "degC" },
-        { type: "ConversionFormula", value: "(F-32)*5/9" },
+        { type: "Unit", valueType: "xs:string", value: "degC" },
+        { type: "ConversionFormula", valueType: "xs:string", value: "(F-32)*5/9" },
       ],
     },
   },
@@ -160,16 +150,13 @@ const KNOWN_MAPPINGS: Record<string, Omit<ProcessingResult, "inputData" | "proce
     status: "success",
     inputType: "brownfield",
     reasoningSteps: [
-      { step: 1, action: "Analise Lexica", detail: "Identificando tag 'Mtr_Tmp_01' - nomenclatura descritiva (Motor_Temperature_01)", timestamp: "0.09s" },
-      { step: 2, action: "Consulta Vector DB", detail: "Buscando embeddings para 'motor temperature sensor'...", timestamp: "0.42s" },
-      { step: 3, action: "Inferencia Semantica", detail: "Alta probabilidade (90%) de ser 'Temperatura de Rolamento do Motor'", timestamp: "0.95s" },
-      { step: 4, action: "Alinhamento ECLASS", detail: "Mapeado para ECLASS: 0173-1#02-AAB713#005 (Temperature)", timestamp: "1.22s" },
-      { step: 5, action: "Validacao TOON", detail: "Token gerado e validado pela gramatica BNF. Conformidade: 100%", timestamp: "1.38s" },
+      { step: 1, action: "Análise Léxica CLP", detail: "Tag 'Mtr_Tmp_01' — Sensor de Temperatura de Mancal", timestamp: "0.09s" },
+      { step: 2, action: "Alinhamento ECLASS", detail: "Mapeado para ECLASS: 0173-1#02-AAB713#005 (Temperature)", timestamp: "1.22s" },
     ],
-    toonOutput: "MAP{SRC='Mtr_Tmp_01' | TGT='ECLASS:0173-1#02-AAB713#005' | ACTION='DirectMap'}",
+    toonOutput: "⟨MAP_START⟩⟨SRC:Mtr_Tmp_01⟩⟨TGT:ECLASS:0173-1#02-AAB713#005⟩⟨CONF:0.90⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩",
     toonMapping: {
       source: "Mtr_Tmp_01",
-      target: "Temperature (Motor Bearing)",
+      target: "Temperature",
       eclassId: "0173-1#02-AAB713#005",
       action: "DirectMap",
       unit: "degC",
@@ -179,43 +166,38 @@ const KNOWN_MAPPINGS: Record<string, Omit<ProcessingResult, "inputData" | "proce
       idShort: "MotorBearingTemperature",
       semanticId: "0173-1#02-AAB713#005",
       valueType: "xs:double",
-      value: "dynamic",
-      qualifiers: [{ type: "Unit", value: "degC" }],
+      value: "0.0",
+      qualifiers: [{ type: "Unit", valueType: "xs:string", value: "degC" }],
     },
   },
 }
 
-// Resposta generica para tags desconhecidas
 function generateGenericResponse(inputData: string, inputType: "brownfield" | "greenfield"): ProcessingResult {
-  const isBrownfield = inputType === "brownfield"
   return {
     status: "warning",
     inputType,
     inputData,
     reasoningSteps: [
-      { step: 1, action: "Analise Lexica", detail: `Identificando ${isBrownfield ? "tag" : "endpoint"} '${inputData}'...`, timestamp: "0.15s" },
-      { step: 2, action: "Consulta Vector DB", detail: "Buscando embeddings similares no dicionario ECLASS...", timestamp: "0.58s" },
-      { step: 3, action: "Inferencia Semantica", detail: `Probabilidade moderada (72%) - identificador ambiguo. Sugestao: '${inputData}' pode ser um sensor generico.`, timestamp: "1.20s" },
-      { step: 4, action: "Alinhamento ECLASS", detail: "Mapeamento tentativo para ECLASS: 0173-1#02-AAA000 (Generic Sensor Value)", timestamp: "1.55s" },
-      { step: 5, action: "Validacao TOON", detail: "Token gerado. ATENCAO: Confidence abaixo de 85%. Requer validacao humana.", timestamp: "1.72s" },
+      { step: 1, action: "Análise Léxica", detail: `Inspecionando identificador '${inputData}'...`, timestamp: "0.15s" },
+      { step: 2, action: "Quantificação de Incerteza", detail: "Confiança (72%) abaixo do limiar de 85%. Encaminhado para fila HITL.", timestamp: "0.85s" },
     ],
-    toonOutput: `MAP{SRC='${inputData}' | TGT='ECLASS:0173-1#02-AAA000' | ACTION='DirectMap'}`,
+    toonOutput: `⟨MAP_START⟩⟨SRC:${inputData}⟩⟨TGT:ECLASS:0173-1#02-BAF321#004⟩⟨CONF:0.72⟩⟨MAP_END⟩⟨ACTION:GENERATE_NODE_RED⟩`,
     toonMapping: {
       source: inputData,
-      target: "Generic Sensor Value",
-      eclassId: "0173-1#02-AAA000",
+      target: "Operating Status (Pending HITL)",
+      eclassId: "0173-1#02-BAF321#004",
       action: "DirectMap",
-      unit: "unknown",
+      unit: "boolean",
     },
     confidence: 0.72,
     aasPreview: {
-      idShort: "GenericSensorValue",
-      semanticId: "0173-1#02-AAA000",
-      valueType: "xs:string",
-      value: "dynamic",
-      qualifiers: [{ type: "Status", value: "REQUIRES_HUMAN_REVIEW" }],
+      idShort: "PendingReviewVariable",
+      semanticId: "0173-1#02-BAF321#004",
+      valueType: "xs:boolean",
+      value: "false",
+      qualifiers: [{ type: "Status", valueType: "xs:string", value: "REQUIRES_HITL_REVIEW" }],
     },
-    processingTimeMs: 1720,
+    processingTimeMs: 950,
   }
 }
 
@@ -227,103 +209,96 @@ export function getMockResult(inputData: string, inputType: "brownfield" | "gree
     return {
       ...known,
       inputData: cleanInput,
-      processingTimeMs: Math.floor(Math.random() * 500) + 1200,
+      processingTimeMs: 850,
     }
   }
 
   return generateGenericResponse(cleanInput, inputType)
 }
 
-// Exemplos pré-carregados para o usuário selecionar
-// Brownfield: variáveis isoladas DEVEM ser enriquecidas com description para mapeamento confiável.
-// Sem contexto, o agente retorna UNKNOWN (evitar alucinação em ambientes críticos).
 export const EXAMPLE_TAGS = [
   {
-    label: "DB1.W0 - Comando Acionar Esteira",
+    label: "DB1.W0 — Comando Acionar Esteira (Siemens S7)",
     value: "DB1.W0",
     type: "brownfield" as const,
     description: "Comando de marcha da esteira (botão start)",
     datatype: "BOOL",
   },
   {
-    label: "DB10.W2 - Velocidade Esteira",
+    label: "DB10.W2 — Velocidade Linear Esteira (Siemens S7)",
     value: "DB10.W2",
     type: "brownfield" as const,
-    description: "Velocidade linear da esteira transportadora",
+    description: "Velocidade linear da esteira transportadora em m/s",
     datatype: "REAL",
   },
   {
-    label: "DB1.DBX0.1 - Motor Start/Stop",
-    value: "DB1.DBX0.1",
+    label: "Mtr_Tmp_01 — Temperatura Rolamento (Rockwell)",
+    value: "Mtr_Tmp_01",
     type: "brownfield" as const,
-    description: "Comando Start/Stop do motor",
-    datatype: "BOOL",
+    description: "Temperatura de rolamento do motor principal",
+    datatype: "REAL",
   },
   {
-    label: "/temp/v1 - Sensor Temperatura (API)",
+    label: "%MW100 — Tag Isolada Sem Descrição (Aciona HITL < 85%)",
+    value: "%MW100",
+    type: "brownfield" as const,
+    description: "",
+    datatype: "WORD",
+  },
+  {
+    label: "/temp/v1 — Telemetria CPS REST (Greenfield)",
     value: "/temp/v1",
     type: "greenfield" as const,
   },
-  {
-    label: "Mtr_Tmp_01 - Temperatura Motor",
-    value: "Mtr_Tmp_01",
-    type: "brownfield" as const,
-    description: "Temperatura de rolamento do motor",
-    datatype: "REAL",
-  },
 ]
 
-// Gerar AAS JSON completo para exportacao
-export function generateAASJson(result: ProcessingResult): string {
-  const aas = {
-    assetAdministrationShells: [{
-      idShort: "GeneratedAAS",
-      id: `urn:aas:${result.toonMapping.source.replace(/[^a-zA-Z0-9]/g, "_")}`,
-      assetInformation: {
-        assetKind: "Instance",
-        globalAssetId: `urn:asset:${result.toonMapping.source.replace(/[^a-zA-Z0-9]/g, "_")}`,
-      },
-      submodels: [{ keys: [{ type: "Submodel", value: "TechnicalData" }] }],
-    }],
-    submodels: [{
-      idShort: "TechnicalData",
-      id: `urn:submodel:technical:${result.toonMapping.source.replace(/[^a-zA-Z0-9]/g, "_")}`,
-      semanticId: { keys: [{ type: "GlobalReference", value: "0173-1#01-AFZ615#016" }] },
-      submodelElements: [{
-        modelType: "Property",
-        ...result.aasPreview,
-      }],
-    }],
-    conceptDescriptions: [{
-      idShort: result.toonMapping.target,
-      id: `urn:eclass:${result.toonMapping.eclassId}`,
-      embeddedDataSpecifications: [{
-        dataSpecification: { keys: [{ type: "GlobalReference", value: "DataSpecificationIEC61360" }] },
-        dataSpecificationContent: {
-          preferredName: [{ language: "en", text: result.toonMapping.target }],
-          unit: result.toonMapping.unit,
-          sourceOfDefinition: "ECLASS",
-        },
-      }],
-    }],
+/**
+ * Generates an IDTA-01001-3-0 AAS v3.0 JSON Environment string from a ProcessingResult.
+ */
+export function generateAASJson(result: ProcessingResult & { aasJson?: object }): string {
+  if (result.aasJson) {
+    return JSON.stringify(result.aasJson, null, 2)
   }
-  return JSON.stringify(aas, null, 2)
+
+  const env: AASEnvironmentV3 = buildIdtaAASEnvironment({
+    assetId: result.inputData,
+    variables: [
+      {
+        sourceTag: result.toonMapping.source,
+        description: result.toonMapping.target,
+        eclassIrdi: result.toonMapping.eclassId,
+        targetName: result.toonMapping.target,
+        unit: result.toonMapping.unit,
+        action: result.toonMapping.action,
+        actionDetail: result.toonMapping.actionDetail,
+        confidence: result.confidence,
+      },
+    ],
+  })
+
+  return JSON.stringify(env, null, 2)
 }
 
-// Gerar script Node-RED para exportacao (formato importavel)
-// IDs unicos por tag para permitir integracao em flows existentes
 function nodeRedId(tag: string, suffix: string): string {
   const base = tag.replace(/[^a-zA-Z0-9]/g, "_").slice(0, 20)
   return `${base}_${suffix}`
 }
 
-export function generateNodeRedFlow(result: ProcessingResult): string {
+/**
+ * Generates an importable Node-RED flow configured with the custom
+ * `semantic-plc-mapper` node and offline-resilient Edge Licensing Bridge.
+ */
+export function generateNodeRedFlow(
+  result: ProcessingResult,
+  options?: { plcVendor?: string; edgeToken?: string }
+): string {
   const tag = result.toonMapping.source
   const ids = {
     tab: nodeRedId(tag, "tab"),
-    inject: nodeRedId(tag, "inject"),
-    transform: nodeRedId(tag, "transform"),
-    aas: nodeRedId(tag, "aas"),
+    plcIn: nodeRedId(tag, "plc_in"),
+    semanticNode: nodeRedId(tag, "semantic_agent_node"),
+    aasOut: nodeRedId(tag, "aas_registry"),
+    localApi: nodeRedId(tag, "local_http_endpoint"),
     debug: nodeRedId(tag, "debug"),
   }
 
@@ -331,52 +306,63 @@ export function generateNodeRedFlow(result: ProcessingResult): string {
     {
       id: ids.tab,
       type: "tab",
-      label: `TOON - ${tag}`,
-      x: 10,
-      y: 10,
+      label: `Industrial Edge — ${tag}`,
+      disabled: false,
+      info: "Fluxo gerado pelo Semantic Agent com validação por créditos e cache offline.",
     },
     {
-      id: ids.inject,
+      id: ids.plcIn,
       type: result.inputType === "brownfield" ? "s7 in" : "http request",
-      name: `Read ${tag}`,
-      tab: ids.tab,
-      x: 150,
-      y: 100,
+      z: ids.tab,
+      name: `PLC Read: ${tag}`,
+      x: 160,
+      y: 120,
       ...(result.inputType === "brownfield"
-        ? { variable: result.inputData, interval: "1000" }
-        : { url: `http://cps-device${result.inputData}`, method: "GET" }),
-      wires: [[ids.transform]],
+        ? { variable: result.inputData, interval: "1000", plcVendor: options?.plcVendor || "Siemens S7-1500" }
+        : { url: `http://cps-edge.local${result.inputData}`, method: "GET" }),
+      wires: [[ids.semanticNode]],
     },
     {
-      id: ids.transform,
-      type: "function",
-      name: "TOON Transform",
-      tab: ids.tab,
-      x: 380,
-      y: 100,
-      func: result.toonMapping.action === "Convert_Unit"
-        ? `// Conversao: ${result.toonMapping.actionDetail}\nmsg.payload = (msg.payload - 32) * 5/9;\nmsg.semanticId = "${result.toonMapping.eclassId}";\nmsg.unit = "${result.toonMapping.unit}";\nreturn msg;`
-        : `// ${result.toonMapping.source} -> ${result.toonMapping.target}\nmsg.semanticId = "${result.toonMapping.eclassId}";\nmsg.unit = "${result.toonMapping.unit}";\nreturn msg;`,
-      wires: [[ids.aas]],
+      id: ids.semanticNode,
+      type: "semantic-plc-mapper",
+      z: ids.tab,
+      name: `AAS/ECLASS Mapper (${result.toonMapping.eclassId})`,
+      plcVendor: options?.plcVendor || "siemens-s7",
+      sourceTag: result.toonMapping.source,
+      eclassIrdi: result.toonMapping.eclassId,
+      targetName: result.toonMapping.target,
+      unit: result.toonMapping.unit || "unitless",
+      actionMode: result.toonMapping.action,
+      outputMode: "aas-v3-and-local-api",
+      platformUrl: "http://localhost:3000",
+      licenseToken: options?.edgeToken || "sk_edge_ind40_prod_9f8a7b6c5d4e3f2a",
+      offlineGraceLimit: 500,
+      x: 430,
+      y: 120,
+      wires: [[ids.aasOut], [ids.debug]],
     },
     {
-      id: ids.aas,
+      id: ids.aasOut,
       type: "http request",
-      name: "Publish AAS",
-      tab: ids.tab,
-      x: 610,
-      y: 100,
-      url: "http://aas-registry:8080/api/v1/submodels/TechnicalData/elements",
+      z: ids.tab,
+      name: "IDTA AAS v3.0 Submodel Repository",
       method: "PUT",
+      url: "http://aas-registry.local:8080/submodels/OperationalData/submodel-elements/" +
+        tag.replace(/[^a-zA-Z0-9_]/g, "_"),
+      x: 740,
+      y: 90,
       wires: [[ids.debug]],
     },
     {
       id: ids.debug,
       type: "debug",
-      name: "Log",
-      tab: ids.tab,
-      x: 840,
-      y: 100,
+      z: ids.tab,
+      name: "Edge Telemetry & License Status",
+      active: true,
+      tosidebar: true,
+      x: 740,
+      y: 160,
+      wires: [],
     },
   ]
   return JSON.stringify(flow, null, 2)

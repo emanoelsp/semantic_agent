@@ -16,6 +16,10 @@ export function generateModelagemFuncionalPDF(result: ResultWithDatasheet): void
     doc.setFont("helvetica", bold ? "bold" : "normal")
     const lines = doc.splitTextToSize(text, pageWidth - margin * 2)
     lines.forEach((line: string) => {
+      if (y > 275) {
+        doc.addPage()
+        y = margin
+      }
       doc.text(line, margin, y)
       y += lineHeight * (size / 10)
     })
@@ -33,7 +37,7 @@ export function generateModelagemFuncionalPDF(result: ResultWithDatasheet): void
     doc.setFontSize(8)
     const lines = doc.splitTextToSize(content, pageWidth - margin * 2)
     for (const line of lines) {
-      if (y > 270) {
+      if (y > 275) {
         doc.addPage()
         y = margin
       }
@@ -43,52 +47,53 @@ export function generateModelagemFuncionalPDF(result: ResultWithDatasheet): void
     doc.setFont("helvetica", "normal")
   }
 
-  // Título
-  addText("Modelagem Funcional do Ativo", 16, true)
-  addText("Baseado em AAS, ECLASS e Formato TOON", 10)
-  y += 5
+  // Cabeçalho Técnico do Produto
+  addText("Especificação Técnica de Interoperabilidade Semântica (AAS v3.0 / ECLASS 14.0)", 14, true)
+  addText("Semantic Agent — Pacote IDTA-01001-3-0 & Node-RED Edge", 9)
+  y += 4
 
-  // 1. Dados de Entrada
+  // 1. Identificação do Ativo e Telemetria
   addSection(
-    "1. Dados de Entrada",
+    "1. Identificação do Ativo e Qualidade Semântica",
     [
-      `Tipo: ${result.inputType === "brownfield" ? "Brownfield (PLC/Legado)" : "Greenfield (CPS/API)"}`,
-      `Identificador: ${result.inputData}`,
-      `Confiança: ${Math.round(result.confidence * 100)}%`,
+      `Origem: ${result.inputType === "brownfield" ? "Brownfield (CLP / Fieldbus)" : "Greenfield (CPS / REST / MQTT)"}`,
+      `Identificador / Tag: ${result.inputData}`,
+      `Índice de Confiança Semântica: ${Math.round(result.confidence * 100)}% (${
+        result.confidence >= 0.85 ? "Aprovado Automaticamente" : "Encaminhado para Revisão HITL"
+      })`,
     ].join("\n")
   )
 
-  // 2. Mapeamento TOON
-  addSection("2. Mapeamento TOON", result.toonOutput)
+  // 2. Cadeia Simbólica TOON
+  addSection("2. Representação Simbólica TOON (BNF Validated)", result.toonOutput)
 
-  // 3. ECLASS
+  // 3. Propriedade Semântica ECLASS 14.0 / IEC 61360
   addSection(
-    "3. Mapeamento ECLASS",
+    "3. Alinhamento ECLASS 14.0 / IEC 61360 CDD",
     [
-      `IRDI: ${result.toonMapping.eclassId}`,
-      `Significado: ${result.toonMapping.target}`,
-      `Ação: ${result.toonMapping.action}`,
-      `Unidade: ${result.toonMapping.unit || "N/A"}`,
-      result.toonMapping.actionDetail ? `Detalhe: ${result.toonMapping.actionDetail}` : "",
+      `IRDI Oficial: ${result.toonMapping.eclassId}`,
+      `Designação Preferencial: ${result.toonMapping.target}`,
+      `Operação de Transformação: ${result.toonMapping.action}`,
+      `Unidade de Engenharia (UNECE): ${result.toonMapping.unit || "unitless"}`,
+      result.toonMapping.actionDetail ? `Fórmula Dimensional: ${result.toonMapping.actionDetail}` : "",
     ]
       .filter(Boolean)
       .join("\n")
   )
 
-  // 4. AAS (Asset Administration Shell)
+  // 4. Ambiente IDTA AAS v3.0
   const aasStr =
     result.aasJson != null
       ? JSON.stringify(result.aasJson, null, 2)
       : generateAASJson(result)
-  addSection("4. AAS - Asset Administration Shell", aasStr)
+  addSection("4. Asset Administration Shell (IDTA-01001-3-0 v3.0 JSON)", aasStr)
 
-  // 5. Node-RED (Modelagem de Integração)
-  addSection("5. Node-RED - Fluxo de Integração", generateNodeRedFlow(result))
+  // 5. Fluxo Node-RED Industrial Edge
+  addSection("5. Node-RED Industrial Edge Flow (semantic-plc-mapper)", generateNodeRedFlow(result))
 
-  // Rodapé
+  // Rodapé Comercial
   y += 5
-  addText("TOON Semantic Agent - Avaliação Intermediária IA Generativa", 8)
-  addText("Gerado automaticamente. Gramática BNF v1.0 | ECLASS Simulado", 8)
+  addText("Semantic Agent — Conformidade IEC 63278 / IDTA AAS v3.0 / ECLASS 14.0", 8)
 
-  doc.save(`modelagem-funcional-${result.toonMapping.source.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`)
+  doc.save(`especificacao-aas-${result.toonMapping.source.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`)
 }

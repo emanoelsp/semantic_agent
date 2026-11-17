@@ -12,7 +12,7 @@ import { Activity, Wifi, ChevronRight, ChevronLeft } from "lucide-react"
 import type { ProcessingResult } from "@/lib/mock-data"
 
 type AgentResult = ProcessingResult & {
-  source?: "llm"
+  source?: "llm" | "rag" | "fallback"
   interpretation?: string
   eclassCandidates?: Array<{ eclassId: string; target: string; unit: string }>
 }
@@ -139,10 +139,10 @@ export default function AgentePage() {
           <div className="mx-auto max-w-3xl flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-lg font-bold text-foreground font-sans">
-                Agente Semântico Interativo
+                Semantic Agent
               </h1>
               <p className="text-xs text-muted-foreground font-sans">
-                4 páginas sequenciais: Dados → Análise → TOON → Modelagem Funcional
+                Da tag cega à inteligência industrial: dados → análise → TOON → AAS
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -313,10 +313,10 @@ export default function AgentePage() {
         <footer className="border-t border-border px-6 py-3">
           <div className="mx-auto max-w-3xl flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="text-[10px] text-muted-foreground font-sans">
-              TOON Semantic Agent - Avaliação Intermediária IA Generativa
+              Semantic Agent · Processamento sintático, semântico e cognitivo
             </p>
             <p className="text-[10px] text-muted-foreground font-mono">
-              LLM (Gemini) | Gramática BNF v1.0 | ECLASS
+              Gemini · TOON · ECLASS · AAS v3.0 · Node-RED
             </p>
           </div>
         </footer>

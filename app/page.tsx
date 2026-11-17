@@ -36,38 +36,38 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background" />
           </div>
 
-          {/* Overlay Course Info */}
+          {/* Overlay Product Positioning */}
           <div className="absolute bottom-0 left-0 right-0 px-4 pb-8 lg:px-6">
             <div className="mx-auto max-w-5xl">
               <div className="rounded-xl border border-border bg-card/90 backdrop-blur-md p-6 lg:p-8">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="flex flex-col gap-2">
                     <Badge className="w-fit bg-primary/10 text-primary border border-primary/20 font-mono text-[10px]">
-                      Avaliação Final
+                      SEMANTIC AGENT
                     </Badge>
                     <h1 className="text-xl lg:text-2xl font-bold text-foreground font-sans text-balance">
-                      Agente Cognitivo para Instanciação Automatizada de AAS
+                      Da tag cega à inteligência industrial
                     </h1>
                     <p className="text-sm text-muted-foreground font-sans">
-                      via Alinhamento Semântico Restrito (TOON)
+                      Processamento sintático, semântico e cognitivo para CLPs, IoT e AAS.
                     </p>
                   </div>
                   <div className="flex flex-col gap-1.5 text-xs text-muted-foreground font-sans lg:text-right shrink-0">
                     <p>
-                      <span className="text-foreground font-medium">Curso:</span>{" "}
-                      Pós-graduação em IA Aplicada
+                      <span className="text-foreground font-medium">Para:</span>{" "}
+                      OEMs, integradores e operações industriais
                     </p>
                     <p>
-                      <span className="text-foreground font-medium">Unidade Curricular:</span>{" "}
-                      IA Generativa
+                      <span className="text-foreground font-medium">Entrada:</span>{" "}
+                      Tags de CLP, telemetria IoT e datasheets
                     </p>
                     <p>
-                      <span className="text-foreground font-medium">Docente:</span>{" "}
-                      Douglas Coimbra de Andrade
+                      <span className="text-foreground font-medium">Saída:</span>{" "}
+                      ECLASS, AAS v3.0 e fluxo Node-RED
                     </p>
                     <p>
-                      <span className="text-foreground font-medium">Estudante:</span>{" "}
-                      Emanoel Spanhol
+                      <span className="text-foreground font-medium">Stack:</span>{" "}
+                      Next.js, Firebase, Pinecone e Gemini
                     </p>
                   </div>
                 </div>
@@ -89,16 +89,16 @@ export default function HomePage() {
                 <div className="h-px flex-1 bg-border" />
               </div>
               <h2 className="text-lg lg:text-xl font-bold text-foreground font-sans text-center text-balance">
-                Do Sintático ao Semântico: O Gargalo da Indústria 4.0
+                Do sintático ao cognitivo: a camada de inteligência industrial
               </h2>
               <p className="text-sm text-muted-foreground text-center max-w-3xl mx-auto font-sans leading-relaxed">
-                A promessa da Indústria 4.0 é a interoperabilidade universal. Padrões como o
-                Asset Administration Shell (AAS) e dicionários semânticos como ECLASS existem
-                para isso. Mas a realidade no chão de fábrica é bem diferente.
+                O Semantic Agent transforma sinais e tags sem significado operacional em contexto
+                industrial utilizável. A plataforma conecta o legado de CLPs e IoT aos padrões
+                ECLASS e Asset Administration Shell (AAS), com validação antes da automação.
               </p>
             </div>
 
-            {/* Diagrama Visual: Sintatico -> Semantico */}
+                {/* Diagrama Visual: Sintatico -> Semantico -> Cognitivo */}
             <div className="rounded-xl border border-border bg-card p-6 lg:p-8">
               <div className="flex flex-col gap-6">
                 {/* Nivel 1: Sintatico */}
@@ -106,11 +106,11 @@ export default function HomePage() {
                   <div className="flex items-center gap-2">
                     <AlertTriangle className="h-4 w-4 text-amber-400" />
                     <h3 className="text-sm font-bold text-foreground font-sans">
-                      Nível Sintático (Onde estamos)
+                      Nível Sintático · Transporte bruto
                     </h3>
                   </div>
                   <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                    Hoje, equipamentos industriais falam "línguas" diferentes. Um PLC Siemens
+                    Hoje, equipamentos industriais falam &quot;línguas&quot; diferentes. Um PLC Siemens
                     usa tags como <code className="text-primary font-mono">DB10.W2</code>, um
                     sensor IoT expõe <code className="text-primary font-mono">/api/temp/v1</code>.
                     Cada dado é sintaticamente correto dentro do seu sistema, mas não carrega
@@ -137,7 +137,7 @@ export default function HomePage() {
                   <div className="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5">
                     <BrainCircuit className="h-3.5 w-3.5 text-primary" />
                     <span className="text-[10px] font-bold text-primary font-mono">
-                      AGENTE COGNITIVO TOON
+                      SEMANTIC AGENT · TOON
                     </span>
                   </div>
                   <div className="h-px flex-1 bg-gradient-to-r from-primary/30 to-emerald-500/30" />
@@ -148,7 +148,7 @@ export default function HomePage() {
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                     <h3 className="text-sm font-bold text-foreground font-sans">
-                      Nível Semântico (Onde queremos chegar)
+                      Nível Semântico · Significado interoperável
                     </h3>
                   </div>
                   <p className="text-xs text-muted-foreground font-sans leading-relaxed">
@@ -170,6 +170,32 @@ export default function HomePage() {
                       >
                         {item.tag}
                         <span className="ml-1 text-emerald-400/50 text-[9px]">{item.id}</span>
+                      </span>
+                    ))}
+                  </div>
+
+                </div>
+
+                {/* Nivel 3: Cognitivo */}
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-2">
+                    <BrainCircuit className="h-4 w-4 text-primary" />
+                    <h3 className="text-sm font-bold text-foreground font-sans">
+                      Nível Cognitivo · Decisão assistida e ação
+                    </h3>
+                  </div>
+                  <p className="text-xs text-muted-foreground font-sans leading-relaxed">
+                    O agente combina contexto recuperado, Gemini e regras determinísticas para
+                    propor o mapeamento, sinalizar incertezas e gerar o próximo artefato operacional:
+                    AAS v3.0, JSON validado ou fluxo Node-RED. Casos ambíguos seguem para revisão humana.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {["RAG Pinecone", "Gemini", "HITL", "AAS v3.0", "Node-RED"].map((capability) => (
+                      <span
+                        key={capability}
+                        className="rounded border border-primary/20 bg-primary/10 px-2.5 py-1 text-[11px] text-primary font-mono"
+                      >
+                        {capability}
                       </span>
                     ))}
                   </div>
@@ -246,10 +272,10 @@ export default function HomePage() {
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-foreground font-sans">
-                      Solução Proposta: Agente Cognitivo TOON
+                      Solução: Semantic Agent
                     </h3>
                     <p className="text-[10px] text-muted-foreground font-sans">
-                      Middleware Cognitivo com Decodificação Restrita
+                      Camada cognitiva com validação industrial
                     </p>
                   </div>
                 </div>
@@ -257,9 +283,9 @@ export default function HomePage() {
                   O problema central não é a falta de padrões, mas a ausência de um{" "}
                   <span className="text-foreground font-medium">middleware cognitivo</span> capaz
                   de automatizar a &quot;cola&quot; semântica entre a realidade física (sinais/APIs) e a
-                  representação digital (AAS). Este trabalho propõe um agente baseado em LLM
-                  que utiliza a notação TOON (Token-Oriented Object Notation) para garantir
-                  100% de conformidade sintática antes da conversão para AAS final.
+                  representação digital (AAS). O Semantic Agent utiliza um modelo de linguagem
+                  com a notação TOON (Token-Oriented Object Notation), catálogo ECLASS e regras
+                  de validação para garantir conformidade antes da conversão para AAS final.
                 </p>
 
                 {/* Pipeline resumido */}
@@ -321,7 +347,7 @@ export default function HomePage() {
             FIESC / UniSENAI / Instituto SENAI de Tecnologia / Instituto SENAI de Inovação
           </p>
           <p className="text-[10px] text-muted-foreground font-mono">
-            Pós-graduação em IA Aplicada - 2025/2026
+            Semantic Agent · Inteligência semântica para operações industriais
           </p>
         </div>
       </footer>

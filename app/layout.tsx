@@ -1,14 +1,15 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { PRODUCT_DESCRIPTOR, PRODUCT_NAME, PRODUCT_TAGLINE } from '@/lib/brand'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'TOON Semantic Agent - AAS Cognitive Orchestrator',
-  description: 'Agente Cognitivo para Instanciacao Automatizada de Asset Administration Shells via Alinhamento Semantico Restrito (TOON)',
+  title: `${PRODUCT_NAME} | ${PRODUCT_TAGLINE}`,
+  description: PRODUCT_DESCRIPTOR,
   generator: 'v0.app',
   icons: {
     icon: [

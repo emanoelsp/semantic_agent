@@ -1,0 +1,93 @@
+[
+  {
+    "id": "temperature-raw-tag-with-description",
+    "tagName": "DB1.DBD4",
+    "description": "Temperatura do mancal do motor em graus Celsius",
+    "expectedEclassId": "0173-1#02-AAB713#005",
+    "expectedHitl": false
+  },
+  {
+    "id": "pressure-plc-tag",
+    "tagName": "PT_101",
+    "description": "Pressão de operação da linha pneumática em bar",
+    "expectedEclassId": "0173-1#02-AAA699#004",
+    "expectedHitl": false
+  },
+  {
+    "id": "linear-conveyor-speed",
+    "tagName": "CV_SPEED",
+    "description": "Velocidade da esteira transportadora em m/s",
+    "expectedEclassId": "0173-1#02-BAA123#003",
+    "expectedHitl": false
+  },
+  {
+    "id": "rotational-speed",
+    "tagName": "MTR_RPM",
+    "description": "Velocidade de rotação do eixo do motor em RPM",
+    "expectedEclassId": "0173-1#02-AAO663#003",
+    "expectedHitl": false
+  },
+  {
+    "id": "drive-command",
+    "tagName": "Q0.1",
+    "description": "Comando de acionamento para partida do motor",
+    "expectedEclassId": "0173-1#02-BAB014#005",
+    "expectedHitl": false
+  },
+  {
+    "id": "operating-status",
+    "tagName": "MOTOR_RUN",
+    "description": "Estado operacional ligado/desligado do motor",
+    "expectedEclassId": "0173-1#02-BAF321#004",
+    "expectedHitl": false
+  },
+  {
+    "id": "photoelectric-barrier",
+    "tagName": "I0.2",
+    "description": "Barreira fotoelétrica livre ou interrompida",
+    "expectedEclassId": "0173-1#02-BAA014#002",
+    "expectedHitl": false
+  },
+  {
+    "id": "limit-switch",
+    "tagName": "I0.3",
+    "description": "Fim de curso da porta de proteção",
+    "expectedEclassId": "0173-1#02-BAA283#002",
+    "expectedHitl": true
+  },
+  {
+    "id": "rated-voltage",
+    "tagName": "U_NOM",
+    "description": "Tensão nominal de alimentação do inversor em V",
+    "expectedEclassId": "0173-1#02-AAO676#002",
+    "expectedHitl": false
+  },
+  {
+    "id": "operating-current",
+    "tagName": "I_OP",
+    "description": "Corrente de operação do motor em ampere",
+    "expectedEclassId": "0173-1#02-AAO677#002",
+    "expectedHitl": false
+  },
+  {
+    "id": "active-power",
+    "tagName": "P_ACTIVE",
+    "description": "Potência ativa consumida pelo acionamento em kW",
+    "expectedEclassId": "0173-1#02-AAO680#002",
+    "expectedHitl": false
+  },
+  {
+    "id": "volumetric-flow",
+    "tagName": "FT_201",
+    "description": "Vazão volumétrica de água em m3 por hora",
+    "expectedEclassId": "0173-1#02-AAO732#003",
+    "expectedHitl": false
+  },
+  {
+    "id": "opaque-plc-address",
+    "tagName": "DB10.DBD4",
+    "description": "",
+    "expectedEclassId": null,
+    "expectedHitl": true
+  }
+]

@@ -1,0 +1,105 @@
+<!-- ==========================================================================
+  node-red-contrib-industrial-semantic-agent — semantic-plc-mapper.html
+  ========================================================================== -->
+<script type="text/javascript">
+  RED.nodes.registerType('semantic-plc-mapper', {
+    category: 'industry 4.0',
+    color: '#0ea5e9',
+    defaults: {
+      name: { value: '' },
+      plcVendor: { value: 'siemens-s7', required: true },
+      sourceTag: { value: 'DB10.W2', required: true },
+      eclassIrdi: { value: '0173-1#02-BAA123#003', required: true },
+      targetName: { value: 'Linear Velocity' },
+      unit: { value: 'm/s' },
+      actionMode: { value: 'DirectMap' },
+      conversionFormula: { value: '' },
+      outputMode: { value: 'aas-v3-and-local-api' },
+      platformUrl: { value: 'http://localhost:3000', required: true },
+      offlineGraceLimit: { value: 500, validate: RED.validators.number() }
+    },
+    credentials: {
+      licenseToken: { type: 'password' }
+    },
+    inputs: 1,
+    outputs: 2,
+    outputLabels: ['IDTA AAS v3.0 Payload', 'Billing / Quota Alert'],
+    icon: 'font-awesome/fa-microchip',
+    label: function () {
+      return this.name || `${this.sourceTag} → ${this.eclassIrdi}`;
+    }
+  });
+</script>
+
+<script type="text/html" data-template-name="semantic-plc-mapper">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Nome</label>
+    <input type="text" id="node-input-name" placeholder="Mapeador Semântico CLP → AAS">
+  </div>
+  <div class="form-row">
+    <label for="node-input-plcVendor"><i class="fa fa-industry"></i> Modelo CLP</label>
+    <select id="node-input-plcVendor">
+      <option value="siemens-s7">Siemens SIMATIC S7-1200 / S7-1500 (Profinet / S7comm)</option>
+      <option value="rockwell-cip">Rockwell Allen-Bradley ControlLogix / CompactLogix (EtherNet/IP)</option>
+      <option value="schneider-modbus">Schneider Electric Modicon M340 / M580 (Modbus TCP)</option>
+      <option value="mitsubishi-melsec">Mitsubishi Electric MELSEC iQ-R / iQ-F (SLMP)</option>
+      <option value="beckhoff-twincat">Beckhoff TwinCAT ADS / EtherCAT</option>
+      <option value="opc-ua-generic">OPC-UA Industrial Server (IEC 62541)</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-sourceTag"><i class="fa fa-code"></i> Tag / Bloco CLP</label>
+    <input type="text" id="node-input-sourceTag" placeholder="Ex: DB10.W2, %MW100, Motor_Temp">
+  </div>
+  <div class="form-row">
+    <label for="node-input-eclassIrdi"><i class="fa fa-sitemap"></i> ECLASS IRDI</label>
+    <input type="text" id="node-input-eclassIrdi" placeholder="0173-1#02-BAA123#003">
+  </div>
+  <div class="form-row">
+    <label for="node-input-targetName"><i class="fa fa-info-circle"></i> Propriedade</label>
+    <input type="text" id="node-input-targetName" placeholder="Linear Velocity">
+  </div>
+  <div class="form-row">
+    <label for="node-input-unit"><i class="fa fa-tachometer"></i> Unidade (UNECE)</label>
+    <input type="text" id="node-input-unit" placeholder="m/s, degC, bar, V, A, boolean">
+  </div>
+  <div class="form-row">
+    <label for="node-input-actionMode"><i class="fa fa-exchange"></i> Ação TOON</label>
+    <select id="node-input-actionMode">
+      <option value="DirectMap">DirectMap (1:1)</option>
+      <option value="Convert_Unit">Convert_Unit (Conversão Dimensional)</option>
+      <option value="Aggregate">Aggregate</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-outputMode"><i class="fa fa-share-alt"></i> Modo de Saída</label>
+    <select id="node-input-outputMode">
+      <option value="aas-v3-and-local-api">Payload JSON AAS v3.0 + Endpoint HTTP Local (/edge/aas/:tag)</option>
+      <option value="aas-v3-only">Somente Payload JSON AAS v3.0 no Fluxo</option>
+      <option value="local-api-only">Somente Endpoint HTTP Local</option>
+    </select>
+  </div>
+  <hr/>
+  <h4>Ponte de Licenciamento Pay-as-you-go &amp; Resiliência Offline</h4>
+  <div class="form-row">
+    <label for="node-input-platformUrl"><i class="fa fa-cloud"></i> SaaS URL</label>
+    <input type="text" id="node-input-platformUrl" placeholder="https://seu-dominio.vercel.app">
+  </div>
+  <div class="form-row">
+    <label for="node-input-licenseToken"><i class="fa fa-key"></i> Token de Licença</label>
+    <input type="password" id="node-input-licenseToken" placeholder="sk_edge_ind40_...">
+  </div>
+  <div class="form-row">
+    <label for="node-input-offlineGraceLimit"><i class="fa fa-shield"></i> Buffer Offline</label>
+    <input type="number" id="node-input-offlineGraceLimit" placeholder="500">
+  </div>
+</script>
+
+<script type="text/html" data-help-name="semantic-plc-mapper">
+  <p>Mapeia blocos de dados de CLPs multimarcas (Siemens, Rockwell, Schneider, OPC-UA) para o padrão oficial <b>IDTA Asset Administration Shell (AAS v3.0)</b> e <b>ECLASS 14.0</b>.</p>
+  <h3>Saídas</h3>
+  <ol>
+    <li><b>Saída 1 (AAS v3.0 Payload):</b> SubmodelElement padronizado pronto para registro AAS ou broker MQTT/OPC-UA.</li>
+    <li><b>Saída 2 (Alerta de Licenciamento):</b> Emitido quando o saldo Pay-as-you-go se esgota, contendo a URL direta de recarga via PIX/Cartão.</li>
+  </ol>
+</script>

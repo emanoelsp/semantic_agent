@@ -1,43 +1,37 @@
 // =============================================================================
-// AAS Generator - Datasheet multi-mapping
-// =============================================================================
-// Gera Asset Administration Shell a partir de múltiplos mapeamentos TOON
-// conforme estrutura fischertechnik / Plattform Industrie 4.0
+// AAS Generator - Datasheet multi-mapping (IDTA AAS v3.0 Compliant)
 // =============================================================================
 
 import type { ToonMapping } from "@/lib/toon-orchestrator-parser"
 import type { DatasheetDataPoint } from "@/lib/datasheet-agent"
+import {
+  buildIdtaAASEnvironment,
+  type AASEnvironmentV3,
+  type SemanticVariableInput,
+} from "@/lib/aas-v3"
 
 export interface DatasheetMapping extends ToonMapping {
   description?: string
   dataType?: string
-}
-
-function toIdShort(description: string, sourceTag: string): string {
-  const safe = description
-    .replace(/[^a-zA-Z0-9\s]/g, "")
-    .replace(/\s+/g, "_")
-    .slice(0, 40)
-  return safe || sourceTag.replace(/[^a-zA-Z0-9]/g, "_")
-}
-
-function inferValueType(dataType: string): string {
-  const u = dataType.toUpperCase()
-  if (u.includes("BOOL")) return "boolean"
-  if (u.includes("INT") || u.includes("DINT") || u.includes("WORD")) return "integer"
-  if (u.includes("REAL") || u.includes("FLOAT")) return "double"
-  return "string"
+  unit?: string
 }
 
 /**
- * Gera AAS JSON a partir de mapeamentos datasheet.
+ * Gera AAS JSON completo v3.0 (IDTA-01001-3-0) a partir de mapeamentos de datasheet,
+ * incluindo Nameplate, TechnicalData, OperationalCapabilities, OperationalData e ConceptDescriptions.
  */
 export function generateAASFromDatasheetMappings(
   assetId: string,
   assetIdShort: string,
   mappings: DatasheetMapping[],
-  dataPoints?: DatasheetDataPoint[]
-): object {
+  dataPoints?: DatasheetDataPoint[],
+  metadata?: {
+    manufacturerName?: string
+    productDesignation?: string
+    serialNumber?: string
+    yearOfConstruction?: string
+  }
+): AASEnvironmentV3 {
   const descriptionMap = new Map<string, string>()
   const dataTypeMap = new Map<string, string>()
   if (dataPoints) {
@@ -47,56 +41,23 @@ export function generateAASFromDatasheetMappings(
     }
   }
 
-  const submodelElements = mappings.map((m) => {
-    const desc = m.description ?? descriptionMap.get(m.source) ?? m.target
-    const dataType = m.dataType ?? dataTypeMap.get(m.source) ?? "BOOL"
-    const valueType = inferValueType(dataType)
-    const idShort = toIdShort(desc, m.source)
+  const variables: SemanticVariableInput[] = mappings.map((m) => ({
+    sourceTag: m.source,
+    description: m.description ?? descriptionMap.get(m.source) ?? m.target,
+    dataType: m.dataType ?? dataTypeMap.get(m.source) ?? "BOOL",
+    eclassIrdi: m.eclassId,
+    targetName: m.target,
+    unit: m.unit,
+    action: (m.action as "DirectMap" | "Convert_Unit" | "Aggregate") || "DirectMap",
+    confidence: m.confidence ?? 0.92,
+  }))
 
-    return {
-      idShort,
-      modelType: "Property",
-      valueType,
-      semanticId: {
-        keys: [
-          {
-            type: "ConceptDescription",
-            value: /\d{4}-\d#\d{2}-[A-Z0-9]+#\d{3}$/.test(m.eclassId)
-              ? m.eclassId
-              : `${m.eclassId}#005`,
-          },
-        ],
-      },
-      description: [{ language: "en", text: desc }],
-      qualifiers: [{ type: "Mapping_Source", value: m.source }],
-    }
+  return buildIdtaAASEnvironment({
+    assetId: assetId || assetIdShort,
+    manufacturerName: metadata?.manufacturerName,
+    productDesignation: metadata?.productDesignation,
+    serialNumber: metadata?.serialNumber,
+    yearOfConstruction: metadata?.yearOfConstruction,
+    variables,
   })
-
-  const aas = {
-    assetAdministrationShells: [
-      {
-        idShort: assetIdShort,
-        identification: {
-          idType: "URI",
-          id: `http://industrial.io/assets/${assetId}/instance/01`,
-        },
-        submodels: [
-          {
-            idShort: "OperationalVariables",
-            semanticId: {
-              keys: [
-                {
-                  type: "GlobalReference",
-                  value: "http://admin-shell.io/submodels/OperationalData/1/0",
-                },
-              ],
-            },
-            submodelElements,
-          },
-        ],
-      },
-    ],
-  }
-
-  return aas
 }

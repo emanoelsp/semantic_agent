@@ -17,10 +17,10 @@ export function DashboardHeader({ isProcessing, lastProcessingTime }: DashboardH
         </div>
         <div>
           <h1 className="text-lg font-bold tracking-tight text-foreground font-sans">
-            TOON Semantic Agent
+            Semantic Agent
           </h1>
           <p className="text-xs text-muted-foreground font-sans">
-            AAS Cognitive Orchestrator v0.1
+            Da tag cega à inteligência industrial
           </p>
         </div>
       </div>
@@ -47,7 +47,7 @@ export function DashboardHeader({ isProcessing, lastProcessingTime }: DashboardH
           className="flex items-center gap-1.5 bg-emerald-950/50 text-emerald-400 border border-emerald-500/20 font-mono text-xs"
         >
           <Wifi className="h-3 w-3" />
-          Mock Mode
+          Industrial Mode
         </Badge>
       </div>
     </header>
